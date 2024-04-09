@@ -1,0 +1,47 @@
+{
+  "name": "wanderlust",
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*",
+    "prettier": "^3.2.5",
+    "sass": "^1.74.1",
+    "turbo": "latest"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "npm@10.2.4",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "dependencies": {
+    "@mantine/carousel": "^7.7.1",
+    "@mantine/charts": "^7.7.1",
+    "@mantine/code-highlight": "^7.7.1",
+    "@mantine/core": "^7.7.1",
+    "@mantine/dates": "^7.7.1",
+    "@mantine/dropzone": "^7.7.1",
+    "@mantine/form": "^7.7.1",
+    "@mantine/hooks": "^7.7.1",
+    "@mantine/modals": "^7.7.1",
+    "@mantine/notifications": "^7.7.1",
+    "@mantine/nprogress": "^7.7.1",
+    "@mantine/spotlight": "^7.7.1",
+    "@mantine/tiptap": "^7.7.1",
+    "@tabler/icons-react": "^3.1.0",
+    "@tiptap/extension-link": "^2.2.6",
+    "@tiptap/react": "^2.2.6",
+    "@tiptap/starter-kit": "^2.2.6",
+    "dayjs": "^1.11.10",
+    "embla-carousel-react": "^8.0.1",
+    "recharts": "^2.12.4"
+  }
+}
