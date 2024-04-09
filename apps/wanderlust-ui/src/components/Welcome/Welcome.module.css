@@ -1,10 +1,13 @@
-.title {
+.pageTitle {
+  font-family: "Michroma", sans-serif;
+  font-weight: 400;
+  font-style: normal;
   color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
   font-size: rem(100px);
-  font-weight: 900;
   letter-spacing: rem(-2px);
 
-  @media (max-width: $mantine-breakpoint-md) {
+  /* @media (max-width: $mantine-breakpoint-md) {
     font-size: rem(50px);
-  }
+  } */
 }
+
