@@ -7,7 +7,6 @@ import { Header } from './components/header/header';
 export default function App() {
   return (
     <MantineProvider theme={theme}>
-      <Header />
       <Router />
     </MantineProvider>
   );
