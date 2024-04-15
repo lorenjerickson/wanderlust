@@ -8,10 +8,11 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
+    "@originjs/vite-plugin-federation": "^1.3.5",
+    "@wanderlust/build-config": "*",
+    "concurrently": "^8.2.2",
     "prettier": "^3.2.5",
-    "sass": "^1.74.1",
+    "sass": "^1.75.0",
     "turbo": "latest"
   },
   "engines": {
@@ -40,6 +41,7 @@
     "@tiptap/extension-link": "^2.2.6",
     "@tiptap/react": "^2.2.6",
     "@tiptap/starter-kit": "^2.2.6",
+    "@wanderlust/build-config": "*",
     "dayjs": "^1.11.10",
     "embla-carousel-react": "^8.0.1",
     "recharts": "^2.12.4"
