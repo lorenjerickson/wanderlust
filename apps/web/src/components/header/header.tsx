@@ -17,60 +17,54 @@ import {
     rem,
     useMantineTheme,
 } from '@mantine/core';
-import Logo from '@/assets/images/peradventure-icon.png';
 import { useDisclosure } from '@mantine/hooks';
 import {
-    IconNotification,
     IconCode,
     IconBook,
-    IconChartPie3,
-    IconFingerprint,
-    IconCoin,
+    IconAdjustmentsHorizontal,
+    IconPhoto,
     IconChevronDown,
 } from '@tabler/icons-react';
 import classes from './header.module.scss';
+import { useNavigate } from 'react-router-dom';
 
 const mockdata = [
     {
-        icon: IconCode,
-        title: 'Extensions',
-        description: 'Extend per adventure with our JavaScript SDK',
-    },
-    {
-        icon: IconCoin,
-        title: 'Creatures',
-        description: 'Create friends and foes for your adventures',
-    },
-    {
         icon: IconBook,
-        title: 'Items',
-        description: 'All the gear a successful party needs',
+        title: 'Collections',
+        description: 'Creatures, races, classes and all the other things',
+        route: '/library/collections'
     },
     {
-        icon: IconFingerprint,
-        title: 'Magic',
-        description: 'Almost only counts with fireball and thunderwave',
-    },
-    {
-        icon: IconChartPie3,
+        icon: IconPhoto,
         title: 'Media',
-        description: 'Set the stage with images, audio and video',
+        description: 'Describe your worlds with images, audio and video',
+        route: '/library/media',
     },
     {
-        icon: IconNotification,
-        title: 'Animation',
-        description: 'Likely to cause damage to photosensitive players',
+        icon: IconAdjustmentsHorizontal,
+        title: 'Mixer',
+        description: 'Create audiovisual effects to distract your players',
+        route: '/library/mixer',
+    },
+    {
+        icon: IconCode,
+        title: 'Modules',
+        description: 'Enhance your adventuring with custom modules',
+        route: '/library/modules',
     },
 ];
 
 export function Header() {
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
     const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
+    const navigate = useNavigate();
+
     const theme = useMantineTheme();
 
     const links = mockdata.map((item) => (
         <UnstyledButton className={classes.subLink} key={item.title}>
-            <Group wrap="nowrap" align="flex-start">
+            <Group wrap="nowrap" align="flex-start" onClick={() => navigate(item.route)}>
                 <ThemeIcon size={34} variant="default" radius="md">
                     <item.icon style={{ width: rem(22), height: rem(22) }} color={theme.colors.blue[6]} />
                 </ThemeIcon>
@@ -132,7 +126,7 @@ export function Header() {
                                                 Get started
                                             </Text>
                                             <Text size="xs" c="dimmed">
-                                                Their food sources have decreased, and their numbers
+                                                Guide to creating adventures beyond imagining
                                             </Text>
                                         </div>
                                         <Button variant="default">Get started</Button>
