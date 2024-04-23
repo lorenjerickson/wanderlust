@@ -1,15 +1,15 @@
-import { lazy } from 'react';
 import { Navigate } from 'react-router-dom';
+import { lazy } from 'react';
 
-const MediaManager = lazy(() => import('./views/manager/MediaManager'));
-const MediaEditor = lazy(() => import('./views/editor/MediaEditor'));
+const MediaManager = lazy(() => import('./views/list/MediaList'));
+const MediaEditor = lazy(() => import('./views/edit/MediaEdit'));
 
 export const mediaRoutes = [{
-    path: 'manager',
+    path: 'list',
     element: <MediaManager />
 }, {
-    path: 'editor',
+    path: 'edit/:id',
     element: <MediaEditor />
 }, {
-    path: '*', element: <Navigate to="manager" />
+    path: '*', element: <Navigate to="list" />
 }]

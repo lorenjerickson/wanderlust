@@ -13,7 +13,9 @@
     "concurrently": "^8.2.2",
     "prettier": "^3.2.5",
     "sass": "^1.75.0",
-    "turbo": "latest"
+    "turbo": "latest",
+    "@types/react": "^18.2.65",
+    "@types/react-dom": "^18.2.19"
   },
   "engines": {
     "node": ">=18"

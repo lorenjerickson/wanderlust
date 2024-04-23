@@ -1,0 +1,42 @@
+.mediaManager {
+    display: flex;
+    flex-direction: column;
+    align-items: felx-start;
+    justify-items: flex-start;
+    padding: 16px 16px;
+
+    .modal { 
+        min-width: 400px;
+    }
+
+    .media {
+
+        .toolbar {
+            display: flex;
+            flex-direction: row;
+            align-items: space-between;
+            justify-content: space-between;
+
+            input {
+                flex-grow: 1;
+            }
+
+            >* {
+                margin-left: 4rem;
+            }
+
+            .buttonGroup {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: flex-start;
+            }
+
+            padding: 0 2rem 0 0;
+        }
+
+
+        .grid {}
+    }
+
+}
