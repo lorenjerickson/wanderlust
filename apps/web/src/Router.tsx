@@ -1,9 +1,11 @@
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
-import { HomePage } from './pages/Home.page';
-import { lazy, Suspense } from 'react';
+import { Suspense } from 'react';
 import { Layout } from './Layout';
 
 import { mediaRoutes } from '@wanderlust/media';
+import { Welcome } from './pages/Welcome/Welcome';
+
+console.log(mediaRoutes);
 
 const router = createBrowserRouter([
   {
@@ -12,7 +14,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: 'welcome',
-        element: <HomePage />
+        element: <Welcome />
       },
       {
         path: 'media',
