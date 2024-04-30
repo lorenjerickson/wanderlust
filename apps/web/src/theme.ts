@@ -1,14 +1,14 @@
-import { createTheme } from '@mantine/core';
+import { ThemeConfig } from 'antd'
 
-export const theme = createTheme({
-  fontFamily: "Montserrat, sans-serif",
-  fontFamilyMonospace: "Consolas, monospaced",
-  fontSizes: {
-    xl: "20pt",
-    lg: "16pt",
-    md: "14pt",
-    sm: "12pt",
-    xs: "10pt",
+export const theme: ThemeConfig = {
+  token: {
+    colorBgBase: '#0f2f5f',
+    colorBgContainer: '#0f2f5f',
+    colorBgLayout: '#0f2f5f',
+
+
+    colorTextBase: '#fdfdfd',
+
   }
-});
+}
 

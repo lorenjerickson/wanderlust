@@ -1,18 +1,18 @@
-import { Title, Text, Anchor, stylesToString } from '@mantine/core';
+import { Typography } from 'antd';
 import classes from './Welcome.module.css';
 
 export function Welcome() {
   return (
     <>
-      <Title className={classes.title} ta="center" mt={100}>
+      <Typography className={classes.title}>
         Welcome to{' '}
-        <Text className={classes.pageTitle}>
-          Wanderlust
-        </Text>
-      </Title>
-      <Text c="dimmed" ta="center" size="lg" maw={580} mx="auto" mt="xl">
-        Finding pleasure once again in adventures imagined, crafted and experienced. 
-      </Text>
+      </Typography>
+      <Typography className={classes.pageTitle}>
+        Wanderlust
+      </Typography>
+      <Typography>
+        Finding pleasure once again in adventures imagined, crafted and experienced.
+      </Typography>
     </>
   );
 }

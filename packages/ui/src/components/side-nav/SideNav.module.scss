@@ -1,0 +1,29 @@
+.sidenav {
+    background-color: transparent;
+
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    .minilist {
+        padding: 16px;
+
+        .item {
+            .icon {}
+
+            .title {}
+        }
+    }
+
+    .drawer {
+        .header {}
+
+        .item {
+            .icon {}
+
+            .title {}
+        }
+    }
+}

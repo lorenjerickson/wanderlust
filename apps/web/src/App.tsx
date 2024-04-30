@@ -1,5 +1,5 @@
 import '@mantine/core/styles.css';
-import { MantineProvider } from '@mantine/core';
+import { ConfigProvider } from 'antd';
 import { Router } from './Router';
 import { theme } from './theme';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
@@ -8,10 +8,10 @@ const queryClient = new QueryClient();
 
 export default function App() {
   return (
-    <MantineProvider theme={theme}>
+    <ConfigProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
         <Router />
       </QueryClientProvider>
-    </MantineProvider>
+    </ConfigProvider>
   );
 }

@@ -16,10 +16,7 @@ const router = createBrowserRouter([
         path: 'welcome',
         element: <Welcome />
       },
-      {
-        path: 'media',
-        children: mediaRoutes
-      },
+      ...mediaRoutes,
       // {
       //   path: 'library',
       //   children: libraryRoutes

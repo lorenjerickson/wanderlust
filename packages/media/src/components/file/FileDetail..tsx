@@ -1,4 +1,5 @@
-import { Text, Button, Box } from '@mantine/core';
+
+import { Button, Typography } from 'antd';
 
 import classes from './FileDetail.module.scss';
 import { useMemo } from 'react';
@@ -17,29 +18,29 @@ export default function FileDetail({ file, onClear, onUpload }: { file: File; on
     return (
         <div className={classes.mediaDetatilForm}>
             <p>Review the details below and click the <b>Upload</b> button, or click <b>Clear</b> to select different media.</p>
-            <Box>
+            <div>
                 <div className={classes.properties}>
-                    <Text className={classes.property}>File name</Text>
-                    <Text className={classes.value}>{file.name}</Text>
+                    <Typography className={classes.property}>File name</Typography>
+                    <Typography className={classes.value}>{file.name}</Typography>
                 </div>
                 <div className={classes.properties}>
-                    <Text className={classes.property}>Content type</Text>
-                    <Text className={classes.value}>{file.type}</Text>
+                    <Typography className={classes.property}>Content type</Typography>
+                    <Typography className={classes.value}>{file.type}</Typography>
                 </div>
                 <div className={classes.properties}>
-                    <Text className={classes.property}>File size</Text>
-                    <Text className={classes.value}>{Math.floor(file.size / 1000)} kb</Text>
+                    <Typography className={classes.property}>File size</Typography>
+                    <Typography className={classes.value}>{Math.floor(file.size / 1000)} kb</Typography>
                 </div>
 
                 <div className={classes.actions}>
-                    <Button color="blue" fullWidth mt="md" radius="md" onClick={handleUpload}>
+                    <Button color="blue" onClick={handleUpload}>
                         Upload media
                     </Button>
-                    <Button color="transparent" fullWidth mt="md" radius="md" onClick={handleClear}>
+                    <Button color="transparent" onClick={handleClear}>
                         Clear media
                     </Button>
                 </div>
-            </Box>
+            </div>
         </div>
     )
 }
