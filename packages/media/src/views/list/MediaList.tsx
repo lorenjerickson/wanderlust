@@ -1,18 +1,19 @@
-import { Button, ButtonGroup, Grid, GridCol, Table, Modal } from '@mantine/core';
-import { IconGrid3x3, IconGrid4x4, IconList, IconListDetails, IconMusic, IconPhoto, IconSquare, IconVideo } from '@tabler/icons-react';
-import { NavBar } from '@wanderlust/ui';
+import { MediaPreview, ToggleButtonGroup } from '@wanderlust/ui';
+import { Button, Table } from 'antd';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import classes from './MediaList.module.scss';
-import { useDisclosure } from '@mantine/hooks';
-import MediaUpload from '../../components/upload/MediaUpload';
 import { useMedia } from '../../hooks/useMedia';
+import classes from './MediaList.module.scss';
+import { IconGrid3x3, IconGrid4x4, IconLayout2, IconLayoutGrid, IconLayoutList, IconList, IconMusic, IconPhoto, IconTable, IconVideo } from '@tabler/icons-react';
+
+const mediaTypes = [{ icon: <IconLayout2 />, value: 'All' }, { icon: <IconPhoto />, value: 'Images' }, { icon: <IconMusic />, value: 'Audio' }, { icon: <IconVideo />, value: 'Video' }];
+const layouts = [{ icon: <IconList />, value: 'List' }, { icon: <IconGrid4x4 />, value: '4x4' }, { icon: <IconGrid3x3 />, value: '3x3' }, { icon: <IconLayoutGrid />, value: '2x2' }];
 
 export default function MediaManager() {
-    const [mode, setMode] = useState("list");
+    const [layout, setLayout] = useState("list");
+    const [filter, setFilter] = useState("all");
     const { getAll } = useMedia();
     const navigate = useNavigate();
-    const [opened, { open, close }] = useDisclosure(false);
     const [data, setData] = useState<any[]>([]);
 
     useEffect(() => {
@@ -22,102 +23,80 @@ export default function MediaManager() {
     }, [getAll]);
 
     const gridCols = () => {
-        switch (mode) {
+        switch (layout) {
             case "4x4":
-                return 4;
+                return 'col4';
             case "3x3":
-                return 3;
-            case "1x1":
-                return 1;
+                return 'col3';
+            case "2x2":
+                return 'col2';
             default:
-                return 0;
+                return 'col1';
         }
     };
 
-    const getThumbnail = (item: any) => {
-        switch (item.type) {
-            case "image":
-                return <img src={item.url} alt={item.name} />;
-            case "audio":
-                return <IconMusic />;
-            case "video":
-                return <IconVideo />;
-            default:
-                return "";
-        }
-    }
+    const tableCols = [
+        {
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
+        },
+        {
+            title: 'Type',
+            dataIndex: 'type',
+            key: 'type',
+        },
+        {
+            title: 'Size',
+            dataIndex: 'size',
+            key: 'size',
+        },
+        {
+            title: 'Actions',
+            dataIndex: 'actions',
+            key: 'actions',
+        },
+    ];
+
+    const tableData = data.map((item) => ({
+        key: item.id,
+        name: item.filename,
+        type: item.type,
+        size: item.size,
+        actions: <Button onClick={() => navigate(`../edit/${item.id}`)}>Edit</Button>,
+    }));
+
+    const handleFilterChnage = (value: string) => setFilter(value);
+    const handleLayoutChange = (value: string) => setLayout(value);
 
     return (
         <div className={classes.mediaManager}>
-            <NavBar />
-
-            <Modal size="xl" opened={opened} onClose={close} title="Add media">
-                <MediaUpload />
-            </Modal>
-
             <div className={classes.media}>
                 <div className={classes.toolbar}>
                     <div>Media Manager</div>
                     <input type="text" placeholder="Search" />
                     <div className={classes.buttonGroup}>
                         <label htmlFor="filter">Filter:</label>
-                        <ButtonGroup>
-                            <Button variant="transparent" name="filter" value="all" onClick={() => setMode('list')}><IconListDetails /></Button>
-                            <Button variant="transparent" name="filter" value="audio" onClick={() => setMode('list')}><IconMusic /></Button>
-                            <Button variant="transparent" name="filter" value="image" onClick={() => setMode('list')}><IconPhoto /></Button>
-                            <Button variant="transparent" name="filter" value="video" onClick={() => setMode('list')}><IconVideo /></Button>
-                        </ButtonGroup>
+                        <ToggleButtonGroup buttons={mediaTypes} onChange={handleFilterChnage} />
                     </div>
                     <div className={classes.buttonGroup}>
-                        <label htmlFor="mode">Layout:</label>
-                        <Button.Group>
-                            <Button variant="transparent" name="mode" value="list" onClick={() => setMode('list')}><IconList /></Button>
-                            <Button variant="transparent" name='mode' value="4x4" onClick={() => setMode('4x4')}><IconGrid4x4 /></Button>
-                            <Button variant="transparent" name='mode' value="3x3" onClick={() => setMode('3x3')}><IconGrid3x3 /></Button>
-                            <Button variant="transparent" name='mode' value="1x1" onClick={() => setMode('1x1')}><IconSquare /></Button>
-                        </Button.Group>
+                        <label htmlFor="layout">Layout:</label>
+                        <ToggleButtonGroup buttons={layouts} onChange={handleLayoutChange} />
                     </div>
-                    <Button variant='filled' onClick={() => open()}>Add media</Button>
                 </div>
                 {data && (
                     <div className={classes.mediaManager}>
-                        {mode !== 'list' && (
-                            <div className="grid">
-                                <Grid columns={gridCols()}>
-                                    {data.map((item: any) => (
-                                        <GridCol key={item.name}>
-                                            <div className="item">
-                                                {getThumbnail(item)}
-                                                {item.name}
-                                            </div>
-                                        </GridCol>
-                                    ))}
-
-                                </Grid>
+                        {layout !== 'list' && (
+                            <div className={`${classes.grid} ${gridCols()}`}>
+                                {data.map((item: any) => (
+                                    <MediaPreview asset={item} key={item.name} />
+                                ))}
                             </div>
                         )}
-                        {mode === 'list' && (
+                        {layout === 'list' && (
                             <div className="list">
-                                <Table>
-                                    <Table.Thead>
-                                        <Table.Tr>
-                                            <Table.Th>Name</Table.Th>
-                                            <Table.Th>Type</Table.Th>
-                                            <Table.Th>Tags</Table.Th>
-                                            <Table.Th>Last Updated</Table.Th>
-                                        </Table.Tr>
-                                    </Table.Thead>
-                                    <Table.Tbody>
-                                        {data.map((item: any) => (
-                                            <Table.Tr key={item.name}>
-                                                <Table.Td>{item.name}</Table.Td>
-                                                <Table.Td>{item.type}</Table.Td>
-                                                <Table.Td>{item.tags.join(', ')}</Table.Td>
-                                                <Table.Td>{item.lastUpdated}</Table.Td>
-                                            </Table.Tr>
-                                        ))}
-                                    </Table.Tbody>
-                                </Table>
+                                <Table columns={tableCols} dataSource={tableData} />
+
                             </div>
                         )}
                     </div>
