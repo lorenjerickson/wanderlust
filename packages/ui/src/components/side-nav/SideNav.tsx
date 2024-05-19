@@ -24,34 +24,10 @@ export function SideNav({ config }: { config: SideNavConfig }) {
                 return;
             } else {
                 setCurrentNav(index);
-                config.items.forEach(item => item.open = false);
                 item.open = true;
             }
         }
     }
-
-    return (
-
-        <div className={classes.sidenav}>
-            <div className={classes.menu}>
-                <nav>
-                    <div>
-                        {config.items.map((item, index) => (
-                            <div key={index} onClick={() => handleNavClick(index)}>
-                                <div className={classes.item}><span className={classes.icon}>{item.icon}</span> <span className={classes.label}>{item.label}</span></div>
-                                {item.items && item.open && <div className={classes.submenu}>
-                                    {item.items.map(subitem => <div >
-                                        <div className={classes.item}><span className={classes.icon}>{subitem.icon}</span> <span className={classes.label}>{subitem.label}</span></div>
-                                    </div>)}
-                                </div>}
-                            </div>
-                        ))}
-                    </div>
-                </nav>
-
-            </div>
-        </div>
-    )
 }
 
 
