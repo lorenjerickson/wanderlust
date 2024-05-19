@@ -4,12 +4,13 @@ import { Layout } from './Layout';
 
 import { mediaRoutes } from '@wanderlust/media';
 import { Welcome } from './pages/Welcome/Welcome';
+import { LoginPage } from './pages/login/Login';
 
 console.log(mediaRoutes);
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: 'main',
     element: <Layout />,
     children: [
       {
@@ -25,10 +26,14 @@ const router = createBrowserRouter([
       //   path: 'mixer',
       //   children: mixerRoutes
       // },
-      {
-        path: "*", element: <Navigate to="welcome" />
-      }
     ],
+  },
+  {
+    path: 'login',
+    element: <LoginPage />
+  },
+  {
+    path: "*", element: <Navigate to="login" />
   },
 ]);
 

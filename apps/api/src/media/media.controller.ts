@@ -14,7 +14,7 @@ const storage = diskStorage({
   },
 });
 
-@Controller("media")
+@Controller("api/media")
 export class MediaController {
   constructor(private readonly mediaService: MediaService) { }
 
