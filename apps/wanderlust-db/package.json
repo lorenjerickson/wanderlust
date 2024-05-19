@@ -1,0 +1,11 @@
+{
+  "name": "wanderlust-db",
+  "version": "1.0.0",
+  "description": "Wanderlust database",
+  "main": "index.js",
+  "scripts": {
+    "dev:dont": "mongod --dbpath ../../data",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Loren Erickson"
+}

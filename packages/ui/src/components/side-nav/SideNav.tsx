@@ -28,6 +28,7 @@ export function SideNav({ config }: { config: SideNavConfig }) {
             }
         }
     }
+
+
+    return <div />;
 }
-
-
