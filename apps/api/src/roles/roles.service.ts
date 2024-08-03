@@ -4,15 +4,15 @@ import { Model } from 'mongoose';
 import { Role } from './roles.schema';
 
 @Injectable()
-export class UsersService {
-    constructor(@InjectModel(Role.name) private roleModel: Model<Role>) { }
+export class RolesService {
+  constructor(@InjectModel(Role.name) private roleModel: Model<Role>) {}
 
-    async getAll() {
-        return await this.roleModel.find().exec();
-    }
+  async getAll() {
+    return await this.roleModel.find().exec();
+  }
 
-    async create(body: Role) {
-        const createdRole = new this.roleModel(body);
-        return createdRole.save();
-    }
+  async create(body: Role) {
+    const createdRole = new this.roleModel(body);
+    return createdRole.save();
+  }
 }

@@ -6,8 +6,9 @@ import { MediaModule } from './media/media.module';
 import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { resolve, join } from 'path';
-import { UsersModule } from './users/users.module';
-import { LoginModule } from './login/login.module';
+import { UsersModule } from './user/user.module';
+import { SessionModule } from './session/session.module';
+import { databaseProviders } from './database/database.providers';
 
 @Module({
   imports: [
@@ -16,11 +17,11 @@ import { LoginModule } from './login/login.module';
     ServeStaticModule.forRoot({
       rootPath: resolve(__dirname, join('..')),
     }),
-    MediaModule, 
+    MediaModule,
     UsersModule,
-    LoginModule,
+    SessionModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ...databaseProviders],
 })
-export class AppModule { }
+export class AppModule {}
