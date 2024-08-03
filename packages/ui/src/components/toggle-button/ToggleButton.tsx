@@ -1,6 +1,5 @@
 
 import { Button } from 'antd';
-import classes from './ToggleButton.module.scss';
 import { PropsWithChildren } from 'react';
 
 type ToggleButtonProps = {
