@@ -1,5 +1,6 @@
-export type Role = {
-  name: string;
-  description: string;
-  permissions: Record<string, boolean>;
-};
+export type Role =
+  | "globalAdmin"
+  | "localAdmin"
+  | "gamemaster"
+  | "player"
+  | "spectator";

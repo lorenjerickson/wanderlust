@@ -3,6 +3,7 @@
     "**/*.css",
     "**/*.scss",
     "**/*.sass",
-    "**/*.less"
+    "**/*.less",
+    "node_modules/@mantine/core/styles.css"
   ]
 }

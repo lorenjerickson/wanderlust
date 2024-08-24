@@ -2,7 +2,7 @@ import { atom, useAtom } from 'jotai';
 import { ReactNode } from 'react';
 
 
-interface MenuItemConfig {
+export interface MenuItemConfig {
     icon: ReactNode;
     label: string;
     path: string;

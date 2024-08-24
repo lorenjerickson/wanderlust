@@ -3,6 +3,7 @@ import type { FormProps } from 'antd';
 import { Button, Checkbox, Form, Input } from 'antd';
 import { useUserSession } from '@wanderlust/ui';
 import { useNavigate } from 'react-router-dom';
+import classes from './Login.module.scss';
 
 type FieldType = {
   username?: string;

@@ -1,6 +1,7 @@
 import { Radio } from "antd";
 
 import { ReactNode } from "react";
+import classes from "./ToggleButtonGroup.module.scss";
 
 type ToggleButtonGroupProps = {
   buttons: Array<{

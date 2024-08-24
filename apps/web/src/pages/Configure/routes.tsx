@@ -11,7 +11,19 @@ const Roles = lazy(() => import('./pages/Roles/Roles').then((module) => ({ defau
 const routes = [
   {
     path: 'participants',
-    element: <Participants />,
+    children: [{
+      path: 'admins', 
+      element: <Participants role="admins" />,
+    },{
+      path: 'admins', 
+      element: <Participants role="gamemasters" />,
+    },{
+      path: 'admins', 
+      element: <Participants role="players" />,
+    },{
+      path: 'admins', 
+      element: <Participants role="spectators" />,
+    }]
   },
   {
     path: 'roles',

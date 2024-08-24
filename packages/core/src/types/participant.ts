@@ -12,4 +12,9 @@ export type Participant = {
     instagram: string;
     facebook: string;
   };
+  gamesAsRole: GameParticipation;
+};
+
+export type GameParticipation = {
+  [key in Role]: number;
 };

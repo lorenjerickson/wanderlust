@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join, resolve } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { MongooseModule } from '@nestjs/mongoose';
-import { MediaModule } from './media/media.module';
-import { ConfigModule } from '@nestjs/config';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { resolve, join } from 'path';
-import { UsersModule } from './user/user.module';
-import { SessionModule } from './session/session.module';
 import { databaseProviders } from './database/database.providers';
+import { MediaModule } from './media/media.module';
+import { ParticipantsModule } from './participants/participants.module';
+import { SessionModule } from './session/session.module';
 
 @Module({
   imports: [
@@ -18,7 +18,7 @@ import { databaseProviders } from './database/database.providers';
       rootPath: resolve(__dirname, join('..')),
     }),
     MediaModule,
-    UsersModule,
+    ParticipantsModule,
     SessionModule,
   ],
   controllers: [AppController],

@@ -6,3 +6,9 @@
     background: #3f3f3f;
     color: #c0c0c0;
 }
+
+.tabler-icon {
+    &.transparent {
+        background: transparent;
+    }
+}
