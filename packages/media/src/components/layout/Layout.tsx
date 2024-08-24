@@ -1,5 +1,5 @@
 
-import { IconBook, IconChairDirector, IconCode, IconMap, IconMovie, IconMusic, IconPhoto, IconSettings2, IconSquares, IconUser, IconWand } from '@tabler/icons-react';
+import { IconAdjustmentsHorizontal, IconBook, IconBooks, IconChairDirector, IconCircles, IconCode, IconCube, IconDatabase, IconGeometry, IconKeyframeAlignHorizontal, IconMap, IconMovie, IconMusic, IconPhoto, IconRecycle, IconSettings2, IconSettingsAutomation, IconSquares, IconUser, IconUsers, IconWand, IconWorld } from '@tabler/icons-react';
 import { SideNav, SideNavConfig } from '@wanderlust/ui';
 import { Outlet } from 'react-router-dom';
 import classes from './Layout.module.scss';
@@ -10,55 +10,94 @@ const config: SideNavConfig = {
             icon: <IconSettings2 />,
             label: 'Settings',
             path: "settings",
+            items: [{
+                icon: <IconUsers />,
+                label: "People",
+                path: "configure/people"
+            }, {
+                icon: <IconCircles />,
+                label: "Systems",
+                path: "configure/systems"
+            }, {
+                icon: <IconWorld />,
+                label: "Worlds",
+                path: "configure/worlds"
+            }, {
+                icon: <IconAdjustmentsHorizontal />,
+                label: "Defaults",
+                path: "configure/settings"
+            }]
         },
         {
-            icon: <IconBook />,
-            label: 'Library',
+            icon: <IconBooks />,
+            label: 'library',
             path: "library",
-        }, {
-            icon: <IconMusic />,
-            label: 'Audio',
-            path: "media/audio",
+            items: [{
+                icon: <IconPhoto />,
+                label: "Images",
+                path: "library/images"
+            }, {
+                icon: <IconMovie />,
+                label: "Movies",
+                path: "library/movies"
+            }, {
+                icon: <IconMusic />,
+                label: "Music",
+                path: "library/music"
+            }, {
+                icon: <IconCode />,
+                label: "Modules",
+                path: "library/modules"
+            }]
         },
         {
-            icon: <IconMovie />,
-            label: 'Video',
-            path: 'media/video',
+            icon: <IconGeometry />,
+            label: "Design",
+            path: "design",
+            items: [{
+                icon: <IconBook />,
+                label: "Handbook",
+                path: "design/handbook"
+            },
+            {
+                icon: <IconMap />,
+                label: "Scenes",
+                path: "scenes"
+            }, {
+                icon: <IconUser />,
+                label: "Actors",
+                path: "design/actors"
+            }, {
+                icon: <IconCube />,
+                label: "Items",
+                path: "design/items"
+            }, {
+                icon: <IconWand />,
+                label: "Spells",
+                path: "design/spells"
+            }]
         },
         {
-            icon: <IconPhoto />,
-            label: 'Images',
-            path: 'media/images',
-        },
-        {
-            icon: <IconMap />,
-            label: "Scenes",
-            path: "scenes",
-        },
-        {
-            icon: <IconSquares />,
-            label: 'Layers',
-            path: 'layers',
-        },
-        {
-            icon: <IconUser />,
-            label: "Actors",
-            path: "actors",
-        },
-        {
-            icon: <IconWand />,
-            label: 'Effects',
-            path: "effects",
-        },
-        {
-            icon: <IconCode />,
-            label: 'Plugins',
-            path: "plugins",
-        },
-        {
-            icon: <IconChairDirector />,
-            label: 'Sequences',
-            path: 'sequences',
+            icon: <IconSettingsAutomation />,
+            label: 'Automation',
+            path: 'automation',
+            items: [
+                {
+                    icon: <IconRecycle />,
+                    label: 'Effects',
+                    path: "automation/effects",
+                },
+                {
+                    icon: <IconCode />,
+                    label: 'Macros',
+                    path: "automation/macros",
+                },
+                {
+                    icon: <IconKeyframeAlignHorizontal />,
+                    label: 'Animation',
+                    path: "automation/animation",
+                }
+            ]
         }
     ]
 };

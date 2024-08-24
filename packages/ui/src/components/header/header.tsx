@@ -1,51 +1,56 @@
+import { Autocomplete, Group, rem } from "@mantine/core";
+import { IconCompass, IconComponents, IconSearch } from "@tabler/icons-react";
+import { Link } from "react-router-dom";
+import classes from "./header.module.scss";
 
-import {
-    IconCode,
-    IconBook,
-    IconAdjustmentsHorizontal,
-    IconPhoto,
-    IconChevronDown,
-    IconPolaroid,
-    IconTools,
-    IconPlayerPlay,
-    IconKeyframes,
-} from '@tabler/icons-react';
-import { useNavigate, Link } from 'react-router-dom';
-
-
-import classes from './header.module.scss';
-
+const links = [
+  { link: "/configure", label: "Configure" },
+  { link: "/media", label: "Assets" },
+  { link: "/build", label: "Build" },
+  { link: "/play", label: "Play!" },
+];
 
 export function Header() {
-    const navigate = useNavigate();
+  const items = links.map((link) => (
+    <Link key={link.label} to={link.link} className={classes.link}>
+      {link.label}
+    </Link>
+  ));
 
-    return (
-        <div className={classes.header}>
-            <div className={classes.logo}>
-                <IconKeyframes size={24} />
-                <span>Wanderlust</span>
-            </div>
-            <div className={classes.menu}>
-                <div className={classes.menuItem} onClick={() => navigate('/configure')}>
-                    <IconAdjustmentsHorizontal size={24} />
-                    <span className={classes.text}>Configure</span>
-                </div>
-                <div className={classes.menuItem} onClick={() => navigate('/media')}>
-                    <IconPhoto size={24} />
-                    <span className={classes.text}>Media</span>
-                </div>
-                <div className={classes.menuItem} onClick={() => navigate('/design')}>
-                    <IconTools size={24} />
-                    <span className={classes.text}>Design</span>
-                </div>
-                <div className={classes.menuItem} onClick={() => navigate('/play')}>
-                    <IconPlayerPlay size={24} />
-                    <span className={classes.text}>Play!</span>
-                </div>
-            </div>
-            <div className={classes.menu}>
-                <Link to="/login">Login / Register</Link>
-            </div>
-        </div>
-    );
+  return (
+    <header className={classes.header}>
+      <div className={classes.inner}>
+        <Group>
+          <IconCompass />
+          <h3>Wanderlust</h3>
+        </Group>
+
+        <Group>
+          <Group ml={50} gap={5} className={classes.links} visibleFrom="sm">
+            {items}
+          </Group>
+          <Autocomplete
+            className={classes.search}
+            placeholder="Search"
+            leftSection={
+              <IconSearch
+                style={{ width: rem(16), height: rem(16) }}
+                stroke={1.5}
+              />
+            }
+            data={[
+              "React",
+              "Angular",
+              "Vue",
+              "Next.js",
+              "Riot.js",
+              "Svelte",
+              "Blitz.js",
+            ]}
+            visibleFrom="xs"
+          />
+        </Group>
+      </div>
+    </header>
+  );
 }

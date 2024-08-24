@@ -2,7 +2,7 @@ import { Controller, Get, Post, UploadedFile, UseInterceptors, ParseFilePipe, Ma
 import { ImagesService } from './images.service';
 import { Image } from './schema';
 
-@Controller("media/images")
+@Controller("api/media/images")
 export class ImagesController {
   constructor(private readonly imageService: ImagesService) { }
 

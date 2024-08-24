@@ -2,8 +2,8 @@ import { Navigate } from 'react-router-dom';
 import { lazy } from 'react';
 import { Layout } from './components/layout/Layout';
 
-const MediaManager = lazy(() => import('./views/list/MediaList'));
-const MediaEditor = lazy(() => import('./views/edit/MediaEdit'));
+// const MediaManager = lazy(() => import('./views/list/MediaList'));
+// const MediaEditor = lazy(() => import('./views/edit/MediaEdit'));
 
 export const mediaRoutes = [{
     path: 'media', element: <Layout />,

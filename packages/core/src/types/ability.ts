@@ -1,3 +1,5 @@
+import { Effect } from "./effect";
+
 export class Ability {
     value: number;
     effects: Effect[];

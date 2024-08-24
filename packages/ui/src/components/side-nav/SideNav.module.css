@@ -1,0 +1,42 @@
+.container {
+  height: 100%;
+  width: 100%;
+  background-color: rgb(36, 36, 36, 0.75);
+  padding: 16px;
+  .aside {
+    .menu {
+      background-color: rgb(36, 36, 36, 0.75);
+
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      .menuItem {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        padding: 8px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+        &.active {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+        .icon {
+          width: 24px;
+          height: 24px;
+        }
+        .label {
+          font-size: 16px;
+          font-weight: 500;
+          color: white;
+        }
+      }
+    }
+  }
+  .subMenu {
+    background-color: rgb(36, 36, 36, 0.75);
+  }
+}

@@ -1,39 +1,69 @@
-import { List } from 'antd';
-import { ReactNode, useState } from 'react';
+import { useEffect, useMemo, useState } from "react";
+import { UnstyledButton, Tooltip, Title, rem } from "@mantine/core";
+import classes from "./SideNav.module.css";
+import { useSideNav, MenuItemConfig } from "../../hooks";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { StyledSidenav } from "./styles";
 
-import classes from './SideNav.module.scss';
+export function SideNav() {
+  const navigate = useNavigate();
+  const { sideNavConfig } = useSideNav();
+  const [isOpen, setIsOpen] = useState(true);
+  const [activeItem, setActiveItem] = useState<MenuItemConfig | null>(null);
 
-export type SideNavConfig = {
-    items: Array<{
-        icon: ReactNode;
-        label: string;
-        path: string;
-    }>;
-}
-
-export function SideNav({ config }: { config: SideNavConfig }) {
-    const [currentNav, setCurrentNav] = useState(0);
-    const [open, setOpen] = useState(false);
-    const handleNavClick = (index: number) => {
-        setCurrentNav(index);
-        setOpen(true);
+  useEffect(() => {
+    const firstItem = sideNavConfig?.menuItems?.[0];
+    if (firstItem) {
+      setActiveItem(firstItem);
     }
-    const onClose = () => setOpen(false);
+  }, [sideNavConfig]);
 
-    return (
+  const menu = useMemo(() => {
+    return sideNavConfig.menuItems?.map((item, index) => {
+      return (
+        <Tooltip key={index} label={item.label} position="right" withArrow>
+          <UnstyledButton
+            className={classes.menuItem}
+            onClick={() => navigate(item.path)}
+          >
+            {item.icon}
+          </UnstyledButton>
+        </Tooltip>
+      );
+    });
+  }, [sideNavConfig]);
 
-        <div className={classes.sidenav}>
-            <List className={classes.minilist}>
-                {config.items.map((item, index) => (
-                    <List.Item key={index} className={classes.item} onClick={() => handleNavClick(index)}>
-                        <div className={classes.icon}>{item.icon}</div>
-                    </List.Item>
-                ))}
-            </List>
+  const isActive = (item: MenuItemConfig) => {
+    return activeItem === item;
+  };
 
-        </div>
+  const submenu = useMemo(() => {
+    if (activeItem) {
+      return activeItem.menuItems?.map((item, index) => {
+        return (
+          <Tooltip key={index} label={item.label} position="right" withArrow>
+            <UnstyledButton
+              className={`submenu-item ${isActive(item) ? "active" : ""}`}
+              onClick={() => navigate(item.path)}
+            >
+              <div className="icon">{item.icon}</div>
+              <div className="label">{item.label}</div>
+            </UnstyledButton>
+          </Tooltip>
+        );
+      });
+    } else {
+      return null;
+    }
+  }, [activeItem]);
 
-    )
+  return (
+    <StyledSidenav open={isOpen}>
+      <div className="container">
+        <div className="main-menu">{menu}</div>
+        <div className="sub-menu">{submenu}</div>
+      </div>
+    </StyledSidenav>
+  );
 }
-
-
