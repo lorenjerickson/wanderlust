@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState } from 'react';
 import type { FormProps } from 'antd';
 import { Button, Checkbox, Form, Input } from 'antd';
@@ -30,6 +31,53 @@ export const LoginPage = () => {
 
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
     console.log('Failed:', errorInfo);
+=======
+import classes from './Login.module.scss';
+import { useNavigate } from 'react-router-dom';
+import { Button, Checkbox, Group, PasswordInput, TextInput } from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { useState } from 'react';
+
+type FormData = {
+  username?: string;
+  password?: string;
+  remember?: boolean;
+};
+
+export const LoginPage = () => {
+  const navigate = useNavigate();
+  const [error, setError] = useState<string | null>(null);
+
+  const form = useForm({
+    mode: 'controlled',
+    initialValues: {
+      username: '',
+      password: '',
+      remember: false,
+    },
+    validate: {
+      username: (value) => (/^\S+$/.test(value) ? null : 'Invalid email'),
+      password: (value) => (/^\S+$/.test(value) ? null : 'Invalid password'),
+    },
+  });
+
+  const handleSubmit = async (values: FormData) => {
+    setError(null);
+    const res = await fetch('http://localhost:3000/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      localStorage.setItem('accessToken', data.accessToken);
+      navigate('/welcome');
+    } else {
+      setError('Login failed.');
+    }
+>>>>>>> cb21b1c (feat: auth with jwt)
   };
 
   return (
@@ -38,6 +86,7 @@ export const LoginPage = () => {
       <div className={classes.subtitle}>Let the adventure begin.</div>
       <div className={classes.form}>
         <div className={classes.login}>
+<<<<<<< HEAD
           <Form
             name="basic"
             labelCol={{ span: 8 }}
@@ -81,6 +130,41 @@ export const LoginPage = () => {
               {error && <div className={classes.error}>{error}</div>}
             </Form.Item>
           </Form>
+=======
+          <form
+            onSubmit={form.onSubmit(handleSubmit)}
+            name="login"
+            style={{ maxWidth: 800 }}
+            autoComplete="off"
+          >
+            <TextInput
+              withAsterisk
+              variant="filled"
+              label="Username"
+              placeholder="Username"
+              key={'username'}
+              {...form.getInputProps('username')}
+            />
+            <PasswordInput
+              withAsterisk
+              variant="filled"
+              label="Password"
+              placeholder="Password"
+              key={'password'}
+              {...form.getInputProps('password')}
+            />
+            <Checkbox
+              mt="md"
+              label="Remember my username"
+              key={'termsOfService'}
+              {...form.getInputProps('remember', { type: 'checkbox' })}
+            />
+            <Group justify="flex-end" mt="md">
+              <Button type="submit">Submit</Button>
+            </Group>
+          </form>
+          {error && <div className={classes.error}>{error}</div>}
+>>>>>>> cb21b1c (feat: auth with jwt)
         </div>
       </div>
     </div>

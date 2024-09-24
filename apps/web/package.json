@@ -42,10 +42,14 @@
     "@tiptap/starter-kit": "^2.5.8",
     "@wanderlust/core": "*",
     "@wanderlust/media": "*",
+<<<<<<< HEAD
     "@wanderlust/api": "*",
     "antd": "^5.17.3",
     "dayjs": "^1.11.12",
     "embla-carousel-react": "^8.1.8",
+=======
+    "@wanderlust/configure": "*",
+>>>>>>> cb21b1c (feat: auth with jwt)
     "jotai": "^2.8.0",
     "postcss-preset-mantine": "^1.17.0",
     "react": "^18.2.0",

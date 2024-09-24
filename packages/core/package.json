@@ -2,6 +2,7 @@
   "name": "@wanderlust/core",
   "version": "1.0.0",
   "description": "",
+<<<<<<< HEAD
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -13,6 +14,9 @@
       "require": "./src/index.js"
     }
   },
+=======
+  "main": "src/index.ts",
+>>>>>>> cb21b1c (feat: auth with jwt)
   "scripts": {
     "start:dev": "tsc --watch",
     "dev": "npm run start:dev"

@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+<<<<<<< HEAD
 import { Navigate, Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import { useUserSession } from '@wanderlust/ui';
@@ -49,6 +50,33 @@ const router = createBrowserRouter([
           },
         ],
       },
+=======
+import { Layout } from './Layout';
+import { routes as configureRoutes } from '@wanderlust/configure';
+import { mediaRoutes } from '@wanderlust/media';
+import { Welcome } from './pages/Welcome/Welcome';
+import { LoginPage } from './pages/login/Login';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      {
+        path: 'welcome',
+        element: <Welcome />,
+      },
+      ...mediaRoutes,
+      ...configureRoutes,
+      // {
+      //   path: 'library',
+      //   children: libraryRoutes
+      // },
+      // {
+      //   path: 'mixer',
+      //   children: mixerRoutes
+      // },
+>>>>>>> cb21b1c (feat: auth with jwt)
     ],
   },
   {
