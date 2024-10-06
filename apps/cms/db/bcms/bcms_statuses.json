@@ -1,0 +1,18 @@
+{
+  "66f632081ab74c52570efac0": {
+    "_id": "66f632081ab74c52570efac0",
+    "createdAt": 1727410696160,
+    "updatedAt": 1727410696160,
+    "color": "",
+    "label": "Draft",
+    "name": "draft"
+  },
+  "66f632081ab74c52570efac1": {
+    "_id": "66f632081ab74c52570efac1",
+    "createdAt": 1727410696160,
+    "updatedAt": 1727410696160,
+    "color": "",
+    "label": "Active",
+    "name": "active"
+  }
+}

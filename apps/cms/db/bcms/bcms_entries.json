@@ -1,0 +1,203 @@
+{
+  "6702e667ab15d29e25c6fdb1": {
+    "_id": "6702e667ab15d29e25c6fdb1",
+    "createdAt": 1728243303117,
+    "updatedAt": 1728243331295,
+    "cid": "1",
+    "templateId": "66f632f81ab74c52570efad2",
+    "userId": "111111111111111111111111",
+    "status": "",
+    "meta": [
+      {
+        "lng": "en",
+        "props": [
+          {
+            "id": "19077492-3709-429d-ae35-9bc11033e745",
+            "data": [
+              "Chicken"
+            ]
+          },
+          {
+            "id": "51da4e99-7c62-4773-b53a-46b7ecc2d6d7",
+            "data": [
+              "chicken"
+            ]
+          },
+          {
+            "id": "8c1aed74-795e-48b3-a226-2e78eef7f368",
+            "data": {
+              "_id": "66f633281ab74c52570efad4",
+              "items": [
+                {
+                  "props": [
+                    {
+                      "id": "61a69923-ee6c-4e06-9681-3c86fabd658b",
+                      "data": [
+                        "XTRA_SMALL"
+                      ]
+                    },
+                    {
+                      "id": "e0871596-ebff-41bf-a50f-764531255724",
+                      "data": [
+                        8
+                      ]
+                    },
+                    {
+                      "id": "80f15adb-b68b-43a4-8422-d95b830de40c",
+                      "data": [
+                        16
+                      ]
+                    },
+                    {
+                      "id": "259afca5-c7b0-44e9-a5ab-b0030957672e",
+                      "data": {
+                        "_id": "66f633a81ab74c52570efad5",
+                        "items": [
+                          {
+                            "props": [
+                              {
+                                "id": "b86ec9de-6f3f-4264-a29b-3e420a20502f",
+                                "data": [
+                                  {
+                                    "_id": "66f632cb1ab74c52570efacf",
+                                    "alt_text": "chicken token",
+                                    "caption": "Chicken"
+                                  }
+                                ]
+                              },
+                              {
+                                "id": "d86f8952-e083-48ee-a570-d91e71e9b2d6",
+                                "data": [
+                                  {
+                                    "_id": "",
+                                    "alt_text": "",
+                                    "caption": ""
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": "83920dc9-9070-4d43-a997-e23af3549564",
+                      "data": {
+                        "_id": "6702e35cab15d29e25c6fdaf",
+                        "items": [
+                          {
+                            "props": [
+                              {
+                                "id": "ae2512f8-a0c4-4c10-bd55-647766baf5d2",
+                                "data": [
+                                  "IDLE"
+                                ]
+                              },
+                              {
+                                "id": "44a5261c-985b-45e7-b3dc-bc4fee426cd0",
+                                "data": [
+                                  {
+                                    "_id": "66f632cb1ab74c52570eface",
+                                    "alt_text": "idle chicken",
+                                    "caption": "Chicken Clucking"
+                                  }
+                                ]
+                              },
+                              {
+                                "id": "630ade4d-9009-4ad8-b7e3-f93888f4372a",
+                                "data": [
+                                  "AUDIO"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "props": [
+                              {
+                                "id": "ae2512f8-a0c4-4c10-bd55-647766baf5d2",
+                                "data": [
+                                  "AGGRAVATED"
+                                ]
+                              },
+                              {
+                                "id": "44a5261c-985b-45e7-b3dc-bc4fee426cd0",
+                                "data": [
+                                  {
+                                    "_id": "66f632cb1ab74c52570efacd",
+                                    "alt_text": "chicken aggravated",
+                                    "caption": "Aggravated Chicken"
+                                  }
+                                ]
+                              },
+                              {
+                                "id": "630ade4d-9009-4ad8-b7e3-f93888f4372a",
+                                "data": [
+                                  "AUDIO"
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "id": "84274eb2-810f-4fd9-a3f4-6600d3655f46",
+            "data": {
+              "_id": "66f637561ab74c52570efadc",
+              "items": []
+            }
+          },
+          {
+            "id": "6735427c-e3cb-4100-9ae1-b07dbb713cae",
+            "data": {
+              "_id": "66f634cd1ab74c52570efad7",
+              "items": [
+                {
+                  "props": [
+                    {
+                      "id": "c72f7d7b-dc4c-4873-9071-e41ed6800dba",
+                      "data": [
+                        4
+                      ]
+                    },
+                    {
+                      "id": "0d58a1b5-9e3d-4598-ba88-81692f1d49a2",
+                      "data": {
+                        "_id": "66f635031ab74c52570efad8",
+                        "items": []
+                      }
+                    },
+                    {
+                      "id": "cb9a2b40-6cdb-46dd-bd99-e68e6bec6f09",
+                      "data": [
+                        "Strength"
+                      ]
+                    },
+                    {
+                      "id": "0b628361-01f0-4e74-9c6b-0663edb2f702",
+                      "data": [
+                        ""
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "content": [
+      {
+        "lng": "en",
+        "nodes": [],
+        "plainText": ""
+      }
+    ]
+  }
+}

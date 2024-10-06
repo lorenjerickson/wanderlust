@@ -1,0 +1,105 @@
+{
+  "66f632f81ab74c52570efad2": {
+    "_id": "66f632f81ab74c52570efad2",
+    "createdAt": 1727410936791,
+    "updatedAt": 1728242986579,
+    "cid": "1",
+    "desc": "",
+    "label": "Creature",
+    "name": "creature",
+    "singleEntry": false,
+    "userId": "111111111111111111111111",
+    "props": [
+      {
+        "id": "19077492-3709-429d-ae35-9bc11033e745",
+        "label": "Title",
+        "name": "title",
+        "array": false,
+        "required": true,
+        "type": "STRING",
+        "defaultData": [
+          ""
+        ]
+      },
+      {
+        "id": "51da4e99-7c62-4773-b53a-46b7ecc2d6d7",
+        "label": "Slug",
+        "name": "slug",
+        "array": false,
+        "required": true,
+        "type": "STRING",
+        "defaultData": [
+          ""
+        ]
+      },
+      {
+        "id": "8c1aed74-795e-48b3-a226-2e78eef7f368",
+        "name": "appearance",
+        "label": "Appearance",
+        "array": false,
+        "required": true,
+        "type": "GROUP_POINTER",
+        "defaultData": {
+          "_id": "66f633281ab74c52570efad4"
+        }
+      },
+      {
+        "id": "84274eb2-810f-4fd9-a3f4-6600d3655f46",
+        "name": "abilities",
+        "label": "Abilities",
+        "array": true,
+        "required": false,
+        "type": "GROUP_POINTER",
+        "defaultData": {
+          "_id": "66f637561ab74c52570efadc"
+        }
+      },
+      {
+        "id": "6735427c-e3cb-4100-9ae1-b07dbb713cae",
+        "name": "attributes",
+        "label": "Attributes",
+        "array": true,
+        "required": true,
+        "type": "GROUP_POINTER",
+        "defaultData": {
+          "_id": "66f634cd1ab74c52570efad7"
+        }
+      }
+    ]
+  },
+  "6702e0afab15d29e25c6fdac": {
+    "_id": "6702e0afab15d29e25c6fdac",
+    "createdAt": 1728241839165,
+    "updatedAt": 1728241839165,
+    "cid": "2",
+    "desc": "",
+    "label": "Item",
+    "name": "item",
+    "singleEntry": false,
+    "userId": "111111111111111111111111",
+    "props": [
+      {
+        "id": "efe7c01a-6f2f-4c42-a6e1-3eb7b3156980",
+        "label": "Title",
+        "name": "title",
+        "array": false,
+        "required": true,
+        "type": "STRING",
+        "defaultData": [
+          ""
+        ]
+      },
+      {
+        "id": "a87dd19f-2add-4ec9-aba4-c9312a07ec05",
+        "label": "Slug",
+        "name": "slug",
+        "array": false,
+        "required": true,
+        "type": "STRING",
+        "defaultData": [
+          ""
+        ]
+      }
+    ]
+  }
+}

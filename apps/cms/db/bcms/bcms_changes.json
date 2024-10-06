@@ -1,0 +1,65 @@
+{
+  "66f632081ab74c52570efac3": {
+    "_id": "66f632081ab74c52570efac3",
+    "createdAt": 1727410696160,
+    "updatedAt": 1727410696160,
+    "name": "color",
+    "count": 0
+  },
+  "66f632081ab74c52570efac4": {
+    "_id": "66f632081ab74c52570efac4",
+    "createdAt": 1727410696160,
+    "updatedAt": 1728243331296,
+    "name": "entry",
+    "count": 2
+  },
+  "66f632081ab74c52570efac5": {
+    "_id": "66f632081ab74c52570efac5",
+    "createdAt": 1727410696160,
+    "updatedAt": 1728243017858,
+    "name": "group",
+    "count": 95
+  },
+  "66f632081ab74c52570efac6": {
+    "_id": "66f632081ab74c52570efac6",
+    "createdAt": 1727410696160,
+    "updatedAt": 1727410696160,
+    "name": "language",
+    "count": 0
+  },
+  "66f632081ab74c52570efac7": {
+    "_id": "66f632081ab74c52570efac7",
+    "createdAt": 1727410696160,
+    "updatedAt": 1727410891580,
+    "name": "media",
+    "count": 5
+  },
+  "66f632081ab74c52570efac8": {
+    "_id": "66f632081ab74c52570efac8",
+    "createdAt": 1727410696160,
+    "updatedAt": 1727410696160,
+    "name": "status",
+    "count": 0
+  },
+  "66f632081ab74c52570efac9": {
+    "_id": "66f632081ab74c52570efac9",
+    "createdAt": 1727410696160,
+    "updatedAt": 1727410696160,
+    "name": "tag",
+    "count": 0
+  },
+  "66f632081ab74c52570efaca": {
+    "_id": "66f632081ab74c52570efaca",
+    "createdAt": 1727410696160,
+    "updatedAt": 1728242986579,
+    "name": "templates",
+    "count": 14
+  },
+  "66f632081ab74c52570efacb": {
+    "_id": "66f632081ab74c52570efacb",
+    "createdAt": 1727410696160,
+    "updatedAt": 1727410696160,
+    "name": "widget",
+    "count": 0
+  }
+}

@@ -1,0 +1,590 @@
+{
+  "66f633281ab74c52570efad4": {
+    "_id": "66f633281ab74c52570efad4",
+    "createdAt": 1727410984467,
+    "updatedAt": 1728242640993,
+    "cid": "1",
+    "desc": "",
+    "label": "Appearance",
+    "name": "appearance",
+    "props": [
+      {
+        "id": "61a69923-ee6c-4e06-9681-3c86fabd658b",
+        "name": "size",
+        "label": "Size",
+        "array": false,
+        "required": true,
+        "type": "ENUMERATION",
+        "defaultData": {
+          "items": [
+            "XTRA_SMALL",
+            "SMALL",
+            "LARGE",
+            "MEDIUM",
+            "XTRA_LARGE",
+            "HUGE",
+            "GIGANTIC"
+          ],
+          "selected": ""
+        }
+      },
+      {
+        "id": "e0871596-ebff-41bf-a50f-764531255724",
+        "name": "weight",
+        "label": "Weight",
+        "array": false,
+        "required": true,
+        "type": "NUMBER",
+        "defaultData": [
+          0
+        ]
+      },
+      {
+        "id": "80f15adb-b68b-43a4-8422-d95b830de40c",
+        "name": "height",
+        "label": "Height",
+        "array": false,
+        "required": true,
+        "type": "NUMBER",
+        "defaultData": [
+          0
+        ]
+      },
+      {
+        "id": "259afca5-c7b0-44e9-a5ab-b0030957672e",
+        "name": "artwork",
+        "label": "Artwork",
+        "array": false,
+        "required": true,
+        "type": "GROUP_POINTER",
+        "defaultData": {
+          "_id": "66f633a81ab74c52570efad5"
+        }
+      },
+      {
+        "id": "83920dc9-9070-4d43-a997-e23af3549564",
+        "name": "av_effects",
+        "label": "AV Effects",
+        "array": true,
+        "required": false,
+        "type": "GROUP_POINTER",
+        "defaultData": {
+          "_id": "6702e35cab15d29e25c6fdaf"
+        }
+      }
+    ]
+  },
+  "66f633a81ab74c52570efad5": {
+    "_id": "66f633a81ab74c52570efad5",
+    "createdAt": 1727411112311,
+    "updatedAt": 1728242299869,
+    "cid": "2",
+    "desc": "",
+    "label": "Artwork",
+    "name": "artwork",
+    "props": [
+      {
+        "id": "b86ec9de-6f3f-4264-a29b-3e420a20502f",
+        "name": "token_image",
+        "label": "Token Image",
+        "array": false,
+        "required": true,
+        "type": "MEDIA",
+        "defaultData": []
+      },
+      {
+        "id": "d86f8952-e083-48ee-a570-d91e71e9b2d6",
+        "name": "avatar_image",
+        "label": "Avatar Image",
+        "array": false,
+        "required": false,
+        "type": "MEDIA",
+        "defaultData": []
+      }
+    ]
+  },
+  "66f634cd1ab74c52570efad7": {
+    "_id": "66f634cd1ab74c52570efad7",
+    "createdAt": 1727411405973,
+    "updatedAt": 1728243017857,
+    "cid": "4",
+    "desc": "",
+    "label": "Attribute",
+    "name": "attribute",
+    "props": [
+      {
+        "id": "c72f7d7b-dc4c-4873-9071-e41ed6800dba",
+        "name": "base_value",
+        "label": "Base Value",
+        "array": false,
+        "required": true,
+        "type": "NUMBER",
+        "defaultData": [
+          0
+        ]
+      },
+      {
+        "id": "0d58a1b5-9e3d-4598-ba88-81692f1d49a2",
+        "name": "modifiers",
+        "label": "Modifiers",
+        "array": true,
+        "required": false,
+        "type": "GROUP_POINTER",
+        "defaultData": {
+          "_id": "66f635031ab74c52570efad8"
+        }
+      },
+      {
+        "id": "cb9a2b40-6cdb-46dd-bd99-e68e6bec6f09",
+        "name": "name",
+        "label": "Name",
+        "array": false,
+        "required": true,
+        "type": "STRING",
+        "defaultData": [
+          ""
+        ]
+      },
+      {
+        "id": "0b628361-01f0-4e74-9c6b-0663edb2f702",
+        "name": "description",
+        "label": "Description",
+        "array": false,
+        "required": false,
+        "type": "STRING",
+        "defaultData": [
+          ""
+        ]
+      }
+    ]
+  },
+  "66f635031ab74c52570efad8": {
+    "_id": "66f635031ab74c52570efad8",
+    "createdAt": 1727411459920,
+    "updatedAt": 1727411782515,
+    "cid": "5",
+    "desc": "",
+    "label": "Attribute Modifier",
+    "name": "attribute_modifier",
+    "props": [
+      {
+        "id": "e9c9327a-9fff-4ac3-bdcc-86e96af4214a",
+        "name": "target_attribute",
+        "label": "Target Attribute",
+        "array": false,
+        "required": true,
+        "type": "ENUMERATION",
+        "defaultData": {
+          "items": [
+            "STRENGTH",
+            "INTELLIGENCE",
+            "WISDOM",
+            "CHARISMA",
+            "DEXTERITY",
+            "CONSTITUTION"
+          ],
+          "selected": ""
+        }
+      },
+      {
+        "id": "214d0768-5813-4cb1-9175-f4d6eccc193e",
+        "name": "increment",
+        "label": "Increment",
+        "array": false,
+        "required": true,
+        "type": "NUMBER",
+        "defaultData": [
+          0
+        ]
+      },
+      {
+        "id": "d68a089b-ba0d-4663-9436-76611e4bd3cb",
+        "name": "modification_type",
+        "label": "Modification Type",
+        "array": false,
+        "required": true,
+        "type": "ENUMERATION",
+        "defaultData": {
+          "items": [
+            "ABSOLUTE",
+            "RELATIVE"
+          ],
+          "selected": ""
+        }
+      },
+      {
+        "id": "32d016f5-5f2d-47a8-8ca4-4e8c4c8850cf",
+        "name": "duration",
+        "label": "Duration",
+        "array": false,
+        "required": true,
+        "type": "GROUP_POINTER",
+        "defaultData": {
+          "_id": "66f635b01ab74c52570efad9"
+        }
+      }
+    ]
+  },
+  "66f635b01ab74c52570efad9": {
+    "_id": "66f635b01ab74c52570efad9",
+    "createdAt": 1727411632073,
+    "updatedAt": 1727411826634,
+    "cid": "6",
+    "desc": "",
+    "label": "Duration",
+    "name": "duration",
+    "props": [
+      {
+        "id": "ec02bdda-86f3-4d02-b274-922f836b8c59",
+        "name": "increment",
+        "label": "Increment",
+        "array": false,
+        "required": true,
+        "type": "NUMBER",
+        "defaultData": [
+          0
+        ]
+      },
+      {
+        "id": "7117e119-1e0f-439e-81a3-8a3be9cc04cf",
+        "name": "units",
+        "label": "Units",
+        "array": false,
+        "required": true,
+        "type": "ENUMERATION",
+        "defaultData": {
+          "items": [
+            "TURN",
+            "ROUND",
+            "SECOND",
+            "MINUTE",
+            "HOUR",
+            "WEEK",
+            "MONTH",
+            "YEAR",
+            "DECADE"
+          ],
+          "selected": ""
+        }
+      },
+      {
+        "id": "58acfae2-801f-4dc2-9169-27b571926e02",
+        "name": "is_permanent",
+        "label": "Is Permanent",
+        "array": false,
+        "required": false,
+        "type": "BOOLEAN",
+        "defaultData": [
+          false
+        ]
+      }
+    ]
+  },
+  "66f635ee1ab74c52570efada": {
+    "_id": "66f635ee1ab74c52570efada",
+    "createdAt": 1727411694579,
+    "updatedAt": 1727411750844,
+    "cid": "7",
+    "desc": "",
+    "label": "Distance",
+    "name": "distance",
+    "props": [
+      {
+        "id": "05ff2116-0438-4a85-b483-baf8ddf3c08e",
+        "name": "interval",
+        "label": "Interval",
+        "array": false,
+        "required": true,
+        "type": "NUMBER",
+        "defaultData": [
+          0
+        ]
+      },
+      {
+        "id": "93485fb1-3ca7-462b-87c9-7d04f8c6bc4f",
+        "name": "units",
+        "label": "Units",
+        "array": false,
+        "required": true,
+        "type": "ENUMERATION",
+        "defaultData": {
+          "items": [
+            "INCH",
+            "FOOT",
+            "YARD",
+            "MILE"
+          ],
+          "selected": ""
+        }
+      }
+    ]
+  },
+  "66f636bd1ab74c52570efadb": {
+    "_id": "66f636bd1ab74c52570efadb",
+    "createdAt": 1727411901201,
+    "updatedAt": 1727412000528,
+    "cid": "8",
+    "desc": "",
+    "label": "Stat Block",
+    "name": "stat_block",
+    "props": [
+      {
+        "id": "66ad4a82-bb6d-4b3b-8622-4cb26bb6a9e1",
+        "name": "strength",
+        "label": "Strength",
+        "array": false,
+        "required": true,
+        "type": "GROUP_POINTER",
+        "defaultData": {
+          "_id": "66f634cd1ab74c52570efad7"
+        }
+      },
+      {
+        "id": "062f4b75-dd4f-481f-a671-ec98c93f3925",
+        "name": "intelligence",
+        "label": "Intelligence",
+        "array": false,
+        "required": true,
+        "type": "GROUP_POINTER",
+        "defaultData": {
+          "_id": "66f634cd1ab74c52570efad7"
+        }
+      },
+      {
+        "id": "8ba3b897-da41-401f-bc1c-f57d394eecf1",
+        "name": "wisdom",
+        "label": "Wisdom",
+        "array": false,
+        "required": true,
+        "type": "GROUP_POINTER",
+        "defaultData": {
+          "_id": "66f634cd1ab74c52570efad7"
+        }
+      },
+      {
+        "id": "0fdbb694-8372-4d9b-9d37-c7d294587c25",
+        "name": "constitution",
+        "label": "Constitution",
+        "array": false,
+        "required": false,
+        "type": "GROUP_POINTER",
+        "defaultData": {
+          "_id": "66f634cd1ab74c52570efad7"
+        }
+      },
+      {
+        "id": "9e8e8c80-f2b8-4568-b4b5-8c4cbaacb1cc",
+        "name": "charisma",
+        "label": "Charisma",
+        "array": false,
+        "required": true,
+        "type": "GROUP_POINTER",
+        "defaultData": {
+          "_id": "66f634cd1ab74c52570efad7"
+        }
+      },
+      {
+        "id": "7b47890a-6528-4bb3-ad39-e63113769a0c",
+        "name": "dexterity",
+        "label": "Dexterity",
+        "array": false,
+        "required": true,
+        "type": "GROUP_POINTER",
+        "defaultData": {
+          "_id": "66f634cd1ab74c52570efad7"
+        }
+      }
+    ]
+  },
+  "66f637561ab74c52570efadc": {
+    "_id": "66f637561ab74c52570efadc",
+    "createdAt": 1727412054985,
+    "updatedAt": 1728242765218,
+    "cid": "9",
+    "desc": "",
+    "label": "Ability",
+    "name": "ability",
+    "props": [
+      {
+        "id": "22c2050b-5cbc-4e2d-89e2-1b654780f944",
+        "name": "modifiers",
+        "label": "Modifiers",
+        "array": true,
+        "required": true,
+        "type": "GROUP_POINTER",
+        "defaultData": {
+          "_id": "66f637e51ab74c52570efadd"
+        }
+      },
+      {
+        "id": "421f5805-f823-4393-b8d9-0517dea95b40",
+        "name": "proficient",
+        "label": "Proficient",
+        "array": false,
+        "required": false,
+        "type": "BOOLEAN",
+        "defaultData": [
+          false
+        ]
+      },
+      {
+        "id": "e74efe93-8b1b-4cdd-b5db-4549bcdba90d",
+        "name": "name",
+        "label": "Name",
+        "array": false,
+        "required": true,
+        "type": "STRING",
+        "defaultData": [
+          ""
+        ]
+      },
+      {
+        "id": "45c99b2e-b724-4b10-8802-b2ccab04744a",
+        "name": "description",
+        "label": "Description",
+        "array": false,
+        "required": false,
+        "type": "STRING",
+        "defaultData": [
+          ""
+        ]
+      }
+    ]
+  },
+  "66f637e51ab74c52570efadd": {
+    "_id": "66f637e51ab74c52570efadd",
+    "createdAt": 1727412197111,
+    "updatedAt": 1727412255986,
+    "cid": "a",
+    "desc": "",
+    "label": "Ability Modifier",
+    "name": "ability_modifier",
+    "props": [
+      {
+        "id": "ddfe828a-e324-4c62-b235-fd8b5b66e3da",
+        "name": "increment",
+        "label": "Increment",
+        "array": false,
+        "required": true,
+        "type": "NUMBER",
+        "defaultData": [
+          0
+        ]
+      },
+      {
+        "id": "1c143443-8ff3-49ee-9614-e8c109a6cd78",
+        "name": "modification_type",
+        "label": "Modification Type",
+        "array": false,
+        "required": true,
+        "type": "ENUMERATION",
+        "defaultData": {
+          "items": [
+            "RELATIVE",
+            "ABSOLUTE"
+          ],
+          "selected": ""
+        }
+      }
+    ]
+  },
+  "66fcc90d00ffc169c773968c": {
+    "_id": "66fcc90d00ffc169c773968c",
+    "createdAt": 1727842573211,
+    "updatedAt": 1727842716264,
+    "cid": "c",
+    "desc": "",
+    "label": "Race",
+    "name": "race",
+    "props": [
+      {
+        "id": "5606d302-0ffd-45b6-8c53-b3691da8e2e7",
+        "name": "name",
+        "label": "Name",
+        "array": false,
+        "required": true,
+        "type": "STRING",
+        "defaultData": [
+          ""
+        ]
+      },
+      {
+        "id": "1902963b-fd52-43d9-b8dd-f2f9016b113f",
+        "name": "description",
+        "label": "Description",
+        "array": false,
+        "required": true,
+        "type": "RICH_TEXT",
+        "defaultData": [
+          {
+            "nodes": []
+          }
+        ]
+      },
+      {
+        "id": "3603e8f0-e28a-41c5-a6ff-13ff548b8807",
+        "name": "hit_die",
+        "label": "Hit Die",
+        "array": false,
+        "required": true,
+        "type": "NUMBER",
+        "defaultData": [
+          0
+        ]
+      }
+    ]
+  },
+  "6702e35cab15d29e25c6fdaf": {
+    "_id": "6702e35cab15d29e25c6fdaf",
+    "createdAt": 1728242524679,
+    "updatedAt": 1728242616094,
+    "cid": "e",
+    "desc": "",
+    "label": "AV Effect",
+    "name": "av_effect",
+    "props": [
+      {
+        "id": "ae2512f8-a0c4-4c10-bd55-647766baf5d2",
+        "name": "trigger",
+        "label": "Trigger",
+        "array": false,
+        "required": true,
+        "type": "ENUMERATION",
+        "defaultData": {
+          "items": [
+            "AGGRAVATED",
+            "IDLE",
+            "ATTACKING",
+            "DEFENDING",
+            "DEATH"
+          ],
+          "selected": ""
+        }
+      },
+      {
+        "id": "44a5261c-985b-45e7-b3dc-bc4fee426cd0",
+        "name": "media",
+        "label": "Media",
+        "array": false,
+        "required": true,
+        "type": "MEDIA",
+        "defaultData": []
+      },
+      {
+        "id": "630ade4d-9009-4ad8-b7e3-f93888f4372a",
+        "name": "media_type",
+        "label": "Media Type",
+        "array": false,
+        "required": true,
+        "type": "ENUMERATION",
+        "defaultData": {
+          "items": [
+            "AUDIO",
+            "VIDEO"
+          ],
+          "selected": ""
+        }
+      }
+    ]
+  }
+}
