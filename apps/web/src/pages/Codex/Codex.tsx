@@ -1,6 +1,8 @@
-import { useSideNav } from '@wanderlust/ui';
 import { useEffect } from 'react';
 import { IconCube, IconMap, IconSpiral, IconSword, IconUsers, IconWand } from '@tabler/icons-react';
+import { useSideNav } from '@/hooks/useSideNav';
+
+import classes from './Codex.module.css';
 
 export default function Codex() {
   const { setSideNavConfig } = useSideNav();

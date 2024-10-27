@@ -14,9 +14,9 @@ describe('MediaController', () => {
     mediaController = app.get<MediaController>(MediaController);
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(true).toBe(true);
+  describe('MediaController', () => {
+    it('should be cinstrycted correctly"', () => {
+      expect(mediaController).toBe(true);
     });
   });
 });

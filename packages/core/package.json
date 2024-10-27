@@ -2,20 +2,22 @@
   "name": "@wanderlust/core",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "src"
-  ],
+  "main": "src/index.ts",
+  "type": "module",
   "exports": {
     ".": {
-      "import": "./src/index.ts",
-      "require": "./src/index.js"
+      "import": "./src/index.ts"
     }
   },
   "scripts": {
-    "start:dev": "tsc --watch",
-    "dev": "npm run start:dev"
+    "dev": "tsc --watch",
+    "build": "tsc",
+    "lint": "npm run lint:eslint && npm run lint:stylelint",
+    "lint:eslint": "eslint . --ext .ts,.tsx --cache",
+    "lint:stylelint": "stylelint '**/*.css' --cache",
+    "prettier": "prettier --check \"**/*.{ts,tsx}\"",
+    "prettier:write": "prettier --write \"**/*.{ts,tsx}\"",
+    "test": "npm run lint && npm run build"    
   },
   "keywords": [],
   "author": "",

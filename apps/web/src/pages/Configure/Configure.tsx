@@ -1,3 +1,4 @@
+import { useSideNav } from '@/hooks/useSideNav';
 import {
   IconAdjustmentsHorizontal,
   IconCertificate,
@@ -11,7 +12,6 @@ import {
   IconUserShield,
   IconUserCog,
 } from '@tabler/icons-react';
-import { useSideNav } from '@wanderlust/ui';
 import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 

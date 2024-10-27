@@ -1,10 +1,18 @@
-import { Controller, Get, Post, UploadedFile, UseInterceptors, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator, Body, Put, Delete, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { ImagesService } from './images.service';
 import { Image } from './schema';
 
-@Controller("api/media/images")
+@Controller('api/media/images')
 export class ImagesController {
-  constructor(private readonly imageService: ImagesService) { }
+  constructor(private readonly imageService: ImagesService) {}
 
   @Get()
   getAll() {

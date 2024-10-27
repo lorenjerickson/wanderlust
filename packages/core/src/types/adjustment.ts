@@ -1,6 +1,6 @@
-import { Duration } from "./duration";
+import { Duration } from "./duration\.js";
 
-export type Adjustment = {
+export interface Adjustment {
     increment: number;
     description: string;
     duration: Duration;

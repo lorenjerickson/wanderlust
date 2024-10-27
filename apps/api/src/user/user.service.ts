@@ -1,7 +1,9 @@
 import { Model } from 'mongoose';
 import { Injectable, Inject } from '@nestjs/common';
-import { User } from './user.schema';
+import { Role, User } from '@wanderlust/core';
 import * as bcrypt from 'bcrypt';
+
+type UserResponse = Omit<Partial<User>, 'password'>;
 
 @Injectable()
 export class UserService {
@@ -10,38 +12,44 @@ export class UserService {
     private userModel: Model<User>,
   ) {}
 
-  async create(username: string, password: string): Promise<User> {
-    const created = new this.userModel({
-      username,
-      password: await bcrypt.hash(password, 10),
-      roles: ['Participant'],
-    });
-    return created.save();
+  async create(user: Partial<User>): Promise<UserResponse> {
+    const { password } = user;
+    user.password = await await bcrypt.hash(password, 10);
+    const created = new this.userModel(user);
+    const createdUser: UserResponse = await created.save();
+    return createdUser;
   }
 
-  async update(sessionId: string, body: User): Promise<User> {
-    const { username, password, ...rest } = body;
-
-    const userToBeUpdated = await this.findOneByUsername(username);
+  async update(sessionId: string, body: User): Promise<UserResponse> {
+    const userToBeUpdated = await this.findOneByUsername(body.emailAddress);
     if (userToBeUpdated) {
       const updatedUser = {
         ...userToBeUpdated,
-        ...rest,
+        ...body,
       };
-      if (password) {
-        updatedUser.password = await bcrypt.hash(password, 10);
-      }
-      return this.userModel.findOneAndUpdate({ sessionId }, updatedUser, {
-        new: true,
-      });
+      const postUpdateUser: UserResponse =
+        await this.userModel.findOneAndUpdate({ sessionId }, updatedUser, {
+          new: true,
+        });
+      return postUpdateUser;
+    } else {
+      throw new Error('User not found');
     }
   }
 
-  async findOneByUsername(username: string): Promise<User> {
-    return this.userModel.findOne({ username });
+  async findOneByUsername(emailAddress: string): Promise<User> {
+    const foundUser = await this.userModel.findOne({
+      emailAddress,
+    });
+    return foundUser;
   }
 
   async findAll() {
-    return this.userModel.find();
+    const allUsers = await this.userModel.find();
+    return allUsers.map((user) => ({ ...user, password: undefined }));
+  }
+
+  async findOneByRole(role: Role) {
+    return await this.userModel.findOne({ roles: role });
   }
 }

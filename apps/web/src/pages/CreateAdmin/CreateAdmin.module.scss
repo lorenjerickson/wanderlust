@@ -1,0 +1,47 @@
+.createAdmin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    
+    p {
+        max-width: 400px;
+    }
+
+    .form {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        max-width: 400px;
+
+        .input {
+            width: 400px;
+            margin-bottom: 8px;
+        }
+
+        .passwordInput {
+            width: 400px;
+            height: 54px;
+            margin-bottom: 48px;
+        }
+
+        .label {
+            pointer-events: none;
+            font-size: var(--mantine-font-size-xs);
+            background: transparent;
+        }
+
+        .button {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .error {
+          color: red;
+        }
+    }
+}

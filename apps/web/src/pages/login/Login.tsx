@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import type { FormProps } from 'antd';
 import { Button, Checkbox, Form, Input } from 'antd';
-import { useUserSession } from '@wanderlust/ui';
 import { useNavigate } from 'react-router-dom';
 import classes from './Login.module.scss';
+import { useUserSession } from '@/hooks/useUserSession';
 
 type FieldType = {
   username?: string;

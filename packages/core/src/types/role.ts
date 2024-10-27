@@ -1,6 +1,7 @@
-export type Role =
-  | "globalAdmin"
-  | "localAdmin"
-  | "gamemaster"
-  | "player"
-  | "spectator";
+export enum Role {
+  GlobalAdmin = "globalAdmin",
+  LocalAdmin = "localAdmin",
+  GameMaster = "gamemaster",
+  Player = "player",
+  Spectator = "spectator",
+}

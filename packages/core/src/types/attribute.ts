@@ -1,9 +1,9 @@
-import { Adjustment } from "./adjustment";
+import { Adjustment } from "./adjustment.js";
 
-export type Attribute = {
-    name: string;
-    description: string;
-    abbrev: string;
-    baseValue: number;
-    adjustments: Adjustment[];
+export interface Attribute {
+  name: string;
+  description: string;
+  abbrev: string;
+  baseValue: number;
+  adjustments: Adjustment[];
 }

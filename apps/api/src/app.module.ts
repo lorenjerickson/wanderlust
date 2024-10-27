@@ -7,8 +7,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { databaseProviders } from './database/database.providers';
 import { MediaModule } from './media/media.module';
-import { ParticipantsModule } from './participants/participants.module';
 import { SessionModule } from './session/session.module';
+import { UsersModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -18,7 +18,7 @@ import { SessionModule } from './session/session.module';
       rootPath: resolve(__dirname, join('..')),
     }),
     MediaModule,
-    ParticipantsModule,
+    UsersModule,
     SessionModule,
   ],
   controllers: [AppController],

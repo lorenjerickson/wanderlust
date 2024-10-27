@@ -1,1 +1,0 @@
-declare module '@wanderlust/core';

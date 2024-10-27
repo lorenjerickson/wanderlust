@@ -5,7 +5,7 @@ import { Image } from './schema';
 
 @Injectable()
 export class ImagesService {
-  constructor(@InjectModel(Image.name) private imageModel: Model<Image>) { }
+  constructor(@InjectModel(Image.name) private imageModel: Model<Image>) {}
 
   async findAll() {
     console.log('images service');
@@ -18,7 +18,7 @@ export class ImagesService {
 
   async createImage(props: Image) {
     const image = new this.imageModel({
-      ...props
+      ...props,
     });
 
     return await image.save();
@@ -29,7 +29,7 @@ export class ImagesService {
 
     const image = new this.imageModel({
       ...original,
-      ...props
+      ...props,
     });
 
     return await image.save();

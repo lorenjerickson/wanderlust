@@ -19,7 +19,6 @@ This Turborepo includes the following packages/apps:
 - `@wanderlust/db`: simple package to provide scripts to start mongodb database in a dev environment
 - `@wanderlust/api`: rest to the database and socket interface between clients
 - `@wanderlust/web`: web app built using microfrotnends
-- `@wanderlust/ui`: library providing shared ui components
 - `@wanderlust/build-config`: `eslint`, `tsconfig`, and other shared build configurations
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).

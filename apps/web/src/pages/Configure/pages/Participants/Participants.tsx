@@ -1,5 +1,5 @@
-import { useParticipants } from '@wanderlust/ui'
-import { Participant } from '@wanderlust/core'
+import { User } from '@/core/types'
+import { useParticipants } from '@/hooks/useParticipants'
 import { useState } from 'react'
 
 // const data = [
@@ -32,7 +32,7 @@ export function Participants() {
                 ) : (
                     <div>
                         {participants &&
-                            participants.map((participant: Participant) => (
+                            participants.map((participant: User) => (
                                 <div key={participant.name}>
                                     <div>
                                         <img

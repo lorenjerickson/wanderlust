@@ -5,32 +5,32 @@ export type ImageDocument = HydratedDocument<Image>;
 
 @Schema()
 export class Image {
-    @Prop()
-    id: string;
-    
-    @Prop()
-    width: number;
+  @Prop()
+  id: string;
 
-    @Prop()
-    height: number;
+  @Prop()
+  width: number;
 
-    @Prop()
-    aspectRatio: number;
+  @Prop()
+  height: number;
 
-    @Prop()
-    format: string;
+  @Prop()
+  aspectRatio: number;
 
-    @Prop()
-    resolution: string;
+  @Prop()
+  format: string;
 
-    @Prop()
-    colorDepth: number;
+  @Prop()
+  resolution: string;
 
-    @Prop()
-    compression: number;
+  @Prop()
+  colorDepth: number;
 
-    @Prop()
-    quality: number;
+  @Prop()
+  compression: number;
+
+  @Prop()
+  quality: number;
 }
 
 export const ImageSchema = SchemaFactory.createForClass(Image);

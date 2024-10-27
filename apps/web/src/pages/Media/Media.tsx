@@ -8,7 +8,9 @@ import {
   IconPhoto,
   IconRecycle,
 } from '@tabler/icons-react';
-import { useSideNav } from '@wanderlust/ui';
+import { useSideNav } from '@/hooks/useSideNav';
+
+import classes from './Media.module.css';
 
 export default function Media() {
   const { setSideNavConfig } = useSideNav();

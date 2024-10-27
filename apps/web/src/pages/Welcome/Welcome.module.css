@@ -1,13 +1,26 @@
-.pageTitle {
-  font-family: "Michroma", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-  color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
-  font-size: rem(100px);
-  letter-spacing: rem(-2px);
+.welcome {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: var(--mantine-color-black);
+    overflow: hidden;
 
-  /* @media (max-width: $mantine-breakpoint-md) {
-    font-size: rem(50px);
-  } */
+    .pageTitle {
+        font-family: 'Michroma', sans-serif;
+        font-weight: 400;
+        font-style: normal;
+        color: light-dark(
+            var(--mantine-color-black),
+            var(--mantine-color-white)
+        );
+        font-size: rem(100px);
+        letter-spacing: rem(-2px);
+
+        /* @media (max-width: $mantine-breakpoint-md) {
+      font-size: rem(50px);
+    } */
+    }
+    color: var(--mantine-color-white);
 }
-

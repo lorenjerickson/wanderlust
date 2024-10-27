@@ -19,7 +19,7 @@ export class SessionController {
         console.error('Password mismatch', body.username);
         throw new Error('Login failed.');
       } else {
-        return this.sessionService.create(user.username);
+        return this.sessionService.create(user.emailAddress);
       }
     } else {
       console.error('User not found', body.username);

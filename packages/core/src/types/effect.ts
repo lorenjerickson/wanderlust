@@ -1,10 +1,10 @@
-import { Ability } from "./ability";
-import { Adjustment } from "./adjustment";
-import { Attribute } from "./attribute";
+import { Ability } from "./ability.js";
+import { Adjustment } from "./adjustment.js";
+import { Attribute } from "./attribute.js";
 
-export type Effect = {
-    name: string;
-    description: string;
-    target: Attribute | Ability;
-    adjustment: Adjustment;
+export interface Effect {
+  name: string;
+  description: string;
+  target: Attribute | Ability;
+  adjustment: Adjustment;
 }

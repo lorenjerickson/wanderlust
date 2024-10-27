@@ -19,7 +19,6 @@
     "storybook:build": "storybook build"
   },
   "dependencies": {
-    "@ant-design/icons": "^5.3.7",
     "@headlessui/react": "^2.1.2",
     "@heroicons/react": "^2.1.5",
     "@mantine/carousel": "^7.11.2",
@@ -40,10 +39,9 @@
     "@tiptap/extension-link": "^2.5.8",
     "@tiptap/react": "^2.5.8",
     "@tiptap/starter-kit": "^2.5.8",
-    "@wanderlust/core": "*",
     "@wanderlust/media": "*",
     "@wanderlust/api": "*",
-    "antd": "^5.17.3",
+    "@wanderlust/core": "*",
     "dayjs": "^1.11.12",
     "embla-carousel-react": "^8.1.8",
     "jotai": "^2.8.0",
