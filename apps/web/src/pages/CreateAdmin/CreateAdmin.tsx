@@ -11,7 +11,7 @@ import { ChangeEvent, FormEvent, useRef, useState } from 'react'
 import classes from './CreateAdmin.module.scss'
 import { useNavigate } from 'react-router-dom'
 import { useGlobalAdmin } from '@/hooks/useGlobalAdmin'
-import { User } from '@wanderlust/core'
+import { User } from '@core'
 
 export function CreateAdminPage() {
     const navigate = useNavigate()

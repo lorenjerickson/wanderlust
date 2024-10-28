@@ -2,13 +2,9 @@
   "name": "@wanderlust/core",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.ts",
-  "type": "module",
-  "exports": {
-    ".": {
-      "import": "./src/index.ts"
-    }
-  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "commonjs",
   "scripts": {
     "dev": "tsc --watch",
     "build": "tsc",

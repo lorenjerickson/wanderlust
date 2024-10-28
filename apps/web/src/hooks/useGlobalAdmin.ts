@@ -1,4 +1,4 @@
-import { User } from '@wanderlust/core'
+import { User } from '@core'
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 

@@ -1,16 +1,16 @@
 import { Avatar, Text } from '@mantine/core'
 import { IconGoGame, IconSunglasses, IconUserCog } from '@tabler/icons-react'
-import { Participant } from '@wanderlust/core'
+import { User } from '@core'
 import classes from './UserInfoIcons.module.css'
 import { StyledParticipantTile } from './styles'
 
-export function ParticipantTile({ participant }: { participant: Participant }) {
+export function ParticipantTile({ participant }: { participant: User }) {
     return (
         <StyledParticipantTile>
             <div className="tile">
                 <div className="avatar">
                     <Avatar
-                        src={`https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=${participant.name}`}
+                        src={`https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=${participant.fullName}`}
                         size={94}
                         radius="md"
                     />
@@ -24,20 +24,7 @@ export function ParticipantTile({ participant }: { participant: Participant }) {
                         </Text>
                     </div>
                     <div className="name">
-                        <Text>{participant.name}</Text>
-                    </div>
-                    <div className="activity">
-                        <div className="participation-stat">
-                            <IconGoGame /> {participant.gamesAs.player}
-                        </div>
-                        <div className="participation-stat">
-                            <IconUserCog />
-                            {participant.gamesAs.gameMaster}
-                        </div>
-                        <div className="participation-stat">
-                            <IconSunglasses />
-                            {participant.gamesAs.spectator}
-                        </div>
+                        <Text>{participant.fullName}</Text>
                     </div>
                     <div className="last-active"></div>
                 </div>
