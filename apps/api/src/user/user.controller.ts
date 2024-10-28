@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { UserService } from './user.service';
-import { Role } from '@core/types';
+import { Role } from '@wanderlust/core';
 
 @Controller('api/users')
 export class UsersController {
