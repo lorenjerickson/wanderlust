@@ -1,0 +1,35 @@
+{
+  "name": "@wanderlust/ui",
+  "version": "1.0.0",
+  "description": "Library of ui components for Wanderlust",
+  "files": [
+    "dist",
+    "lib/theme"
+  ],
+  "main": "./dist/wanderlust-ui.umd.js",
+  "module": "./dist/wanderlust-ui.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/wanderlust-ui.es.js",
+      "require": "./dist/wanderlust-ui.umd.js"
+    }
+  },
+  "scripts": {
+    "dev": "npm run build:watch",
+    "build": "vite build",
+    "build:watch": "vite build --watch",
+    "preview": "vite preview",
+    "clean": "rm -rf dist && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10",
+    "vite-tsconfig-paths": "^4.3.1",
+    "vitest": "^1.3.1"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-jss": "^10.10.0",
+    "styled-components": "^6.1.13"
+  }
+}

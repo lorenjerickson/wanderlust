@@ -1,8 +1,8 @@
 .header {
     height: 56px;
-    margin-bottom: 120px;
-    background-color: var(--mantine-color-body);
-    border-bottom: 1px solid var(--mantine-color-gray-2);
+    background-color: transparet;
+    border-bottom: 1px solid var(--mantine-color-gray-7);
+    padding-left: 16px;
 }
 
 .title {
@@ -19,7 +19,15 @@
     align-items: center;
     padding-left: var(--mantine-spacing-md);
     padding-right: var(--mantine-spacing-md);
-  }
+}
+
+.links {
+    flex-grow: 1;
+    align-content: flex-start;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-bottom: 4px;
+}
 
 .link {
     display: block;
@@ -36,5 +44,22 @@
             var(--mantine-color-gray-0),
             var(--mantine-color-dark-6)
         );
+        border-bottom: 1px solid var(--mantine-color-dark-3);
     }
+
+    &.active {
+        border-bottom: 1px solid var(--mantine-color-primary);
+    }
+}
+
+.signedIn {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    margin-left: 36px;
+    margin-right: 16px;
+}
+
+.name {
+    margin-left: -8px;
 }

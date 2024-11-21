@@ -1,17 +1,10 @@
-import {
-    Anchor,
-    Button,
-    Group,
-    PasswordInput,
-    Text,
-    TextInput,
-} from '@mantine/core'
 import { ChangeEvent, FormEvent, useRef, useState } from 'react'
 
 import classes from './CreateAdmin.module.scss'
 import { useNavigate } from 'react-router-dom'
 import { useGlobalAdmin } from '@/hooks/useGlobalAdmin'
-import { User } from '@core'
+import { User } from '@wanderlust/core'
+import { TextInput, Button, Text } from '@wanderlust/ui'
 
 export function CreateAdminPage() {
     const navigate = useNavigate()
@@ -22,7 +15,7 @@ export function CreateAdminPage() {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        setError(null);
+        setError(null)
         if (!working.current) {
             working.current = true
             createGlobalAdmin(data).then((response) => {
@@ -32,7 +25,7 @@ export function CreateAdminPage() {
                     console.error('Failed to create global admin account')
                     setError('Unable to create user')
                 }
-                working.current = false;
+                working.current = false
             })
         }
     }
@@ -95,7 +88,8 @@ export function CreateAdminPage() {
                     required
                 />
 
-                <PasswordInput
+                <TextInput
+                    type="password"
                     name="password"
                     placeholder="Your password"
                     label="Password"

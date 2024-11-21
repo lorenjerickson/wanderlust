@@ -1,71 +1,46 @@
-import { Autocomplete, Group, Burger, rem } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
-import { IconNavigationBolt, IconSearch } from '@tabler/icons-react'
+import { IconSearch } from '@tabler/icons-react'
 import classes from './header.module.scss'
+import { Link } from 'react-router-dom'
+import { useUserSession } from '@/hooks/useUserSession'
 
 const links = [
-    { link: '/about', label: 'Features' },
-    { link: '/pricing', label: 'Pricing' },
-    { link: '/learn', label: 'Learn' },
-    { link: '/community', label: 'Community' },
+    { link: '/configure', label: 'Configure' },
+    { link: '/media', label: 'Media' },
+    { link: '/design', label: 'Design' },
+    { link: '/play', label: 'Play!' },
 ]
 
 export function Header() {
-    const [opened, { toggle }] = useDisclosure(false)
+    const { isLoggedIn, userSession } = useUserSession()
 
     const items = links.map((link) => (
-        <a
+        <Link
             key={link.label}
-            href={link.link}
+            to={link.link}
             className={classes.link}
             onClick={(event) => event.preventDefault()}
         >
             {link.label}
-        </a>
+        </Link>
     ))
 
     return (
         <header className={classes.header}>
             <div className={classes.inner}>
-                <Group>
-                    <Burger
-                        opened={opened}
-                        onClick={toggle}
-                        size="sm"
-                        hiddenFrom="sm"
-                    />
-                    <Group className={classes.title}>Wanderlust</Group>
-                </Group>
-                <Group>
-                    <Group
-                        ml={50}
-                        gap={5}
-                        className={classes.links}
-                        visibleFrom="sm"
-                    >
-                        {items}
-                    </Group>
-                    <Autocomplete
-                        className={classes.search}
-                        placeholder="Search"
-                        leftSection={
-                            <IconSearch
-                                style={{ width: rem(16), height: rem(16) }}
-                                stroke={1.5}
-                            />
-                        }
-                        data={[
-                            'React',
-                            'Angular',
-                            'Vue',
-                            'Next.js',
-                            'Riot.js',
-                            'Svelte',
-                            'Blitz.js',
-                        ]}
-                        visibleFrom="xs"
-                    />
-                </Group>
+                <Link to="/" className={classes.logo}>
+                    Wanderlust
+                </Link>
+                <nav className={classes.nav}>
+                    {items}
+                    {isLoggedIn() && (
+                        <Link to="/profile" className={classes.link}>
+                            {userSession?.username}
+                        </Link>
+                    )}
+                    <Link to="/search" className={classes.link}>
+                        <IconSearch />
+                    </Link>
+                </nav>
             </div>
         </header>
     )

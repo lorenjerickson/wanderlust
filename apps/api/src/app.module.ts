@@ -9,6 +9,7 @@ import { databaseProviders } from './database/database.providers';
 import { MediaModule } from './media/media.module';
 import { SessionModule } from './session/session.module';
 import { UsersModule } from './user/user.module';
+import { SettingsModule } from './settings/settings.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { UsersModule } from './user/user.module';
     MediaModule,
     UsersModule,
     SessionModule,
+    SettingsModule,
   ],
   controllers: [AppController],
   providers: [AppService, ...databaseProviders],

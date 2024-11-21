@@ -1,0 +1,30 @@
+{
+  "name": "@wanderlust/module-site",
+  "version": "1.0.0",
+  "description": "Provides configuration and other utilities for managing the Wanderlust site instance",
+  "files": [
+    "dist"
+  ],
+  "module": "./dist/wanderlust-module-site.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/wanderlust-module-site.es.js"
+    }
+  },
+  "scripts": {
+    "dev:local": "vite --port 3002 --strictPort",
+    "dev": "npm run build:watch",
+    "build": "vite build",
+    "build:watch": "vite build --watch",
+    "postbuild": "cp dist/* ../../apps/library/dist/wanderlust-module-site",
+    "preview": "vite --port 3002 --strictPort preview",
+    "clean": "rm -rf dist && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10"
+  },
+  "dependencies": {
+    "@wanderlust/core": "*",
+    "@wanderlust/ui": "*"
+  }
+}

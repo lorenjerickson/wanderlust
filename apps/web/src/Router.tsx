@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+import { lazy, Suspense } from 'react'
 import {
     Navigate,
     Outlet,
@@ -6,17 +6,15 @@ import {
     createBrowserRouter,
 } from 'react-router-dom'
 
-import { SideLayout } from './components/SideLayout/SideLayout'
+import { ContentLayout } from './components/ContentLayout/ContentLayout'
 import { TopLayout } from './components/TopLayout/TopLayout'
-import Configure from './pages/Configure/Configure'
-import configureRoutes from './pages/Configure/routes'
-import Design from './pages/Design/Design'
-import Play from './pages/Play/Play'
 import { Welcome } from './pages/Welcome/Welcome'
-import { LoginPage } from './pages/login/Login'
+import { LoginPage } from './pages/Login/Login'
 import { useUserSession } from './hooks/useUserSession'
 import { useGlobalAdmin } from './hooks/useGlobalAdmin'
 import { CreateAdminPage } from './pages/CreateAdmin/CreateAdmin'
+
+import { routes as configureRoutes } from 'wanderlust-configure/manifest'
 
 const ProtectedRoutes = () => {
     let { isLoggedIn } = useUserSession()
@@ -51,21 +49,11 @@ const router = createBrowserRouter([
                         element: <Welcome />,
                     },
                     {
-                        path: '*',
-                        element: <SideLayout />,
+                        element: <ContentLayout />,
                         children: [
                             {
                                 path: 'configure',
-                                element: <Configure />,
                                 children: configureRoutes,
-                            },
-                            {
-                                path: 'create',
-                                element: <Design />,
-                            },
-                            {
-                                path: 'play',
-                                element: <Play />,
                             },
                         ],
                     },

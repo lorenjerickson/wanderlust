@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { UnstyledButton, Tooltip, Title, rem } from "@mantine/core";
 import classes from "./SideNav.module.css";
 import { useNavigate } from "react-router-dom";
 import { StyledSidenav } from "./styles";
