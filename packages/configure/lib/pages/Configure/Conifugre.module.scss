@@ -1,0 +1,22 @@
+.configure {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-items: flex-start;
+  height: 100%;
+  width: 100%;
+  padding: 24px;
+  overflow: hidden;
+  .groups {
+    height: 100%;
+    width: 300px;
+    overflow-y: auto;
+    border-right: 1px solid
+      light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  }
+  .list {
+    height: 100%;
+    flex-grow: 1;
+    overflow-y: auto;
+  }
+}

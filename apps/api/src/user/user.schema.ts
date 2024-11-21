@@ -1,13 +1,8 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Schema } from 'mongoose';
+import { User } from '@wanderlust/core';
 
-@Schema()
-export class User {
-  @Prop({ required: true })
-  username: string;
-  @Prop({ required: true })
-  password: string;
-  @Prop({ ref: 'roles' })
-  roles: string[];
-}
-
-export const UserSchema = SchemaFactory.createForClass(User);
+export const UserSchema = new Schema<User>({
+  emailAddress: { type: String, required: true },
+  password: { type: String, required: true },
+  roles: [{ type: String }],
+});

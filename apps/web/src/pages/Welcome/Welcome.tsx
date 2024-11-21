@@ -1,18 +1,12 @@
-import { Typography } from 'antd';
-import classes from './Welcome.module.css';
+import classes from './Welcome.module.scss'
 
 export function Welcome() {
-  return (
-    <>
-      <Typography className={classes.title}>
-        Welcome to{' '}
-      </Typography>
-      <Typography className={classes.pageTitle}>
-        Wanderlust
-      </Typography>
-      <Typography>
-        Finding pleasure once again in adventures imagined, crafted and experienced.
-      </Typography>
-    </>
-  );
+    return (
+        <div className={classes.welcome}>
+            <div className={classes.pageTitle}>Wanderlust</div>
+            <div className={classes.tagline}>
+                Where adventure awaits.
+            </div>
+        </div>
+    )
 }

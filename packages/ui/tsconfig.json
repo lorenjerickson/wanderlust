@@ -1,8 +1,27 @@
 {
-  "extends": "@wanderlust/build-config/tsconfig/react-library.json",
   "compilerOptions": {
-    "outDir": "dist"
+    "types": ["node", "@testing-library/jest-dom", "vitest/globals"],
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "@/*": ["./lib/*"],
+      "@core/*": ["../core/lib/*"],
+      "~": ["../../node_modules"]
+    }
   },
-  "include": ["src"],
+  "include": ["lib"],
   "exclude": ["node_modules", "dist"]
 }

@@ -5,8 +5,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ImageSchema, Image } from './schema';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Image.name, schema: ImageSchema }])],
+  imports: [
+    MongooseModule.forFeature([{ name: Image.name, schema: ImageSchema }]),
+  ],
   controllers: [ImagesController],
   providers: [ImagesService],
 })
-export class ImagesModule { }
+export class ImagesModule {}
