@@ -1,0 +1,29 @@
+{
+  "name": "@wanderlust/settings",
+  "version": "1.0.0",
+  "description": "Settings module for Wanderlust",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/wanderlust-settings.umd.cjs",
+  "module": "./dist/wanderlust-settings.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/wanderlust-settings.es.js",
+      "require": "./dist/wanderlust-settings.umd.cjs"
+    }
+  },
+  "scripts": {
+    "dev": "npm run build:watch",
+    "dev:local": "vite",
+    "build:watch": "vite build --watch",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.0.6"
+  },
+  "dependencies": {
+    "fuse.js": "^7.0.0"
+  }
+}

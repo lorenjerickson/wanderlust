@@ -1,6 +1,6 @@
-import { ISettingsGroup } from "@core/types";
+import { ISettingsGroup } from "@wanderlust/core";
 import { IconSearch } from "@tabler/icons-react";
-import { TextInput } from "@ui/components";
+import { TextInput } from "@wanderlust/ui";
 import { ChangeEvent, useState } from "react";
 import { StyledSettingsGroups } from "./SettingsGroups.styles";
 

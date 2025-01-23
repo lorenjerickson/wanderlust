@@ -1,6 +1,5 @@
-import { ISetting } from "@core/types";
-import { SettingValue } from "@ui/types";
-import { MySelect, TextInput } from "@ui/components";
+import { ISetting } from "@wanderlust/core";
+import { SettingValue, MySelect, TextInput } from "@wanderlust/ui";
 import { SelectChangeEvent } from "@mui/material";
 import { StyledSettingsEditor } from "./SettingsEditor.styles";
 import { useMemo } from "react";

@@ -2,11 +2,9 @@ import { Suspense, useEffect, useState } from "react";
 
 import classes from "./Conifugre.module.scss";
 import { useSettings } from "../../hooks/useSettings";
-import { ISettingsGroup } from "@core/types";
+import { ISettingsGroup } from "@wanderlust/core";
 import { SettingsGroups } from "../../components/SettingsGroups/SettingsGroups";
 import { SettingsList } from "../../components/SettingsList/SettingsList";
-
-import siteManifest from "wanderlust-site/manifest";
 
 export function Configure() {
   const { settings, isLoading, addSettings } = useSettings();
