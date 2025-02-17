@@ -3,9 +3,13 @@ import { Ownership, Permissions } from "./ownership";
 type SettingDataType = string | number | boolean;
 type ArraySettingDataType = Array<SettingDataType>;
 
-export type OptionValue = { label: string; value: string };
 export type ControlType = "text" | "number" | "choice" | "toggle" | "range" | "password";
 export type ValueType = SettingDataType | ArraySettingDataType;
+
+export interface SettingOption {
+  label: string;
+  value: string;
+}
 
 export interface ISetting {
   key: string;
@@ -16,7 +20,7 @@ export interface ISetting {
   value?: ValueType;
   defaultValue?: ValueType;
   type: ControlType;
-  options?: Array<OptionValue>;
+  options?: Array<SettingOption>;
   min?: number;
   max?: number;
   increment?: number; // for range

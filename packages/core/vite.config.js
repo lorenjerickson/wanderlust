@@ -1,23 +1,23 @@
-import react from "@vitejs/plugin-react";
 import path from "path";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
+import dts from "vite-plugin-dts";
 
 export default defineConfig({
   build: {
     lib: {
-      entry: path.resolve(__dirname, 'lib/main.js'),
+      entry: path.resolve(__dirname, 'lib/main.ts'),
       name: 'wanderlust-core',
       fileName: (format) => `wanderlust-core.${format}.js`
     }
   },
   plugins: [
-    react(),
     tsconfigPaths(),
+    dts(),
   ],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "src"),
+      "@": path.resolve(__dirname, "lib"),
     },
     preserveSymlinks: true,
   },

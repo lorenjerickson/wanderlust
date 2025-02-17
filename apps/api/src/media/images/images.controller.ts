@@ -7,8 +7,8 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ImagesService } from './images.service';
-import { Image } from './schema';
+import { ImagesService } from './images.service.js';
+import { Image } from './schema.js';
 
 @Controller('api/media/images')
 export class ImagesController {

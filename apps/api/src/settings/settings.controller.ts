@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
-import { SettingsService } from './settings.service';
+import { SettingsService } from './settings.service.js';
 import { Settings, ISettingsGroup } from '@wanderlust/core';
 
 @Controller('settings')

@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "types": ["node", "@testing-library/jest-dom", "vitest/globals"],
+        "types": ["node", "vitest/globals"],
         "target": "ESNext",
         "useDefineForClassFields": true,
         "lib": ["DOM", "DOM.Iterable", "ESNext"],
@@ -10,17 +10,15 @@
         "allowSyntheticDefaultImports": true,
         "strict": true,
         "forceConsistentCasingInFileNames": true,
-        "module": "ESNext",
+        "module": "commonjs",
         "moduleResolution": "Node",
         "resolveJsonModule": true,
         "isolatedModules": true,
         "noEmit": true,
         "jsx": "react-jsx",
         "paths": {
-            "@/*": ["./src/*"],
-            "@core/*": ["../core/lib/*"],
-            "@ui/*": ["../ui/lib/*"]
+            "@/*": ["./src/*"]
         }
     },
-    "include": ["src"]
+    "include": ["src", "../../packages/ui/lib/components/media-preview", "../../packages/ui/lib/components/header", "../../packages/ui/lib/components/NotImplemented.tsx"]
 }

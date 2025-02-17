@@ -7,7 +7,9 @@ export interface Permissions {
   remove: boolean;
 }
 
+export type MappedPermissions = Record<Role | string, Permissions>;
+
 export interface Ownership {
-  roles?: Record<Role, Permissions>;
-  participants?: Record<string, Permissions>;
+  roles?: MappedPermissions;
+  participants?: MappedPermissions;
 }

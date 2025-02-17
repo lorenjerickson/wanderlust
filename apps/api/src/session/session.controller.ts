@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { SessionService } from './session.service';
+import { SessionService } from './session.service.js';
 import * as bcrypt from 'bcrypt';
-import { UserService } from '../user/user.service';
+import { UserService } from '../user/user.service.js';
 
 @Controller('api/session')
 export class SessionController {
@@ -19,7 +19,7 @@ export class SessionController {
         console.error('Password mismatch', body.username);
         throw new Error('Login failed.');
       } else {
-        return this.sessionService.create(user.emailAddress);
+        return this.sessionService.create(user.username);
       }
     } else {
       console.error('User not found', body.username);

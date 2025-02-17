@@ -1,6 +1,6 @@
 import { Model } from 'mongoose';
 import { Injectable, Inject } from '@nestjs/common';
-import { Session } from './session.schema';
+import { Session } from './session.schema.js';
 import { randomUUID } from 'crypto';
 
 @Injectable()

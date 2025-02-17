@@ -10,7 +10,8 @@
     "clean:root": "rm -rf node_modules",
     "deep-clean": "turbo clean && npm run clean:root && rm package-lock.json",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "preinstall": "npx only-allow pnpm"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.2",
@@ -22,45 +23,23 @@
     "@storybook/react": "^8.4.4",
     "@storybook/react-vite": "^8.4.4",
     "@storybook/test": "^8.4.4",
-    "@types/antd": "^1.0.0",
     "@types/node": "^22.9.0",
     "@types/react": "^18.2.65",
     "@types/react-dom": "^18.2.19",
-    "@wanderlust/build-config": "*",
+    "@wanderlust/build-config": "workspace:*",
     "concurrently": "^8.2.2",
     "eslint-plugin-storybook": "^0.11.0",
     "prettier": "^3.2.5",
     "prop-types": "^15.8.1",
     "sass": "^1.75.0",
     "storybook": "^8.4.4",
-    "turbo": "latest"
+    "turbo": "^2.3.3"
   },
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "npm@10.2.4",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "packageManager": "pnpm@9.5.14",
   "dependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
-    "@fontsource/montserrat": "^5.1.0",
-    "@mui/icons-material": "^6.1.7",
-    "@mui/material": "^6.4.0",
-    "@mui/styled-engine-sc": "^6.4.0",
-    "@tabler/icons-react": "^3.1.0",
-    "@tanstack/react-query": "^5.59.20",
-    "@tiptap/extension-link": "^2.2.6",
-    "@tiptap/react": "^2.2.6",
-    "@tiptap/starter-kit": "^2.2.6",
-    "@vitejs/plugin-react": "^4.3.3",
-    "@wanderlust/build-config": "*",
-    "dayjs": "^1.11.12",
-    "embla-carousel-react": "^8.0.1",
-    "recharts": "^2.12.4",
-    "styled-components": "^6.1.14",
     "vite": "^5.4.10"
   }
 }
