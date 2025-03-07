@@ -29,6 +29,8 @@
     "@tiptap/react": "^2.5.8",
     "@tiptap/starter-kit": "^2.5.8",
     "@wanderlust/core": "workspace:*",
+    "@wanderlust/ui": "workspace:*",
+    "@wanderlust/configure": "workspace:*",
     "dayjs": "^1.11.12",
     "embla-carousel-react": "^8.1.8",
     "jotai": "^2.8.0",

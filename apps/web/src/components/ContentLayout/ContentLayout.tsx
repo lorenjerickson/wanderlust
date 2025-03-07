@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom'
 import classes from './ContentLayout.module.scss'
-import { SideNav } from '@/ui/components'
+import { SideNav } from '@wanderlust/ui'
 
 export function ContentLayout() {
     return (

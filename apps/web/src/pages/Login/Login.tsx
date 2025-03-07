@@ -1,8 +1,8 @@
+import { useUserSession } from '@web/hooks/useUserSession'
+import { Button, TextInput } from '@wanderlust/ui'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import classes from './Login.module.scss'
-import { useUserSession } from '@/hooks/useUserSession'
-import { Button, FormField, TextInput } from '@/ui/components'
 
 type FieldType = {
     username?: string
@@ -31,10 +31,10 @@ export const LoginPage = () => {
         e.preventDefault()
         setError(undefined)
         startUserSession(values)
-            .then((response) => {
+            .then(() => {
                 navigate('/welcome')
             })
-            .catch((error) => {
+            .catch((error: unknown) => {
                 console.error('Login failed', error)
                 setError('Login failed')
             })
@@ -47,28 +47,26 @@ export const LoginPage = () => {
             <div className={classes.form}>
                 <div className={classes.login}>
                     <form
-                        name="basic"
+                        name="loginForm"
                         style={{ maxWidth: 800 }}
                         autoComplete="off"
                         onSubmit={handleSubmit}
                     >
-                        <FormField label="Username">
-                            <TextInput
-                                id="filled-basic"
-                                name="username"
-                                placeholder="Username"
-                                onChange={handleChange}
-                            />
-                        </FormField>
-                        <FormField label="Password">
-                            <TextInput
-                                id="filled-basic"
-                                name="password"
-                                type="password"
-                                placeholder="Password"
-                                onChange={handleChange}
-                            />
-                        </FormField>
+                        <TextInput
+                            id="filled-basic"
+                            name="username"
+                            placeholder="Username"
+                            onChange={handleChange}
+                            label="Username"
+                        />
+                        <TextInput
+                            id="filled-basic"
+                            name="password"
+                            type="password"
+                            placeholder="Password"
+                            onChange={handleChange}
+                            label="Password"
+                        />
 
                         <Button
                             variant="primary"

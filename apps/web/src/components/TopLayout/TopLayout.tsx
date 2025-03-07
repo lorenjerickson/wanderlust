@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom'
 import classes from './TopLayout.module.scss'
-import { Header } from '@/ui/components'
+import { Header } from '@wanderlust/ui'
 
 export function TopLayout() {
     return (

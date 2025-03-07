@@ -16,6 +16,8 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "baseUrl": ".",
+    "outDir": "dist",
     "paths": {
       "@/*": ["./lib/*"],
     }

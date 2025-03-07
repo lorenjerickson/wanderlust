@@ -11,7 +11,7 @@ export interface SettingOption {
   value: string;
 }
 
-export interface ISetting {
+export interface Setting {
   key: string;
   label: string;
   description: string;
@@ -28,12 +28,13 @@ export interface ISetting {
   ownership: Ownership;
 }
 
-export interface ISettingsGroup {
+export interface SettingsGroup {
   key: string;
   label: string;
   description: string;
   icon?: string;
-  settings: ISetting[];
+  moduleId: string;
+  settings: Setting[];
 }
 
-export type Settings = Array<ISettingsGroup>;
+export type Settings = Array<SettingsGroup>;

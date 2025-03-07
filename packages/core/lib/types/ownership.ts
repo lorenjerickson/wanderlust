@@ -1,4 +1,4 @@
-import { Role } from "./role.js";
+import { RoleName } from "./role.js";
 
 export interface Permissions {
   create: boolean;
@@ -7,7 +7,7 @@ export interface Permissions {
   remove: boolean;
 }
 
-export type MappedPermissions = Record<Role | string, Permissions>;
+export type MappedPermissions = Record<RoleName, Permissions>;
 
 export interface Ownership {
   roles?: MappedPermissions;

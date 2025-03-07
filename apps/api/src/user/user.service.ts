@@ -1,6 +1,6 @@
 import { Model } from 'mongoose';
 import { Injectable, Inject } from '@nestjs/common';
-import { Role, User } from '@wanderlust/core';
+import { RoleName, User } from '@wanderlust/core';
 import * as bcrypt from 'bcrypt';
 
 type UserResponse = Omit<Partial<User>, 'password'>;
@@ -74,7 +74,7 @@ export class UserService {
     return allUsers.map((user) => ({ ...user, password: undefined }));
   }
 
-  async findOneByRole(role: Role) {
-    return await this.userModel.findOne({ roles: role.roles });
+  async findOneByRoleName(name: RoleName) {
+    return await this.userModel.findOne({ role: { name } });
   }
 }

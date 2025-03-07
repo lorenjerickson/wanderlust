@@ -17,8 +17,8 @@
         "noEmit": true,
         "jsx": "react-jsx",
         "paths": {
-            "@/*": ["./src/*"]
+            "@web/*": ["./src/*"]
         }
     },
-    "include": ["src", "../../packages/ui/lib/components/media-preview", "../../packages/ui/lib/components/header", "../../packages/ui/lib/components/NotImplemented.tsx"]
+    "include": ["src"]
 }

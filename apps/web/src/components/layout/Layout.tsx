@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom'
-import { Header } from '@/ui/components'
+import { Header } from '@wanderlust/ui'
 import classes from './Layout.module.scss'
 
 export function Layout() {

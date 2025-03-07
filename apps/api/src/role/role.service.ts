@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Role } from '@wanderlust/core';
+import { Role, RoleName } from '@wanderlust/core';
 import { Model } from 'mongoose';
 
 @Injectable()
@@ -9,16 +9,14 @@ export class RoleService {
     private roleModel: Model<Role>,
   ) {}
 
-  async create(role: Role): Promise<Role> {
+  async create(role: RoleName): Promise<Role> {
     const newRole = new this.roleModel(role);
     const createdRole: Role = await newRole.save();
     return createdRole;
   }
 
-  async findOneByName(name: string): Promise<Role> {
-    return await this.roleModel.findOne({
-      name,
-    });
+  async findOneByName(role: RoleName): Promise<Role> {
+    return await this.roleModel.findOne({ name: role });
   }
 
   async findAll() {
@@ -26,14 +24,11 @@ export class RoleService {
   }
 
   async findOrCreateAdminRole(): Promise<Role> {
-    const adminRole = await this.findOneByName(Role.GlobalAdmin);
+    const adminRole = await this.findOneByName(RoleName.GlobalAdmin);
     if (adminRole) {
       return adminRole;
     } else {
-      return this.create({
-        name: Role.GlobalAdmin,
-        description: 'Global Admin',
-      });
+      return this.create(RoleName.GlobalAdmin);
     }
   }
 }

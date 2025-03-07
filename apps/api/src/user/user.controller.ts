@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { UserService } from './user.service.js';
-import { Role } from '@wanderlust/core';
 import { RoleService } from '../role/role.service.js';
+import { UserService } from './user.service.js';
+import { RoleName } from '@wanderlust/core';
 
 @Controller('api/users')
 export class UsersController {
@@ -33,7 +33,7 @@ export class UsersController {
       const adminRole = await this.rolesService.findOrCreateAdminRole();
       return this.usersService.create({
         ...body,
-        roles: [adminRole._id],
+        roles: [adminRole],
       });
     }
   }
@@ -41,10 +41,10 @@ export class UsersController {
   @Get('global-admin')
   async getGlobalAdmin() {
     const adminRole = await this.rolesService.findOrCreateAdminRole();
-    return this.findOneByRole(adminRole);
+    return this.findOneByRoleName(adminRole.name);
   }
 
-  async findOneByRole(role: Role) {
-    return await this.usersService.findOneByRole({ roles: [role._id] });
+  async findOneByRoleName(name: RoleName) {
+    return await this.usersService.findOneByRoleName(name);
   }
 }
