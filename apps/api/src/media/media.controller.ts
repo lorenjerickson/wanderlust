@@ -8,7 +8,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname, resolve } from 'path';
-import { MediaService } from './media.service';
+import { MediaService } from './media.service.js';
 
 const storage = diskStorage({
   destination: resolve(__dirname, '../../static/media'),

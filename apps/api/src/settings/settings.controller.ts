@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
-import { SettingsService } from './settings.service';
-import { Settings, ISettingsGroup } from '@wanderlust/core';
+import { SettingsService } from './settings.service.js';
+import { Settings, SettingsGroup } from '@wanderlust/core';
 
 @Controller('settings')
 export class SettingsController {
@@ -11,17 +11,17 @@ export class SettingsController {
     return this.settingsService.getAllSettings();
   }
 
-  @Get(':groupKey')
-  async getSettingsByGroupKey(@Param('groupKey') groupKey: string) {
-    return this.settingsService.findByGroupKey(groupKey);
+  @Get(':key')
+  async getSettingsBykey(@Param('key') key: string) {
+    return this.settingsService.findByKey(key);
   }
 
-  @Get(':groupKey/:settingKey')
+  @Get(':key/:settingKey')
   async getSettingsByGroupAndSettingKey(
-    @Param('groupKey') groupKey: string,
+    @Param('key') key: string,
     @Param('settingKey') settingKey: string,
   ) {
-    return this.settingsService.findByGroupAndSettingKey(groupKey, settingKey);
+    return this.settingsService.findByKeyAndSettingKey(key, settingKey);
   }
 
   @Put()
@@ -29,22 +29,22 @@ export class SettingsController {
     return this.settingsService.updateAllSettings(allSettings);
   }
 
-  @Put(':groupKey')
+  @Put(':key')
   async updateAllGroupSettings(
-    @Param('groupKey') groupKey: string,
-    groupSettings: ISettingsGroup,
+    @Param('key') key: string,
+    group: SettingsGroup,
   ) {
-    return this.settingsService.updateAllGroupSettings(groupKey, groupSettings);
+    return this.settingsService.updateAllGroupSettings(key, group);
   }
 
-  @Put(':groupKey/:settingKey')
+  @Put(':key/:settingKey')
   async updateOneGroupSetting(
-    @Param('groupKey') groupKey: string,
+    @Param('key') key: string,
     @Param('settingKey') settingKey: string,
     @Body() settingValue: string,
   ) {
     return this.settingsService.updateOneGroupSetting(
-      groupKey,
+      key,
       settingKey,
       settingValue,
     );

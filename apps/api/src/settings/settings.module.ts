@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { SettingsController } from './settings.controller';
-import { SettingsService } from './settings.service';
-import { settingsProviders } from './settings.providers';
-import { DatabaseModule } from '@/database/database.module';
+import { SettingsController } from './settings.controller.js';
+import { SettingsService } from './settings.service.js';
+import { settingsProviders } from './settings.providers.js';
+import { DatabaseModule } from '../database/database.module.js';
 
 @Module({
   imports: [DatabaseModule],

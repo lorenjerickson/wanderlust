@@ -1,8 +1,10 @@
-import { StyledSelect } from "./Select.styles";
-import "../../theme/theme.scss";
-import { FormControl, InputLabel } from "@mui/material";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
+import {
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select as MuiSelect,
+    SelectChangeEvent,
+} from "@mui/material";
 
 type OptionValue = {
   value: string;
@@ -10,37 +12,34 @@ type OptionValue = {
 };
 
 type SelectProps = {
+  name: string;
+  id: string;
   options: OptionValue[];
-  placeholder: string;
   className?: string;
   value?: string;
   label: string;
-  onChange: (event: SelectChangeEvent) => void;
+  onChange: (event: { name: string; value: string }) => void;
 };
 
-export function MySelect(props: SelectProps) {
-  const { options, placeholder, className, onChange, value, label } = props;
+export function Select(props: SelectProps) {
+  const { name, id, options, onChange, value, label } = props;
+
+  const handleChange = (event: SelectChangeEvent) => {
+    onChange({ name: event.target.name, value: event.target.value });
+  };
 
   return (
-    <StyledSelect>
-      <FormControl variant="filled" className="form-control">
-        <InputLabel id="demo-simple-select-filled-label">{label}</InputLabel>
-        <Select
-          labelId="demo-simple-select-filled-label"
-          id="demo-simple-select-filled"
-          value={value}
-          onChange={onChange}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          {options.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
+    <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
+      <InputLabel>{label}</InputLabel>
+      <MuiSelect value={value} onChange={handleChange} name={name} id={id}>
+        <MenuItem value="">
+          <em>None</em>
+        </MenuItem>
+        {options &&
+          options.map((option) => (
+            <MenuItem value={option.value}>{option.label}</MenuItem>
           ))}
-        </Select>
-      </FormControl>
-    </StyledSelect>
+      </MuiSelect>
+    </FormControl>
   );
 }

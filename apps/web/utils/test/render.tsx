@@ -1,11 +1,9 @@
-import { render as testingLibraryRender } from '@testing-library/react';
-import { theme } from '../src/theme';
-import { ConfigProvider } from 'antd';
+import { render as testingLibraryRender } from '@testing-library/react'
 
 export function render(ui: React.ReactNode) {
-  return testingLibraryRender(<>{ui}</>, {
-    wrapper: ({ children }: { children: React.ReactNode }) => (
-      <ConfigProvider theme={theme}>{children}</ConfigProvider>
-    ),
-  });
+    return testingLibraryRender(<>{ui}</>, {
+        wrapper: ({ children }: { children: React.ReactNode }) => (
+            <div>{children}</div>
+        ),
+    })
 }

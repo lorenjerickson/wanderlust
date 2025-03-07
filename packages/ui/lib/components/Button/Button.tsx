@@ -1,13 +1,26 @@
-import Button from "@mui/material/Button";
-import "../../theme/theme.scss";
+import { MouseEvent } from "react";
+import MuiButton from "@mui/material/Button";
 
 type ButtonProps = {
-  onClick: () => void;
+  onClick: (e: MouseEvent) => void;
   children: React.ReactNode;
+  className?: string;
+  disabled?: boolean;
+  type?: "button" | "submit" | "reset";
+  variant?: "primary" | "secondary";
 };
 
-export function MyButton({ children, onClick }: ButtonProps) {
-  return <Button variant="contained" onClick={onClick}>{children}</Button>;
+export function Button(props: ButtonProps) {
+  const { onClick, children, className, type, variant, disabled } = props;
+  return (
+    <MuiButton
+      className={className}
+      type={type}
+      disabled={disabled}
+      variant={variant === "secondary" ? "outlined" : "contained"}
+      onClick={onClick}
+    >
+      {children}
+    </MuiButton>
+  );
 }
-
-export default MyButton;

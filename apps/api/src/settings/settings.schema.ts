@@ -1,7 +1,12 @@
 import { Schema } from 'mongoose';
-import { ISettingsGroup } from '@wanderlust/core';
+import { SettingsGroup, Setting, SettingOption } from '@wanderlust/core';
 
-export const SettingsSchema = new Schema<ISettingsGroup>({
+export const SettingOptionsSchema = new Schema<SettingOption>({
+  label: { type: String, required: true },
+  value: { type: String, required: true },
+});
+
+export const SettingsSchema = new Schema<Setting>({
   key: { type: String, required: true },
   label: { type: String, required: true },
   description: { type: String, required: true },
@@ -10,7 +15,7 @@ export const SettingsSchema = new Schema<ISettingsGroup>({
   value: { type: String },
   defaultValue: { type: String },
   type: { type: String, required: true },
-  options: { type: Object },
+  options: [{ type: Schema.Types.ObjectId, ref: 'SettingOption' }],
   min: { type: Number },
   max: { type: Number },
   increment: { type: Number },
@@ -18,7 +23,7 @@ export const SettingsSchema = new Schema<ISettingsGroup>({
   ownership: { type: Object, required: true },
 });
 
-export const SettingsGroupSchema = new Schema<ISettingsGroup>({
+export const SettingsGroupSchema = new Schema<SettingsGroup>({
   key: { type: String, required: true },
   label: { type: String, required: true },
   description: { type: String, required: true },

@@ -14,7 +14,7 @@ import { useUserSession } from './hooks/useUserSession'
 import { useGlobalAdmin } from './hooks/useGlobalAdmin'
 import { CreateAdminPage } from './pages/CreateAdmin/CreateAdmin'
 
-import { routes as configureRoutes } from 'wanderlust-configure/manifest'
+import { routes as configureRoutes } from '@wanderlust/configure';
 
 const ProtectedRoutes = () => {
     let { isLoggedIn } = useUserSession()

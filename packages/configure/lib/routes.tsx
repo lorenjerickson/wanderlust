@@ -1,38 +1,19 @@
-import { Navigate } from "react-router-dom";
-import { Configure } from "./pages/Configure/Configure";
+import { SideNavLayout } from "@wanderlust/ui";
+import { Navigate, RouteObject } from "react-router-dom";
+import { Configure } from "./Configure";
 
-export const routes = [
+export const routes: RouteObject[] = [
   {
     path: "configure",
-    element: <Configure />,
-    chidlren: [
+    element: <SideNavLayout />,
+    children: [
       {
-        path: "overview",
-        element: <h1>Overview</h1>,
-      },
-      {
-        path: "users",
-        element: <h1>Users</h1>,
-      },
-      {
-        path: "systems",
-        element: <h1>Game Systems</h1>,
-      },
-      {
-        path: "worlds",
-        element: <h1>Worlds</h1>,
-      },
-      {
-        path: "admin",
-        element: <h1>Admin</h1>,
-      },
-      {
-        path: "modules",
-        element: <h1>Modules</h1>,
+        path: ":moduleName",
+        element: <Configure />,
       },
       {
         path: "*",
-        element: <Navigate to="overview" />,
+        element: <Navigate to="general" />,
       },
     ],
   },

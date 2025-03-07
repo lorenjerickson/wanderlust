@@ -1,9 +1,8 @@
-import "../../theme/theme.scss";
-import List from "./List";
+import { List } from "./List";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 export default {
-  title: "Wanderlust/Components/List",
+  title: "Wanderlust/UI/Components/List",
   component: List,
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
@@ -38,19 +37,19 @@ export default {
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const Default = {
   args: {
-    compact: false
+    compact: false,
   },
 };
 
 export const Compact = {
   args: {
-    compact: true
+    compact: true,
   },
 };
 
 export const Empty = {
   args: {
-    items: []
+    items: [],
   },
 };
 
@@ -61,17 +60,17 @@ export const WithTrailingElement = {
       {
         title: "Item 1",
         subtitle: "Description 1",
-        trailingElement: "X"
+        trailingElement: "X",
       },
       {
         title: "Item 2",
         subtitle: "Description 2",
-        trailingElement: "X"
+        trailingElement: "X",
       },
       {
         title: "Item 3",
         subtitle: "Description 3",
-        trailingElement: "X"
+        trailingElement: "X",
       },
     ],
   },
@@ -84,17 +83,17 @@ export const WithLeadingElement = {
       {
         title: "Item 1",
         subtitle: "Description 1",
-        leadingElement: "X"
+        leadingElement: "X",
       },
       {
         title: "Item 2",
         subtitle: "Description 2",
-        leadingElement: "X"
+        leadingElement: "X",
       },
       {
         title: "Item 3",
         subtitle: "Description 3",
-        leadingElement: "X"
+        leadingElement: "X",
       },
     ],
   },
@@ -108,22 +107,20 @@ export const WithLeadingAndTrailingElement = {
         title: "Item 1",
         subtitle: "Description 1",
         leadingElement: "X",
-        trailingElement: "Y"
+        trailingElement: "Y",
       },
       {
         title: "Item 2",
         subtitle: "Description 2",
         leadingElement: "X",
-        trailingElement: "Y"
+        trailingElement: "Y",
       },
       {
         title: "Item 3",
         subtitle: "Description 3",
         leadingElement: "X",
-        trailingElement: "Y"
+        trailingElement: "Y",
       },
     ],
   },
 };
-
-

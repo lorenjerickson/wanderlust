@@ -1,10 +1,14 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { UserService } from './user.service';
-import { Role } from '@wanderlust/core';
+import { RoleService } from '../role/role.service.js';
+import { UserService } from './user.service.js';
+import { RoleName } from '@wanderlust/core';
 
 @Controller('api/users')
 export class UsersController {
-  constructor(private readonly usersService: UserService) {}
+  constructor(
+    private readonly usersService: UserService,
+    private readonly rolesService: RoleService,
+  ) {}
 
   @Get()
   async getAll() {
@@ -22,19 +26,25 @@ export class UsersController {
 
   @Post('global-admin')
   async createGlobalAdmin(@Body() body) {
-    const globalAdmin = await this.fetchGlobalAdmin();
+    const globalAdmin = await this.getGlobalAdmin();
     if (globalAdmin) {
       throw new Error('Global admin already exists');
     } else {
+      const adminRole = await this.rolesService.findOrCreateAdminRole();
       return this.usersService.create({
         ...body,
-        roles: [Role.GlobalAdmin],
+        roles: [adminRole],
       });
     }
   }
 
   @Get('global-admin')
-  async fetchGlobalAdmin() {
-    return this.usersService.findOneByRole(Role.GlobalAdmin);
+  async getGlobalAdmin() {
+    const adminRole = await this.rolesService.findOrCreateAdminRole();
+    return this.findOneByRoleName(adminRole.name);
+  }
+
+  async findOneByRoleName(name: RoleName) {
+    return await this.usersService.findOneByRoleName(name);
   }
 }

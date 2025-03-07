@@ -1,3 +1,0 @@
-{
-  "extends": "@wanderlust/build-config/tsconfig/base.json"
-}

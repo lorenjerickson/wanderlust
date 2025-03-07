@@ -1,32 +1,47 @@
-import { ChangeEvent, FormEvent, useRef, useState } from 'react'
-
-import classes from './CreateAdmin.module.scss'
-import { useNavigate } from 'react-router-dom'
-import { useGlobalAdmin } from '@/hooks/useGlobalAdmin'
+import { useGlobalAdmin } from '@web/hooks/useGlobalAdmin'
 import { User } from '@wanderlust/core'
-import { TextInput, Button, Text } from '@wanderlust/ui'
+import { Button, Text, TextInput } from '@wanderlust/ui'
+import { ChangeEvent, MouseEvent, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { StyledCreateAdmin } from './CreateAdmin.styles'
 
 export function CreateAdminPage() {
     const navigate = useNavigate()
-    const [data, setData] = useState<Partial<User>>({})
+    const [data, setData] = useState<
+        Partial<User> & { confirmPassword: string }
+    >({
+        fullName: '',
+        phoneNumber: '',
+        zipCode: '',
+        emailAddress: '',
+        password: '',
+        username: '',
+        confirmPassword: '',
+    })
     const [error, setError] = useState<string | null>(null)
     const { createGlobalAdmin } = useGlobalAdmin()
     const working = useRef(false)
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        setError(null)
+    const handleSubmit = () => {
+        setError('')
+        if (data.password !== data.confirmPassword) {
+            setError('Passwords do not match')
+            return
+        }
+
         if (!working.current) {
             working.current = true
-            createGlobalAdmin(data).then((response) => {
-                if (response.emailAddress) {
-                    navigate('/login')
-                } else {
-                    console.error('Failed to create global admin account')
-                    setError('Unable to create user')
+            createGlobalAdmin(data).then(
+                (response: { emailAddress: string }) => {
+                    if (response.emailAddress) {
+                        navigate('/login')
+                    } else {
+                        console.error('Failed to create global admin account')
+                        setError('Unable to create user')
+                    }
+                    working.current = false
                 }
-                working.current = false
-            })
+            )
         }
     }
 
@@ -36,8 +51,13 @@ export function CreateAdminPage() {
             [event.currentTarget.name]: event.currentTarget.value,
         })
 
+    const handleClick = (e: MouseEvent) => {
+        e.preventDefault()
+        handleSubmit()
+    }
+
     return (
-        <div className={classes.createAdmin}>
+        <StyledCreateAdmin>
             <h1>Wanderlust</h1>
             <h2>Global Admin Account</h2>
             <p>
@@ -47,69 +67,93 @@ export function CreateAdminPage() {
             </p>
             <p>Please create a global admin account to continue.</p>
 
-            <form action="" onSubmit={handleSubmit} className={classes.form}>
+            <form action="" className={`form`} onSubmit={handleSubmit}>
                 <TextInput
+                    id="username"
+                    name="username"
+                    placeholder="Username"
+                    className="input"
+                    value={data.username}
+                    onChange={handleChange}
+                    required
+                    label="Username"
+                />
+
+                <TextInput
+                    id="fullName"
                     name="fullName"
-                    label="Full Name"
+                    className="input"
                     placeholder="Your full name"
-                    classNames={classes}
                     value={data.fullName}
                     onChange={handleChange}
                     required
+                    label="Full name"
                 />
 
                 <TextInput
                     name="phoneNumber"
-                    label="Phone"
                     placeholder="Your phone number"
-                    classNames={classes}
+                    className="input"
                     value={data.phoneNumber}
                     onChange={handleChange}
                     required
+                    label="Phone number"
                 />
-
                 <TextInput
                     name="zipCode"
-                    label="Location"
                     placeholder="Enter your zipcode"
-                    classNames={classes}
+                    className="input"
                     value={data.zipCode}
                     onChange={handleChange}
                     required
+                    label="Zip code"
                 />
 
                 <TextInput
                     name="emailAddress"
-                    label="Email address"
+                    className="input"
                     placeholder="Your email address"
-                    classNames={classes}
                     value={data.emailAddress}
                     onChange={handleChange}
                     required
+                    label="Email address"
                 />
 
                 <TextInput
                     type="password"
                     name="password"
+                    className="input"
                     placeholder="Your password"
-                    label="Password"
-                    id="your-password"
+                    id="password"
                     value={data.password}
                     onChange={handleChange}
-                    className={classes.passwordInput}
                     required
+                    label="Password"
                 />
 
+                <TextInput
+                    type="password"
+                    name="confirmPassword"
+                    placeholder="Confirm password"
+                    id="confirmPassword"
+                    className="input"
+                    value={data.confirmPassword}
+                    onChange={handleChange}
+                    required
+                    label="Confirm password"
+                />
+
+                {error && <Text className={`error`}>{error}</Text>}
+
                 <Button
-                    fullWidth
-                    className={classes.button}
+                    className={`button`}
                     type="submit"
                     variant="primary"
+                    onClick={handleSubmit}
                 >
                     Create global admin
                 </Button>
-                {error && <Text className={classes.error}>{error}</Text>}
             </form>
-        </div>
+        </StyledCreateAdmin>
     )
 }

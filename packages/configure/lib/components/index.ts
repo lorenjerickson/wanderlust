@@ -1,3 +1,4 @@
+export * from './SettingFilter/SettingFilter';
 export * from './SettingsEditor/SettingsEditor';
-export * from './ContainedInput/ContainedInput';
-export * from './ContainedSelect/ContainedSelect';
+export * from './SettingsList/SettingsList';
+export * from './SettingDetail/SettingDetail';

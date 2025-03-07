@@ -7,7 +7,7 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "target": "ES2021",
+    "target": "ESNext",
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
@@ -18,9 +18,12 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
     "paths": {
-      "@/*": ["src/*"],
-      "@core/*": ["../../packages/core/lib/*"],
+      "@/*": ["src/*"]
     }
-  }
+    
+  },
+  "include": ["src/*"]
 }

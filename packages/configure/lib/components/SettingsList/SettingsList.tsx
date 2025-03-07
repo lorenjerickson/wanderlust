@@ -1,32 +1,7 @@
-import { ISettingsGroup, ISetting, ValueType } from "@core/types";
-import { SettingEditor } from "../SettingsEditor/SettingsEditor";
-import { StyledSettingsList } from "./SettingsList.styles";
+import { useSettings } from "@configure/hooks/useSettings";
+import { List } from "@wanderlust/ui";
 
-export function SettingsList({ settings }: { settings: ISettingsGroup[] }) {
-  const handleSettingChanged = (
-    settingKey: string,
-    settingValue: ValueType
-  ) => {
-    console.log("Setting changed", settingKey, settingValue);
-  };
-  return (
-    <StyledSettingsList>
-      {settings &&
-        settings.map((group: ISettingsGroup) => (
-          <div key={group.label} className="group">
-            <h3>{group.label}</h3>
-            <p>{group.description}</p>
-            {group.settings.map((setting: ISetting) => (
-              <div className="setting">
-                <SettingEditor
-                  key={setting.key}
-                  setting={setting}
-                  onChange={handleSettingChanged}
-                />
-              </div>
-            ))}
-          </div>
-        ))}
-    </StyledSettingsList>
-  );
+export function SettingsList() {
+  const { settings } = useSettings();
+  return <List items={settings} />
 }

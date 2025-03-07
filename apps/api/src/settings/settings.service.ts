@@ -1,23 +1,23 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Settings, ISettingsGroup } from '@wanderlust/core';
+import { Settings, SettingsGroup } from '@wanderlust/core';
 import { Model } from 'mongoose';
 
 @Injectable()
 export class SettingsService {
   constructor(
     @Inject('SETTINGS_MODEL')
-    private settingsModel: Model<ISettingsGroup>,
+    private settingsModel: Model<SettingsGroup>,
   ) {}
 
   async getAllSettings() {
     return this.settingsModel.find().exec();
   }
 
-  async findByGroupKey(groupKey: string) {
+  async findByKey(groupKey: string) {
     return this.settingsModel.find({ key: groupKey }).exec();
   }
 
-  async findByGroupAndSettingKey(groupKey: string, settingKey: string) {
+  async findByKeyAndSettingKey(groupKey: string, settingKey: string) {
     const results = await this.settingsModel.find({ key: groupKey }).exec();
     if (results.length === 0) {
       return null;
@@ -30,11 +30,8 @@ export class SettingsService {
     return this.settingsModel.updateMany(allSettings);
   }
 
-  async updateAllGroupSettings(
-    groupKey: string,
-    groupSettings: ISettingsGroup,
-  ) {
-    return this.settingsModel.updateMany({ key: groupKey }, groupSettings);
+  async updateAllGroupSettings(key: string, group: SettingsGroup) {
+    return this.settingsModel.updateMany({ key }, group);
   }
 
   async updateOneGroupSetting(

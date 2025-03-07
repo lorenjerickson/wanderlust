@@ -1,53 +1,42 @@
-import {
-  IconSearch
-} from "@tabler/icons-react";
-import { ReactNode } from "react";
-import classes from "./SideNav.module.scss";
-import { NavLinkProps } from "./types";
+import MailIcon from "@mui/icons-material/Mail";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import Box from "@mui/material/Box";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
 import { useSideNav } from "./useSideNav";
 
-type SideNavProps = {
-  links: NavLinkProps[];
-};
-
 export function SideNav() {
-  const { links } = useSideNav();
+  const { items, isOpen } = useSideNav();
 
-  const mainLinks = links.map((link) => (
-    <UnstyledButton key={link.label} className={classes.mainLink}>
-      <div className={classes.mainLinkInner}>
-        <span className={classes.mainLinkIcon}>{link.icon}</span>
-        <span>{link.label}</span>
-      </div>
-      {link.badge && (
-        <Badge size="sm" variant="filled" className={classes.mainLinkBadge}>
-          {link.badge}
-        </Badge>
-      )}
-    </UnstyledButton>
-  ));
+  const DrawerList = (
+    <Box
+      sx={{ width: isOpen ? 250 : 48, background: "rgba(0,0,0,0.5)" }}
+      role="presentation"
+    >
+      <List>
+        {items.map(({ label }, index) => (
+          <ListItem key={label} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
+              <ListItemText primary={label} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>  
+    </Box>
+  );
 
   return (
-    <nav className={classes.navbar}>
-      <h3>Configuration</h3>
-      <TextInput
-        placeholder="Search"
-        size="xs"
-        leftSection={
-          <IconSearch
-            style={{ width: rem(12), height: rem(12) }}
-            stroke={1.5}
-          />
-        }
-        rightSectionWidth={70}
-        rightSection={<Code className={classes.searchCode}>Ctrl + K</Code>}
-        styles={{ section: { pointerEvents: "none" } }}
-        mb="sm"
-      />
-
-      <div className={classes.section}>
-        <div className={classes.mainLinks}>{mainLinks}</div>
-      </div>
-    </nav>
+    <div>
+      <Drawer sx={{ background: "rgba(0,0,0,0.5)" }} open={true}>
+        {DrawerList}
+      </Drawer>
+    </div>
   );
 }

@@ -1,4 +1,4 @@
-import { User } from '@core'
+import { User } from '@wanderlust/core'
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -13,6 +13,9 @@ export function useGlobalAdmin() {
             .then((res) => {
                 if (res.ok) {
                     res.json().then((data) => setGlobalAdmin(data))
+                } else {
+                    setGlobalAdmin(undefined)
+                    navigate('/create-admin')
                 }
             })
             .catch((err) => {

@@ -1,13 +1,16 @@
-import { useMemo, useState } from "react";
-import { NavLinkProps } from "./types";
+import { useMemo, useState } from 'react'
+import { NavLinkProps } from './types'
 
 export function useSideNav() {
-  const [links, setLinks] = useState<NavLinkProps[]>([]);
+    const [items, setItems] = useState<NavLinkProps[]>([])
+    const [isOpen, setOpen] = useState(false)
 
-  return useMemo(() => {
-    return {
-      links,
-      setLinks,
-    };
-  }, [links]);
+    return useMemo(() => {
+        return {
+            isOpen,
+            setOpen,
+            items,
+            setItems,
+        }
+    }, [items, isOpen])
 }

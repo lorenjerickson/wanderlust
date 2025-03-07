@@ -3,11 +3,15 @@ import { Ownership, Permissions } from "./ownership";
 type SettingDataType = string | number | boolean;
 type ArraySettingDataType = Array<SettingDataType>;
 
-export type OptionValue = { label: string; value: string };
 export type ControlType = "text" | "number" | "choice" | "toggle" | "range" | "password";
 export type ValueType = SettingDataType | ArraySettingDataType;
 
-export interface ISetting {
+export interface SettingOption {
+  label: string;
+  value: string;
+}
+
+export interface Setting {
   key: string;
   label: string;
   description: string;
@@ -16,7 +20,7 @@ export interface ISetting {
   value?: ValueType;
   defaultValue?: ValueType;
   type: ControlType;
-  options?: Array<OptionValue>;
+  options?: Array<SettingOption>;
   min?: number;
   max?: number;
   increment?: number; // for range
@@ -24,12 +28,13 @@ export interface ISetting {
   ownership: Ownership;
 }
 
-export interface ISettingsGroup {
+export interface SettingsGroup {
   key: string;
   label: string;
   description: string;
   icon?: string;
-  settings: ISetting[];
+  moduleId: string;
+  settings: Setting[];
 }
 
-export type Settings = Array<ISettingsGroup>;
+export type Settings = Array<SettingsGroup>;

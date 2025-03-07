@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { UsersModule } from '../user/user.module';
-import { SessionController } from './session.controller';
-import { SessionService } from './session.service';
-import { sessionProviders } from './session.providers';
-import { DatabaseModule } from '../database/database.module';
+import { UsersModule } from '../user/user.module.js';
+import { SessionController } from './session.controller.js';
+import { SessionService } from './session.service.js';
+import { sessionProviders } from './session.providers.js';
+import { DatabaseModule } from '../database/database.module.js';
 
 @Module({
   imports: [UsersModule, DatabaseModule],

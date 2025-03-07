@@ -1,60 +1,57 @@
-import TextField from "@mui/material/TextField";
-import { StyledTextInput } from "./TextInput.styles";
-import {
-  FormControl,
-  IconButton,
-  Input,
-  InputAdornment,
-  InputLabel,
-} from "@mui/material";
+import InputAdornment from "@mui/material/InputAdornment";
+import MuiTextInput from "@mui/material/TextField";
+import { ReactNode } from "react";
 
 type TextInputProps = {
   type?: string;
-  id: string;
+  id?: string;
   name: string;
   label: string;
-  placeholder: string;
-  value: string;
+  placeholder?: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  leading?: React.ReactNode;
-  trailing: React.ReactNode;
+  value?: string;
+  className?: string;
+  required?: boolean;
+  leading?: ReactNode;
+  trailing?: ReactNode;
 };
 
 export function TextInput(props: TextInputProps) {
   const {
     id,
     name,
-    placeholder,
+    placeholder = "",
     value,
-    label,
     onChange,
+    type = "text",
+    className = "",
+    required = false,
+    label,
     leading,
     trailing,
-    type,
   } = props;
   return (
-    <StyledTextInput>
-      <TextField
-        variant="filled"
-        label={label}
-        type={type || "text"}
-        onChange={onChange}
-        placeholder={placeholder}
-        id={id}
-        name={name}
-        value={value}
-        sx-{...{width: "100%"}}
-        slotProps={{
-          input: {
-            startAdornment: leading && (
-              <InputAdornment position="start">{leading}</InputAdornment>
-            ),
-            endAdornment: trailing && (
-              <InputAdornment position="end">{trailing}</InputAdornment>
-            ),
-          },
-        }}
-      />
-    </StyledTextInput>
+    <MuiTextInput
+      value={value}
+      onChange={onChange}
+      id={id}
+      name={name}
+      type={type}
+      placeholder={placeholder}
+      className={className}
+      required={required}
+      label={label}
+      slotProps={{
+        input: {
+          startAdornment: leading ? (
+            <InputAdornment position="start">{leading}</InputAdornment>
+          ) : undefined,
+          endAdornment: trailing ? (
+            <InputAdornment position="end">{trailing}</InputAdornment>
+          ) : undefined,
+        },
+      }}
+      variant="filled"
+    />
   );
 }

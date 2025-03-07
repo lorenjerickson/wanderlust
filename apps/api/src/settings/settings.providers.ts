@@ -1,5 +1,5 @@
 import { Connection } from 'mongoose';
-import { SettingsGroupSchema } from './settings.schema';
+import { SettingsGroupSchema } from './settings.schema.js';
 
 export const settingsProviders = [
   {

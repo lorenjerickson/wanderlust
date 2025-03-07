@@ -1,4 +1,4 @@
-import { ISettingsGroup } from "./settings";
+import { SettingsGroup } from "./settings";
 
 export interface SemanticVersion {
   major: number;
@@ -18,5 +18,5 @@ export interface ModuleManifest {
   dependsOn: string[];
   version: SemanticVersion;
   handler: ModuleHandler;
-  settings: ISettingsGroup;  
+  settings: SettingsGroup;  
 }

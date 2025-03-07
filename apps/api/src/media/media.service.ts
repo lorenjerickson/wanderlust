@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { MediaModel } from './storage';
+import { MediaModel } from './storage.js';
 
 @Injectable()
 export class MediaService {
