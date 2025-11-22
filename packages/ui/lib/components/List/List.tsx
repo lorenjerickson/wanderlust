@@ -18,6 +18,7 @@ type ListItemProps = {
   checked?: boolean;
   subtitle?: React.ReactNode;
   trailingElement?: React.ReactNode;
+  data?: unknown;
 };
 
 type ListProps = {
@@ -37,7 +38,7 @@ export function List(props: ListProps) {
     onSecondaryAction,
     onSelectionChanged,
     onClick,
-    compact
+    compact,
   } = props;
 
   const handleClick = (item: ListItemProps) => {
@@ -48,7 +49,7 @@ export function List(props: ListProps) {
 
   const handleSelectionChanged = (item: ListItemProps) => {
     if (onSelectionChanged) {
-        onSelectionChanged(item);
+      onSelectionChanged(item);
     }
   };
 
@@ -59,7 +60,10 @@ export function List(props: ListProps) {
   };
 
   return (
-    <MuiList sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }} dense={compact}>
+    <MuiList
+      sx={{ width: "100%", maxWidth: 360, bgcolor: "transparent" }}
+      dense={compact}
+    >
       {items.map((item, index) => {
         const labelId = `checkbox-list-label-${item.id}`;
 

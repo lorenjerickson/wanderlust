@@ -11,3 +11,6 @@ export * from "./Header/Header";
 export * from "./MediaPreview";
 export * from "./SideNavLayout/SideNavLayout";
 export * from "./List/List";
+export * from './DisplayFormat/DisplayFormat';
+export * from './TableView/TableView';
+export * from "./FileUploader/FileUploader";

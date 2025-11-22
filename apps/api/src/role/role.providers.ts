@@ -1,5 +1,5 @@
 import { Connection } from 'mongoose';
-import { RoleSchema } from './role.schema';
+import { RoleSchema } from './role.schema.js';
 
 export const roleProviders = [
   {

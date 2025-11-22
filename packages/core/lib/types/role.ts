@@ -1,4 +1,4 @@
-export enum RoleName {
+export const enum RoleName {
   GlobalAdmin = "globalAdmin",
   LocalAdmin = "localAdmin",
   GameMaster = "gamemaster",
@@ -7,6 +7,7 @@ export enum RoleName {
 }
 
 export type Role = {
+  _id: string;
   name: RoleName;
   description?: string;
 }

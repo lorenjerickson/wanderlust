@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "ESNext",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -22,8 +22,8 @@
     "esModuleInterop": true,
     "paths": {
       "@/*": ["src/*"]
-    }
-    
+    },
+    "types": ["node", "jest"]
   },
   "include": ["src/*"]
 }

@@ -1,7 +1,10 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { RoleService } from '../role/role.service.js';
 import { UserService } from './user.service.js';
 import { RoleName } from '@wanderlust/core';
+import { AuthenticatedGuard } from '../common/guards/authenticated.guard.js';
+import { ObjectId, Schema } from 'mongoose';
+import { Role } from '@wanderlust/core';
 
 @Controller('api/users')
 export class UsersController {
@@ -15,6 +18,7 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @UseGuards(AuthenticatedGuard)
   @Post()
   async createUser(@Body() body) {
     const user = await this.usersService.findOneByUsername(body.emailAddress);
@@ -41,10 +45,11 @@ export class UsersController {
   @Get('global-admin')
   async getGlobalAdmin() {
     const adminRole = await this.rolesService.findOrCreateAdminRole();
-    return this.findOneByRoleName(adminRole.name);
+    const admin = await this.findOneByRole(adminRole);
+    return { ...admin, passowrd: undefined };
   }
 
-  async findOneByRoleName(name: RoleName) {
-    return await this.usersService.findOneByRoleName(name);
+  async findOneByRole(role: Role) {
+    return this.usersService.findOneByRole(role);
   }
 }

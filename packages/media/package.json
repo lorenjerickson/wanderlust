@@ -9,7 +9,8 @@
     "dist"
   ],
   "scripts": {
-    "dev": "vite",
+    "dev": "vite build --watch",
+    "dev:module": "vite",
     "build": "tsc --p ./tsconfig.build.json && vite build",
     "build:watch": "tsc --p ./tsconfig.build.json && vite build --watch",
     "lint": "eslint .",
@@ -22,7 +23,11 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@eslint/js": "^9.19.0",
+    "@mui/material": "^6.4.5",
+    "@types/jest": "^29.5.14",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.19",
     "@vitejs/plugin-react-swc": "^3.5.0",
@@ -41,6 +46,11 @@
     "**/*.css"
   ],
   "dependencies": {
+    "@mui/icons-material": "^6.4.5",
+    "@tanstack/react-query": "^5.29.2",
+    "@wanderlust/core": "workspace:*",
+    "@wanderlust/ui": "workspace:*",
+    "image-meta": "^0.2.1",
     "react-router-dom": "^6.22.3",
     "styled-components": "^6.1.12"
   }
