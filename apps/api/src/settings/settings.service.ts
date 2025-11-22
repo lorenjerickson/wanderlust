@@ -26,9 +26,9 @@ export class SettingsService {
     return results.find((setting) => setting.key === settingKey);
   }
 
-  async updateAllSettings(allSettings: Settings) {
-    return this.settingsModel.updateMany(allSettings);
-  }
+  // async updateAllSettings(allSettings: Settings) {
+  //   return this.settingsModel.updateMany(allSettings);
+  // }
 
   async updateAllGroupSettings(key: string, group: SettingsGroup) {
     return this.settingsModel.updateMany({ key }, group);

@@ -1,4 +1,4 @@
-import { MappedPermissions, Permissions } from '@wanderlust/core';
+import { MappedPermissions, Permissions, RoleName } from '@wanderlust/core';
 import { Schema } from 'mongoose';
 
 export const PermissionsSchema = new Schema<Permissions>({
@@ -9,6 +9,9 @@ export const PermissionsSchema = new Schema<Permissions>({
 });
 
 export const MappedPermissionsSchema = new Schema<MappedPermissions>({
-  key: String,
-  permissions: PermissionsSchema,
+  [RoleName.GlobalAdmin]: { type: PermissionsSchema, required: true },
+  [RoleName.LocalAdmin]: { type: PermissionsSchema, required: true },
+  [RoleName.GameMaster]: { type: PermissionsSchema, required: true },
+  [RoleName.Player]: { type: PermissionsSchema, required: true },
+  [RoleName.Spectator]: { type: PermissionsSchema, required: true },
 });

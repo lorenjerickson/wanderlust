@@ -1,6 +1,7 @@
 import InputAdornment from "@mui/material/InputAdornment";
 import MuiTextInput from "@mui/material/TextField";
 import { ReactNode } from "react";
+import { theme } from "../../theme/theme";
 
 type TextInputProps = {
   type?: string;
@@ -41,6 +42,10 @@ export function TextInput(props: TextInputProps) {
       className={className}
       required={required}
       label={label}
+      sx={{
+        color: theme.palette.primary.main,
+        borderColor: theme.palette.primary.main,
+      }}
       slotProps={{
         input: {
           startAdornment: leading ? (

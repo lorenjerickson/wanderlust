@@ -7,10 +7,15 @@ import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { databaseProviders } from './database/database.providers.js';
 import { MediaModule } from './media/media.module.js';
-import { SessionModule } from './session/session.module.js';
+import { AuthModule } from './auth/auth.module.js';
 import { UsersModule } from './user/user.module.js';
 import { SettingsModule } from './settings/settings.module.js';
 import { RoleModule } from './role/role.module.js';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+export const __filename = fileURLToPath(import.meta.url);
+export const __dirname = dirname(__filename);
 
 @Module({
   imports: [
@@ -21,7 +26,7 @@ import { RoleModule } from './role/role.module.js';
     }),
     MediaModule,
     UsersModule,
-    SessionModule,
+    AuthModule,
     SettingsModule,
     RoleModule,
   ],

@@ -1,5 +1,6 @@
 import Typography from "@mui/material/Typography";
 import { PropsWithChildren } from "react";
+import { theme } from "../../theme/theme";
 
 export type Variant =
   | "h1"
@@ -24,5 +25,13 @@ export function Text({
   variant?: Variant;
   className?: string;
 }>) {
-  return <Typography className={className} variant={variant}>{children}</Typography>;
+  return (
+    <Typography
+      className={className}
+      sx={{ color: theme.palette.primary.main }}
+      variant={variant}
+    >
+      {children}
+    </Typography>
+  );
 }

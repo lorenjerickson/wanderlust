@@ -1,8 +1,8 @@
-import { useUserSession } from '@web/hooks/useUserSession'
 import { Button, TextInput } from '@wanderlust/ui'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import classes from './Login.module.scss'
+import { useAuthentication } from '@web/hooks/useAuthentication'
 
 type FieldType = {
     username?: string
@@ -11,7 +11,6 @@ type FieldType = {
 }
 
 export const LoginPage = () => {
-    const { startUserSession } = useUserSession()
     const [error, setError] = useState<string | undefined>(undefined)
     const navigate = useNavigate()
     const [values, setValues] = useState<FieldType>({
@@ -19,6 +18,7 @@ export const LoginPage = () => {
         password: '',
         remember: false,
     })
+    const { login } = useAuthentication()
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValues({
@@ -30,7 +30,12 @@ export const LoginPage = () => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setError(undefined)
-        startUserSession(values)
+        const { username, password } = values
+        if (!username || !password) {
+            setError('Please enter a username and password')
+            return
+        }
+        login({ username, password })
             .then(() => {
                 navigate('/welcome')
             })

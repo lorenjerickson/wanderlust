@@ -10,23 +10,23 @@ import { ContentLayout } from './components/ContentLayout/ContentLayout'
 import { TopLayout } from './components/TopLayout/TopLayout'
 import { Welcome } from './pages/Welcome/Welcome'
 import { LoginPage } from './pages/Login/Login'
-import { useUserSession } from './hooks/useUserSession'
 import { useGlobalAdmin } from './hooks/useGlobalAdmin'
 import { CreateAdminPage } from './pages/CreateAdmin/CreateAdmin'
 
 import { routes as configureRoutes } from '@wanderlust/configure';
+import { useAuthentication } from './hooks/useAuthentication'
 
 const ProtectedRoutes = () => {
-    let { isLoggedIn } = useUserSession()
-    return isLoggedIn() ? <Outlet /> : <Navigate to="/" />
+    let { isLoggedIn } = useAuthentication()
+    return isLoggedIn ? <Outlet /> : <Navigate to="/" />
 }
 
 const StartupComponent = () => {
-    let { isLoggedIn } = useUserSession()
+    let { isLoggedIn } = useAuthentication()
     const { hasGlobalAdmin } = useGlobalAdmin()
     if (!hasGlobalAdmin) {
         return <CreateAdminPage />
-    } else if (!isLoggedIn()) {
+    } else if (!isLoggedIn) {
         return <LoginPage />
     } else {
         return <Navigate to="/welcome" />

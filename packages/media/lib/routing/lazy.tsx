@@ -1,7 +1,7 @@
 import { lazy } from "react";
 
 export const MediaApp = lazy(() =>
-  import("../components/MediaApp/MediaApp").then((module) => ({
+  import("../pages/MediaApp/MediaApp").then((module) => ({
     default: module.MediaApp,
   }))
 );

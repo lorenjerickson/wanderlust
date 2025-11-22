@@ -5,7 +5,7 @@ import MuiToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 type ToggleButtonGroupProps = {
   buttons: Array<ToggleButtonProps>;
   value: string;
-  onChange: (event: MouseEvent) => void;
+  onChange: (event: MouseEvent, value: string) => void;
 };
 
 export function ToggleButtonGroup({
@@ -20,6 +20,7 @@ export function ToggleButtonGroup({
           key={button.value}
           value={button.value}
           onChange={button.onChange}
+          icon={button.value === value ? button.selectedIcon : button.icon} 
         >
           {button.children}
         </ToggleButton>

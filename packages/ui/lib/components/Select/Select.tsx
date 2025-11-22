@@ -1,10 +1,7 @@
-import {
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Select as MuiSelect,
-    SelectChangeEvent,
-} from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import MuiSelect, { SelectChangeEvent } from "@mui/material/Select";
 
 type OptionValue = {
   value: string;
