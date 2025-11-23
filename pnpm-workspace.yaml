@@ -1,6 +1,13 @@
 packages:
-  - "apps/**"
-  - 'packages/**'
+  - apps/**
+  - packages/**
   - '!**/test/**'
   - '!**/node_modules/**'
   - '!**/dist/**'
+
+onlyBuiltDependencies:
+  - '@nestjs/core'
+  - '@parcel/watcher'
+  - '@swc/core'
+  - bcrypt
+  - esbuild
