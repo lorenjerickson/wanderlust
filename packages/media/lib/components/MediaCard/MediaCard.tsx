@@ -1,18 +1,18 @@
 import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
-import { Button, Text, TextInput } from "@wanderlust/ui";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import { Text, TextInput } from "@wanderlust/ui";
 import { useMemo } from "react";
 
 export function MediaCard({ file }: { file: File }) {
-  const handleView = () => {
-    console.log("View", file);
-  };
+  // const handleView = () => {
+  //   console.log("View", file);
+  // };
 
-  const handleDelete = () => {
-    console.log("Delete", file);
-  };
+  // const handleDelete = () => {
+  //   console.log("Delete", file);
+  // };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log("Change", e.target.value);

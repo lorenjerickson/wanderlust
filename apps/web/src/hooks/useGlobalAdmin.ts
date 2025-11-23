@@ -1,46 +1,54 @@
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { User } from '@wanderlust/core'
-import { useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useMemo, useState } from 'react'
 
 export function useGlobalAdmin() {
-    const [globalAdmin, setGlobalAdmin] = useState<Partial<User> | undefined>(
-        undefined
-    )
-    const navigate = useNavigate()
+    const [saving, setSaving] = useState(false)
 
-    useEffect(() => {
-        fetch('http://localhost:3000/api/users/global-admin')
-            .then((res) => {
-                if (res.ok) {
-                    res.json().then((data) => setGlobalAdmin(data))
-                } else {
-                    setGlobalAdmin(undefined)
-                    navigate('/create-admin')
+    const { data: globalAdmin, error } = useQuery({
+        queryKey: ['global-admin', saving],
+        queryFn: async () => {
+            const res = await fetch(
+                'http://localhost:3000/api/users/global-admin'
+            )
+            if (!res.ok) {
+                throw new Error('Global admin not found')
+            }
+            return res.json()
+        },
+        enabled: saving,
+    })
+
+    const { mutateAsync: createGlobalAdmin } = useMutation({
+        mutationKey: ['create-global-admin', saving],
+        mutationFn: async (data: Partial<User>) => {
+            if (!saving) {
+                setSaving(() => true)
+                const res = await fetch(
+                    'http://localhost:3000/api/users/global-admin',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                    }
+                )
+
+                if (!res.ok) {
+                    setSaving(() => false)
+                    throw new Error('Failed to create global admin')
                 }
-            })
-            .catch((err) => {
-                console.error(err)
-                setGlobalAdmin(undefined)
-                navigate('/create-admin')
-            })
-    }, [])
+                setSaving(() => false)
+                return res.json()
+            }
+
+            setSaving(() => false)  
+            return null
+        },
+    })
 
     return useMemo(() => {
-        const createGlobalAdmin = async (data: Partial<User>) => {
-            const res = await fetch(
-                'http://localhost:3000/api/users/global-admin',
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data),
-                }
-            )
-
-            return res.json()
-        }
-
         return { hasGlobalAdmin: !!globalAdmin, createGlobalAdmin }
-    }, [globalAdmin])
+    }, [globalAdmin, saving])
 }

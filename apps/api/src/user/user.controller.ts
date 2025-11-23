@@ -1,10 +1,8 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Role } from '@wanderlust/core';
+import { AuthenticatedGuard } from '../common/guards/authenticated.guard.js';
 import { RoleService } from '../role/role.service.js';
 import { UserService } from './user.service.js';
-import { RoleName } from '@wanderlust/core';
-import { AuthenticatedGuard } from '../common/guards/authenticated.guard.js';
-import { ObjectId, Schema } from 'mongoose';
-import { Role } from '@wanderlust/core';
 
 @Controller('api/users')
 export class UsersController {
@@ -21,35 +19,59 @@ export class UsersController {
   @UseGuards(AuthenticatedGuard)
   @Post()
   async createUser(@Body() body) {
-    const user = await this.usersService.findOneByUsername(body.emailAddress);
-    if (user) {
-      throw new Error('User already exists');
+    try {
+      const user = await this.usersService.findOneByUsername(body.emailAddress);
+      if (user) {
+        throw new Error('User already exists');
+      }
+      return this.usersService.create(body);
+    } catch (error) {
+      console.error(error);
+      throw error;
     }
-    return this.usersService.create(body);
   }
 
   @Post('global-admin')
   async createGlobalAdmin(@Body() body) {
-    const globalAdmin = await this.getGlobalAdmin();
-    if (globalAdmin) {
-      throw new Error('Global admin already exists');
-    } else {
-      const adminRole = await this.rolesService.findOrCreateAdminRole();
-      return this.usersService.create({
-        ...body,
-        roles: [adminRole],
-      });
+    try {
+      const globalAdmin = await this.getGlobalAdmin();
+      if (globalAdmin) {
+        throw new Error('Global admin already exists');
+      } else {
+        const adminRole = await this.rolesService.findOrCreateAdminRole();
+        return this.usersService.create({
+          ...body,
+          roles: [adminRole?._id],
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      throw error;
     }
   }
 
   @Get('global-admin')
   async getGlobalAdmin() {
-    const adminRole = await this.rolesService.findOrCreateAdminRole();
-    const admin = await this.findOneByRole(adminRole);
-    return { ...admin, passowrd: undefined };
+    try {
+      const adminRole = await this.rolesService.findOrCreateAdminRole();
+      const admin = await this.findOneByRole(adminRole);
+      if (!admin) {
+        return null;
+      }
+
+      return { ...admin, password: undefined };
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   }
 
   async findOneByRole(role: Role) {
-    return this.usersService.findOneByRole(role);
+    try {
+      return this.usersService.findOneByRole(role);
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   }
 }
