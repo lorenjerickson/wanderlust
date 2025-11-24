@@ -40,3 +40,5 @@ yarn-error.log*
 data
 
 *storybook.log
+
+apps/db/logs
