@@ -9,26 +9,49 @@ export class RoleService {
     private roleModel: Model<Role>,
   ) {}
 
-  async create(role: RoleName): Promise<Role> {
-    const newRole = new this.roleModel(role);
-    const createdRole: Role = await newRole.save();
-    return createdRole;
+  async create(role: Role): Promise<Role> {
+    try {
+      const newRole = new this.roleModel(role);
+      const createdRole: Role = await newRole.save();
+      return createdRole;
+    } catch (error) {
+      console.error('Error creating role:', error);
+      throw error;
+    }
   }
 
   async findOneByName(role: RoleName): Promise<Role> {
-    return await this.roleModel.findOne({ name: role });
+    try {
+      return await this.roleModel.findOne({ name: role });
+    } catch (error) {
+      console.error('Error finding role by name:', error);
+      throw error;
+    }
   }
 
   async findAll() {
-    return await this.roleModel.find();
+    try {
+      return await this.roleModel.find();
+    } catch (error) {
+      console.error('Error finding all roles:', error);
+      throw error;
+    }
   }
 
   async findOrCreateAdminRole(): Promise<Role> {
-    const adminRole = await this.findOneByName(RoleName.GlobalAdmin);
-    if (adminRole) {
-      return adminRole;
-    } else {
-      return this.create(RoleName.GlobalAdmin);
+    try {
+      const adminRole = await this.findOneByName(RoleName.GlobalAdmin);
+      if (adminRole) {
+        return adminRole;
+      } else {
+        return this.create({
+          name: RoleName.GlobalAdmin,
+          description: 'Global Administrator with full access',
+        });
+      }
+    } catch (error) {
+      console.error('Error in findOrCreateAdminRole:', error);
+      throw error;
     }
   }
 }

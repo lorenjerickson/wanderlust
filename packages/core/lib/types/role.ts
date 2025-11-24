@@ -7,7 +7,7 @@ export const enum RoleName {
 }
 
 export type Role = {
-  _id: string;
+  _id?: string;
   name: RoleName;
   description?: string;
 }

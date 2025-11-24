@@ -32,8 +32,8 @@ export function CreateAdminPage() {
         if (!working.current) {
             working.current = true
             createGlobalAdmin(data).then(
-                (response: { emailAddress: string }) => {
-                    if (response.emailAddress) {
+                (response: User | null) => {
+                    if (response?.emailAddress) {
                         navigate('/login')
                     } else {
                         console.error('Failed to create global admin account')
@@ -41,7 +41,11 @@ export function CreateAdminPage() {
                     }
                     working.current = false
                 }
-            )
+            ).catch((err) => {  
+                console.error('Error during global admin creation:', err)
+                setError(err.message || 'Unable to create user')
+                working.current = false
+            })
         }
     }
 

@@ -22,9 +22,17 @@
 
     .form {
         padding: 24px;
+        width: 350px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
 
         .login {
             margin-bottom: 32px;
+        }
+
+        .button {
+            color: #0f0f0f;
         }
     }
 }

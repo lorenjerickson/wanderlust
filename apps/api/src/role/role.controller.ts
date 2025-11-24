@@ -7,15 +7,25 @@ export class RoleController {
 
   @Get()
   async getAll() {
-    return this.roleService.findAll();
+    try {
+      return this.roleService.findAll();
+    } catch (error) {
+      console.error('Error getting all roles:', error);
+      throw error;
+    }
   }
 
   @Post()
   async createRole(@Body() body) {
-    const user = await this.roleService.findOneByName(body.name);
-    if (user) {
-      throw new Error('Role already exists');
+    try {
+      const user = await this.roleService.findOneByName(body.name);
+      if (user) {
+        throw new Error('Role already exists');
+      }
+      return this.roleService.create(body);
+    } catch (error) {
+      console.error('Error creating role:', error);
+      throw error;
     }
-    return this.roleService.create(body);
   }
 }

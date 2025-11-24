@@ -18,7 +18,7 @@ export function useAuthentication() {
 
     return useMemo(() => {
         const login = async ({ username, password }: LoginArgs) => {
-            fetch(`${AUTH_API_ENDPOINT}/api/auth`, {
+            fetch(`${import.meta.env.VITE_AUTH_API_ENDPOINT}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -27,9 +27,9 @@ export function useAuthentication() {
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    if (data.access_token) {
+                    if (data.jwt) {
                         setIsAuthenticated(true)
-                        setAccessToken(data.access_token)
+                        setAccessToken(data.jwt)
                         setUser(data.user)
                     }
                 })
