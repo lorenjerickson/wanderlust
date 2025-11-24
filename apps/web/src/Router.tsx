@@ -23,8 +23,8 @@ const ProtectedRoutes = () => {
 
 const StartupComponent = () => {
     let { isLoggedIn } = useAuthentication()
-    const { hasGlobalAdmin } = useGlobalAdmin()
-    if (!hasGlobalAdmin) {
+    const { globalAdmin } = useGlobalAdmin()
+    if (!globalAdmin) {
         return <CreateAdminPage />
     } else if (!isLoggedIn) {
         return <LoginPage />

@@ -3,40 +3,18 @@ import { Injectable, Inject, UseGuards } from '@nestjs/common';
 import { Role, RoleName, User } from '@wanderlust/core';
 import * as bcrypt from 'bcrypt';
 
-type UserResponse = Omit<Partial<User>, 'password'>;
-
 @Injectable()
 export class UserService {
   constructor(@Inject('USER_MODEL') private userModel: Model<User>) {}
 
-  async create(user: Partial<User>): Promise<UserResponse> {
+  async create(user: Partial<User>): Promise<User> {
     try {
       const { password } = user;
       user.password = await bcrypt.hash(password, 10);
       const newUser = new this.userModel({
         ...user,
-        // revisions: {
-        //   createdOn: new Date(),
-        //   createdBy: 'system',
-        //   updatedOn: new Date(),
-        //   updatedBy: 'system',
-        // },
-        // access: {
-        //   lastActive: new Date(),
-        //   active: true,
-        //   isBanned: false,
-        //   isSuspended: false,
-        //   isApproved: false,
-        //   lastOnline: new Date(),
-        // },
-        // social: {
-        //   discord: '',
-        //   twitter: '',
-        //   instagram: '',
-        //   facebook: '',
-        // },
       });
-      const createdUser: UserResponse = await newUser.save();
+      const createdUser: User = await newUser.save();
       return createdUser;
     } catch (error) {
       console.error('Error creating user:', error);
@@ -44,7 +22,7 @@ export class UserService {
     }
   }
 
-  async update(sessionId: string, body: User): Promise<UserResponse> {
+  async update(sessionId: string, body: User): Promise<User> {
     try {
       const userToBeUpdated = await this.findOneByUsername(body.emailAddress);
       if (userToBeUpdated) {
@@ -52,7 +30,7 @@ export class UserService {
           ...userToBeUpdated,
           ...body,
         };
-        const postUpdateUser: UserResponse = await this.userModel
+        const postUpdateUser: User = await this.userModel
           .findOneAndUpdate({ sessionId }, updatedUser, {
             new: true,
           })

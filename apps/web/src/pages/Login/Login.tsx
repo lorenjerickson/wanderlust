@@ -1,5 +1,5 @@
 import { Button, TextInput } from '@wanderlust/ui'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import classes from './Login.module.scss'
 import { useAuthentication } from '@web/hooks/useAuthentication'
@@ -18,7 +18,7 @@ export const LoginPage = () => {
         password: '',
         remember: false,
     })
-    const { login } = useAuthentication()
+    const { login, isLoggedIn } = useAuthentication()
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValues({
@@ -35,15 +35,17 @@ export const LoginPage = () => {
             setError('Please enter a username and password')
             return
         }
-        login({ username, password })
-            .then(() => {
-                navigate('/welcome')
-            })
-            .catch((error: unknown) => {
-                console.error('Login failed', error)
-                setError('Login failed')
-            })
+        login({ username, password }).catch((error: unknown) => {
+            console.error('Login failed', error)
+            setError('Login failed')
+        })
     }
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigate('welcome')
+        }
+    }, [isLoggedIn, navigate])
 
     return (
         <div className={classes.page}>
@@ -53,19 +55,19 @@ export const LoginPage = () => {
                 <div className={classes.login}>
                     <form
                         name="loginForm"
-                        style={{ maxWidth: 800 }}
+                        className={classes.form}
                         autoComplete="off"
                         onSubmit={handleSubmit}
                     >
                         <TextInput
-                            id="filled-basic"
+                            id="username"
                             name="username"
                             placeholder="Username"
                             onChange={handleChange}
                             label="Username"
                         />
                         <TextInput
-                            id="filled-basic"
+                            id="passowrd"
                             name="password"
                             type="password"
                             placeholder="Password"
@@ -77,6 +79,7 @@ export const LoginPage = () => {
                             variant="primary"
                             onClick={() => handleSubmit}
                             type="submit"
+                            className={classes.button}
                         >
                             Login
                         </Button>
