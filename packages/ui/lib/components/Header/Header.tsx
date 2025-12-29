@@ -20,7 +20,7 @@ import PlayIcon from "@mui/icons-material/PlayArrow";
 
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
-export function Header() {
+export function Header({ user }: { user: any }) {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -68,9 +68,12 @@ export function Header() {
 
   return (
     <AppBar position="static">
-      <Container maxWidth="xl">
+      <Container maxWidth={false}>
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          <AdbIcon sx={{
+            display: { xs: "none", md: "flex" },
+            mr: 1
+          }} />
           <Typography
             variant="h6"
             noWrap
@@ -159,9 +162,12 @@ export function Header() {
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
+              <>
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                </IconButton>
+                <Typography variant="button">{user.name}</Typography>
+              </>
             </Tooltip>
             <Menu
               sx={{ mt: "45px" }}

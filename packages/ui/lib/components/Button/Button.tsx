@@ -1,3 +1,5 @@
+'use client';
+
 import { MouseEvent } from "react";
 import MuiButton from "@mui/material/Button";
 import { theme } from "../../theme/theme";
