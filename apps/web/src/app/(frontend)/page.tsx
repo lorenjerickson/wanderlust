@@ -1,11 +1,9 @@
-import { headers as getHeaders } from 'next/headers.js'
-import Image from 'next/image'
-import { getPayload } from 'payload'
-import React from 'react'
-
+import { Footer } from '@/components/footer/Footer'
+import { Header } from '@/components/header/Header'
 import config from '@/payload.config'
+import { headers as getHeaders } from 'next/headers.js'
+import { getPayload } from 'payload'
 import './styles.css'
-import { Footer, Header } from '@wanderlust/ui'
 
 export const getServerProps = async () => {
   const headers = await getHeaders()
@@ -29,9 +27,16 @@ export const getServerProps = async () => {
 
 export default async function HomePage({ user }: { user: any }) {
   return (
-    <div className="home">
-      <Header user={user} />
-      <h1>Home</h1>
+    <div className="home bg-[url('/api/media/file/rpg-backround-1.jpg')] bg-cover min-h-screen bg-opacity-75 bg-blend-darken">
+      <Header />
+      <main className="flex flex-col items-center justify-center min-h-screen py-20 px-4 text-white">
+        <h1 className="text-4xl font-bold mb-4 drop-shadow-lg">
+          Welcome to Wanderlust
+        </h1>
+        <p className="text-lg text-center mb-8 drop-shadow-lg">
+          Let the adventure begin.
+        </p>
+      </main>
       <Footer />
     </div>
   )

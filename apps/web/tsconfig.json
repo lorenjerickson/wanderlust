@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "lib": [
       "DOM",
@@ -9,6 +10,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
+    "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -26,6 +28,9 @@
       "@/*": [
         "./src/*"
       ],
+      "@core/*": [
+        "../../packages/core/lib/*"
+      ],
       "@payload-config": [
         "./src/payload.config.ts"
       ]
@@ -37,7 +42,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "src/server.js"  ],
   "exclude": [
     "node_modules"
   ],

@@ -5,7 +5,6 @@ import '@payloadcms/next/css'
 import type { ServerFunctionClient } from 'payload'
 import { handleServerFunctions, RootLayout } from '@payloadcms/next/layouts'
 import React from 'react'
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 
 import { importMap } from './admin/importMap.js'
 import './custom.scss'
@@ -24,11 +23,13 @@ const serverFunction: ServerFunctionClient = async function (args) {
 }
 
 const Layout = ({ children }: any) => (
-  <AppRouterCacheProvider>
-    <RootLayout config={config} importMap={importMap} serverFunction={serverFunction}>
-      {children}
-    </RootLayout>
-  </AppRouterCacheProvider>
+  <RootLayout
+    config={config}
+    importMap={importMap}
+    serverFunction={serverFunction}
+  >
+    {children}
+  </RootLayout>
 )
 
 export default Layout

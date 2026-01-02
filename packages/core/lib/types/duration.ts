@@ -1,15 +1,23 @@
-export interface Duration {
-  length: number;
-  interval: DurationInterval;
+export enum DurationType {
+  Temporary = 'temporary',
+  Permanent = 'permanent',
+  Concentration = 'concentration',
 }
 
-export enum DurationInterval {
-  Seconds = 1,
-  Minutes = 60,
-  Hours = 60 * 60,
-  Days = 60 * 60 * 24,
-  Weeks = 60 * 60 * 24 * 7,
-  Months = 60 * 60 * 24 * 30,
-  Years = 60 * 60 * 24 * 30 * 12,
-  Perpetual = Infinity,
+export enum DurationUnits {
+  Rounds = 'rounds',
+  Seconds = 'seconds',
+  Minutes = 'minutes',
+  Hours = 'hours',
+  Days = 'days',
+  Weeks = 'weeks',
+  Months = 'months',
+  Years = 'years',
+  UntilDispelled = 'untilDispelled',
+}
+
+export type Duration = {
+  type: DurationType
+  units?: DurationUnits
+  interval?: number
 }

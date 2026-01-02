@@ -1,9 +1,13 @@
-import { AttributeType } from '@/types/attributes'
-import { EffectType } from '@/types/effects'
-import { ItemType } from '@/types/items'
-import { ModifierType, ModifierValueAdjustmentType } from '@/types/modifiers'
-import { SpeedType } from '@/types/speed'
-import { DamageType, WeaponType } from '@/types/weapon'
+import {
+  AttributeType,
+  EffectType,
+  ItemType,
+  ModifierType,
+  ModifierValueAdjustmentType,
+  SpeedType,
+  DamageType,
+  WeaponType,
+} from '@core/types'
 import type { CollectionConfig } from 'payload'
 
 export const Items: CollectionConfig = {
@@ -183,11 +187,15 @@ export const Items: CollectionConfig = {
                   name: 'adjustmentType',
                   label: 'Adjustment Type',
                   type: 'select',
-                  options: Object.keys(ModifierValueAdjustmentType).map((key) => ({
-                    label: key,
-                    value:
-                      ModifierValueAdjustmentType[key as keyof typeof ModifierValueAdjustmentType],
-                  })),
+                  options: Object.keys(ModifierValueAdjustmentType).map(
+                    (key) => ({
+                      label: key,
+                      value:
+                        ModifierValueAdjustmentType[
+                          key as keyof typeof ModifierValueAdjustmentType
+                        ],
+                    }),
+                  ),
                   admin: {
                     condition: (data, siblingData) =>
                       siblingData.modifierType === ModifierType.Attribute ||
