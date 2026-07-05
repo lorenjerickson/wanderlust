@@ -1,4 +1,4 @@
-import { Header } from '@wanderlust/ui'
+import { Header } from '@/core/components/Header/Header'
 import { ReactNode } from 'react'
 
 type TopLayoutProps = {

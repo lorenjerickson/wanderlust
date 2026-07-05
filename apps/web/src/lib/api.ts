@@ -1,5 +1,7 @@
 import { User } from '@wanderlust/core'
 
+import { getGlobalAdmin as getSqliteGlobalAdmin } from '@web/server/user'
+
 const fallbackUserApiEndpoint = 'http://localhost:3000/api/users'
 
 export function getUserApiEndpoint() {
@@ -11,17 +13,5 @@ export function getUserApiEndpoint() {
 }
 
 export async function getGlobalAdmin(): Promise<User | null> {
-    try {
-        const response = await fetch(`${getUserApiEndpoint()}/global-admin`, {
-            cache: 'no-store',
-        })
-
-        if (!response.ok) {
-            return null
-        }
-
-        return (await response.json()) as User
-    } catch {
-        return null
-    }
+    return getSqliteGlobalAdmin()
 }

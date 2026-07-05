@@ -1,8 +1,8 @@
 'use client'
 
-import { Workspace } from '@wanderlust/ui'
+import { Workspace } from '@/core/components/Workspace/Workspace'
 
-import { TopLayout } from '@web/components/TopLayout/TopLayout'
+import { TopLayout } from '@/components/TopLayout/TopLayout'
 
 export function WorldClient() {
     return (

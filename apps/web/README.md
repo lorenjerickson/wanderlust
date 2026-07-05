@@ -9,8 +9,8 @@ Web Application in Auth0.
 
 For local development, configure these Auth0 application URLs:
 
-- Allowed Callback URL: `http://localhost:5173/auth/callback`
-- Allowed Logout URL: `http://localhost:5173`
+- Allowed Callback URL: `http://local.wanderlust.io:3000/auth/callback`
+- Allowed Logout URL: `http://local.wanderlust.io:3000`
 
 Run the app with:
 

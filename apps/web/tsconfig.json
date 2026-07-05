@@ -22,10 +22,15 @@
         "name": "next"
       }
     ],
-    "baseUrl": ".",
     "paths": {
+      "@/*": [
+        "./src/*"
+      ],
       "@web/*": [
         "./src/*"
+      ],
+      "@wanderlust/core": [
+        "./src/core/types/index.ts"
       ]
     }
   },
