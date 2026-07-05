@@ -1,6 +1,9 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { User } from '@wanderlust/core'
 import { useEffect, useMemo, useRef, useState } from 'react'
+
+const USER_API_ENDPOINT =
+    process.env.NEXT_PUBLIC_USER_API_ENDPOINT || 'http://localhost:3000/api/users'
 
 export function useGlobalAdmin() {
     const creating = useRef(false)
@@ -8,7 +11,7 @@ export function useGlobalAdmin() {
 
     useEffect(() => {
         if (globalAdmin === null && !creating.current) {
-            fetch('http://localhost:3000/api/users/global-admin')
+            fetch(`${USER_API_ENDPOINT}/global-admin`)
                 .then((res) => {
                     if (!res.ok) {
                         throw new Error('Global admin not found')
@@ -25,13 +28,13 @@ export function useGlobalAdmin() {
     }, [globalAdmin])
 
     const { mutateAsync: createGlobalAdmin } = useMutation({
-        mutationKey: ['create-global-admin', creating.current],
+        mutationKey: ['create-global-admin'],
         mutationFn: async (admintDTO: Partial<User>) => {
             try {
                 if (!creating.current) {
                     creating.current = true
                     const res = await fetch(
-                        `${import.meta.env.VITE_USER_API_ENDPOINT}/global-admin`,
+                        `${USER_API_ENDPOINT}/global-admin`,
                         {
                             method: 'POST',
                             headers: {

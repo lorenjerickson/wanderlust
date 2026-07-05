@@ -1,0 +1,27 @@
+.workspaceShell {
+  @apply flex h-full min-h-[24rem] w-full min-w-0 flex-col overflow-hidden rounded-xl border border-slate-700/60 bg-slate-950 text-slate-100 shadow-xl;
+}
+
+.workspaceToolbar {
+  @apply flex h-10 items-center gap-2 border-b border-slate-700/60 bg-slate-900/95 px-3 text-xs uppercase tracking-wide text-slate-300;
+}
+
+.workspaceDot {
+  @apply h-2.5 w-2.5 rounded-full bg-cyan-400/80;
+}
+
+.workspaceTitle {
+  @apply font-semibold text-slate-100;
+}
+
+.workspaceCanvas {
+  @apply h-full min-h-0 flex-1;
+}
+
+.workspaceDockview {
+  @apply h-full w-full;
+}
+
+.workspaceBodyText {
+  @apply text-sm text-slate-200;
+}

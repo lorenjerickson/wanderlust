@@ -1,13 +1,16 @@
-import { Outlet } from 'react-router-dom'
 import { Header } from '@wanderlust/ui'
-import classes from './Layout.module.scss'
+import { ReactNode } from 'react'
 
-export function Layout() {
+type LayoutProps = {
+    children: ReactNode
+}
+
+export function Layout({ children }: LayoutProps) {
     return (
-        <div className={classes.layout}>
+        <div className="flex h-screen w-screen flex-col overflow-hidden bg-neutral-900 text-slate-200">
             <Header />
-            <main className={classes.main}>
-                <Outlet />
+            <main className="min-h-0 flex-1 overflow-hidden">
+                {children}
             </main>
         </div>
     )
