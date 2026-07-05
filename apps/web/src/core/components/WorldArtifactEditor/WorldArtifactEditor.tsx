@@ -427,6 +427,13 @@ export function WorldArtifactEditor({
                                         const nextArtifactType = event.target
                                             .value as WorldArtifactType
                                         setArtifactType(nextArtifactType)
+                                        if (
+                                            !MAP_IMAGE_ARTIFACT_TYPES.includes(
+                                                nextArtifactType
+                                            )
+                                        ) {
+                                            setMapImageUrl('')
+                                        }
                                         setParentArtifactIds({})
                                     }}
                                     aria-label="Artifact type"
