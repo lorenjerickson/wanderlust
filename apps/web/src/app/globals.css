@@ -1,24 +1,25 @@
 @import '@fontsource/montserrat/400.css';
 @import '@fontsource/montserrat/600.css';
 @import '@fontsource/montserrat/700.css';
+@import '@mdxeditor/editor/style.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 html,
 body {
-  width: 100%;
-  min-height: 100%;
-  margin: 0;
-  background: #23252a;
-  color: #d8dee9;
-  overflow: hidden;
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+    background: #23252a;
+    color: #d8dee9;
+    overflow: hidden;
 }
 
 body {
-  font-family: Montserrat, ui-sans-serif, system-ui, sans-serif;
+    font-family: Montserrat, ui-sans-serif, system-ui, sans-serif;
 }
 
 .tabler-icon.transparent {
-  background: transparent;
+    background: transparent;
 }

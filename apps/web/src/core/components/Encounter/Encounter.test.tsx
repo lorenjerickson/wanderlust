@@ -3,9 +3,9 @@ import { describe, expect, it } from "vitest";
 import { Encounter } from "./Encounter";
 
 describe("Encounter", () => {
-  it("renders a Panel with the correct title", () => {
+  it("renders its placeholder content", () => {
     render(<Encounter />);
 
-    expect(screen.getByText("Encounter")).toBeInTheDocument();
+    expect(screen.getByText("Not Implemented")).toBeInTheDocument();
   });
 });

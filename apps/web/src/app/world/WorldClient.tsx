@@ -4,10 +4,14 @@ import { Workspace } from '@/core/components/Workspace/Workspace'
 
 import { TopLayout } from '@/components/TopLayout/TopLayout'
 
-export function WorldClient() {
+type WorldClientProps = {
+    isGm: boolean
+}
+
+export function WorldClient({ isGm }: WorldClientProps) {
     return (
         <TopLayout>
-            <Workspace />
+            <Workspace isGm={isGm} />
         </TopLayout>
     )
 }

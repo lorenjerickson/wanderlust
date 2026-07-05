@@ -1,28 +1,10 @@
-import { useMemo } from "react";
-import { Panel, WorkspaceRegion } from "../Panel";
+import { NotImplemented } from "../NotImplemented";
 import styles from "./Campaign.module.scss";
 
-export type CampaignProps = {
-  id?: string;
-  region?: WorkspaceRegion;
-  className?: string;
-  statusMessage?: string;
-};
-
-export function Campaign(props: CampaignProps) {
-  const { id = "campaign", region, className, statusMessage } = props;
-
-  const panelClassName = useMemo(() => {
-    return [styles.panelView, className].filter(Boolean).join(" ");
-  }, [className]);
-
+export function Campaign() {
   return (
-    <Panel
-      id={id}
-      title="Campaign"
-      region={region}
-      className={panelClassName}
-      statusMessage={statusMessage}
-    />
+    <div className={styles.panelView}>
+      <NotImplemented />
+    </div>
   );
 }

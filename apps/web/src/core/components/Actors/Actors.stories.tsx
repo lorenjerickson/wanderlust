@@ -15,12 +15,9 @@ export default meta;
 type Story = StoryObj<typeof Actors>;
 
 export const Default: Story = {
-  args: {
-    statusMessage: "",
-  },
-  render: (args) => (
+  render: () => (
     <div style={{ width: "640px", height: "360px", backgroundColor: "#020617", padding: "1rem" }}>
-      <Actors {...args} />
+      <Actors />
     </div>
   ),
 };

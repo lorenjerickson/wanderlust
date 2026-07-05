@@ -4,6 +4,7 @@ import * as v0InitialSchema from './v0_initial_schema'
 import * as v1CampaignLobbyTables from './v1_campaign_lobby_tables'
 import * as v2WorldScenarioEncounter from './v2_world_scenario_encounter'
 import * as v3FirstGmUserFlags from './v3_first_gm_user_flags'
+import * as v4WorldArtifacts from './v4_world_artifacts'
 
 type Migration = {
     migrationId: string
@@ -24,6 +25,7 @@ const migrations: Migration[] = [
     v1CampaignLobbyTables,
     v2WorldScenarioEncounter,
     v3FirstGmUserFlags,
+    v4WorldArtifacts,
 ]
 
 function getVersionFromMigrationId(migrationId: string) {

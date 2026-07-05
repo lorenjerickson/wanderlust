@@ -15,12 +15,9 @@ export default meta;
 type Story = StoryObj<typeof Compendium>;
 
 export const Default: Story = {
-  args: {
-    statusMessage: "",
-  },
-  render: (args) => (
+  render: () => (
     <div style={{ width: "640px", height: "360px", backgroundColor: "#020617", padding: "1rem" }}>
-      <Compendium {...args} />
+      <Compendium />
     </div>
   ),
 };

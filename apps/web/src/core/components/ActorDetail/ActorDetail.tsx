@@ -1,28 +1,10 @@
-import { useMemo } from "react";
-import { Panel, WorkspaceRegion } from "../Panel";
+import { NotImplemented } from "../NotImplemented";
 import styles from "./ActorDetail.module.scss";
 
-export type ActorDetailProps = {
-  id?: string;
-  region?: WorkspaceRegion;
-  className?: string;
-  statusMessage?: string;
-};
-
-export function ActorDetail(props: ActorDetailProps) {
-  const { id = "actor-detail", region, className, statusMessage } = props;
-
-  const panelClassName = useMemo(() => {
-    return [styles.panelView, className].filter(Boolean).join(" ");
-  }, [className]);
-
+export function ActorDetail() {
   return (
-    <Panel
-      id={id}
-      title="Actor Detail"
-      region={region}
-      className={panelClassName}
-      statusMessage={statusMessage}
-    />
+    <div className={styles.panelView}>
+      <NotImplemented />
+    </div>
   );
 }

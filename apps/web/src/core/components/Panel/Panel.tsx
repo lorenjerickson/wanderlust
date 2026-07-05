@@ -13,12 +13,9 @@ export type PanelProps = {
   title: string;
   region?: WorkspaceRegion;
   statusMessage?: string;
+  isFloating?: boolean;
   children?: ReactNode;
   className?: string;
-  onDetach?: () => void;
-  onMinimize?: () => void;
-  onMaximize?: () => void;
-  onClose?: () => void;
 };
 
 type WorkspacePanelComponent = React.FC<PanelProps> & {
@@ -28,12 +25,9 @@ type WorkspacePanelComponent = React.FC<PanelProps> & {
 const PanelBase: React.FC<PanelProps> = ({
   title,
   statusMessage,
+  isFloating = true,
   children,
   className,
-  onDetach,
-  onMinimize,
-  onMaximize,
-  onClose,
 }) => {
   const rootClassName = useMemo(() => {
     return [styles.panel, className].filter(Boolean).join(" ");
@@ -41,23 +35,11 @@ const PanelBase: React.FC<PanelProps> = ({
 
   return (
     <section className={rootClassName} data-testid="workspace-panel">
-      <header className={styles.panelHeader}>
-        <h3 className={styles.panelTitle}>{title}</h3>
-        <div className={styles.panelControls}>
-          <button type="button" className={styles.panelControlButton} onClick={onDetach} aria-label="Detach panel">
-            Detach
-          </button>
-          <button type="button" className={styles.panelControlButton} onClick={onMinimize} aria-label="Minimize panel">
-            Min
-          </button>
-          <button type="button" className={styles.panelControlButton} onClick={onMaximize} aria-label="Maximize panel">
-            Max
-          </button>
-          <button type="button" className={styles.panelControlButton} onClick={onClose} aria-label="Close panel">
-            Close
-          </button>
-        </div>
-      </header>
+      {isFloating ? (
+        <header className={styles.panelHeader}>
+          <h3 className={styles.panelTitle}>{title}</h3>
+        </header>
+      ) : null}
       <div className={styles.panelBody}>{children}</div>
       {statusMessage ? <footer className={styles.panelFooter}>{statusMessage}</footer> : null}
     </section>

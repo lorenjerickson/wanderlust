@@ -13,6 +13,12 @@
       "skillPath": "skills/best-practices/SKILL.md",
       "computedHash": "2de17c9838c439f6ed12b9963d303e058cd46f1ba0c2700814fe4762e0e307b9"
     },
+    "daisyui": {
+      "source": "saadeghi/daisyui",
+      "sourceType": "github",
+      "skillPath": "skills/daisyui/SKILL.md",
+      "computedHash": "adef920750831ad362603407547d261fcf697e16aec7f2adb7ef8f239e762aee"
+    },
     "game-engine": {
       "source": "github/awesome-copilot",
       "sourceType": "github",
@@ -36,6 +42,12 @@
       "sourceType": "github",
       "skillPath": "skills/react-best-practices/SKILL.md",
       "computedHash": "bdb13a3a239c067136b39cf77a34462ccc0dd4645d440362182409dcfd331221"
+    },
+    "react-nextjs-development": {
+      "source": "sickn33/antigravity-awesome-skills",
+      "sourceType": "github",
+      "skillPath": "skills/react-nextjs-development/SKILL.md",
+      "computedHash": "f6fccc099580762dc1ffe48d8462c9183f14225a6dd28679cb56a0e5b011669a"
     },
     "react19-concurrent-patterns": {
       "source": "github/awesome-copilot",
@@ -61,11 +73,23 @@
       "skillPath": "skills/react19-test-patterns/SKILL.md",
       "computedHash": "16d1d800fcf2b0d06d1bc745252afcaec946a4a347354148c743d8200f964d1a"
     },
+    "responsive-design": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "skillPath": "plugins/ui-design/skills/responsive-design/SKILL.md",
+      "computedHash": "794cc7f1b2f79d398135d19ef3fe32c406dde926b9bdf86ee3fe7b939a0be906"
+    },
     "sqlite-expert": {
       "source": "rightnow-ai/openfang",
       "sourceType": "github",
       "skillPath": "crates/openfang-skills/bundled/sqlite-expert/SKILL.md",
       "computedHash": "f63004999d019b0a150309ea1a20661ab3aa33267e48e26f0dfafa6f800cc122"
+    },
+    "ui-design": {
+      "source": "pproenca/dot-skills",
+      "sourceType": "github",
+      "skillPath": "skills/.curated/ui-design/SKILL.md",
+      "computedHash": "9bb6421762ba99bbf0e5dc3b32ce0da9547ce884a0f712f4c6f528abe735ed47"
     },
     "vercel-react-best-practices": {
       "source": "vercel-labs/agent-skills",

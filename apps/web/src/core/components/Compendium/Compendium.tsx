@@ -1,28 +1,10 @@
-import { useMemo } from "react";
-import { Panel, WorkspaceRegion } from "../Panel";
+import { NotImplemented } from "../NotImplemented";
 import styles from "./Compendium.module.scss";
 
-export type CompendiumProps = {
-  id?: string;
-  region?: WorkspaceRegion;
-  className?: string;
-  statusMessage?: string;
-};
-
-export function Compendium(props: CompendiumProps) {
-  const { id = "compendium", region, className, statusMessage } = props;
-
-  const panelClassName = useMemo(() => {
-    return [styles.panelView, className].filter(Boolean).join(" ");
-  }, [className]);
-
+export function Compendium() {
   return (
-    <Panel
-      id={id}
-      title="Compendium"
-      region={region}
-      className={panelClassName}
-      statusMessage={statusMessage}
-    />
+    <div className={styles.panelView}>
+      <NotImplemented />
+    </div>
   );
 }
