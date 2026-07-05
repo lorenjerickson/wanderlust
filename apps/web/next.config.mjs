@@ -5,6 +5,13 @@ const nextConfig = {
             bodySizeLimit: '10mb',
         },
     },
+    images: {
+        localPatterns: [
+            {
+                pathname: '/assets/images/**',
+            },
+        ],
+    },
     transpilePackages: ['@mdxeditor/editor'],
 }
 

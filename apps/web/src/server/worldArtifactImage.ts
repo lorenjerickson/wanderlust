@@ -77,10 +77,14 @@ export async function uploadWorldArtifactImage({
     )
     const fileName = `${baseName}.${extension}`
     const filePath = path.join(publicDirectory, fileName)
+    const publicUrl = `/${path
+        .join(relativeDirectory, fileName)
+        .split(path.sep)
+        .join('/')}`
     const arrayBuffer = await file.arrayBuffer()
 
     await mkdir(publicDirectory, { recursive: true })
     await writeFile(filePath, Buffer.from(arrayBuffer))
 
-    return `/${relativeDirectory.split(path.sep).join('/')}/${fileName}`
+    return `${publicUrl}?v=${Date.now().toString(36)}`
 }

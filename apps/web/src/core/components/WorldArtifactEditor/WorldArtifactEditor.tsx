@@ -42,12 +42,7 @@ const WORLD_ARTIFACT_PARENT_TYPES: Partial<
     Item: ['World', 'Campaign'],
 }
 
-const MAP_IMAGE_ARTIFACT_TYPES: WorldArtifactType[] = [
-    'World',
-    'Campaign',
-    'Scenario',
-    'Encounter',
-]
+const IMAGE_ARTIFACT_TYPES: WorldArtifactType[] = [...WORLD_ARTIFACT_TYPES]
 
 const PARENT_CONTEXT_CHARACTER_LIMIT = 6000
 
@@ -198,8 +193,9 @@ export function WorldArtifactEditor({
     const isEditing = state.mode === 'edit'
     const canSave = title.trim().length > 0 && state.mode !== 'idle'
     const canGenerate = !isPending && missingSelectableParentTypes.length === 0
-    const supportsMapImage = MAP_IMAGE_ARTIFACT_TYPES.includes(artifactType)
-    const canUploadMapImage = supportsMapImage && title.trim().length > 0
+    const supportsArtifactImage = IMAGE_ARTIFACT_TYPES.includes(artifactType)
+    const canUploadArtifactImage =
+        supportsArtifactImage && title.trim().length > 0
 
     const handleGenerate = () => {
         setError('')
@@ -316,7 +312,7 @@ export function WorldArtifactEditor({
     }
 
     const handleImageUpload = (file: File | undefined) => {
-        if (!file || !canUploadMapImage) {
+        if (!file || !canUploadArtifactImage) {
             return
         }
 
@@ -428,7 +424,7 @@ export function WorldArtifactEditor({
                                             .value as WorldArtifactType
                                         setArtifactType(nextArtifactType)
                                         if (
-                                            !MAP_IMAGE_ARTIFACT_TYPES.includes(
+                                            !IMAGE_ARTIFACT_TYPES.includes(
                                                 nextArtifactType
                                             )
                                         ) {
@@ -515,17 +511,18 @@ export function WorldArtifactEditor({
                                 placeholder="Artifact title"
                             />
                         </label>
-                        {supportsMapImage ? (
+                        {supportsArtifactImage ? (
                             <div
                                 className={[
                                     styles.field,
                                     styles.imageUploadField,
                                 ].join(' ')}
                             >
-                                <span className={styles.label}>Map image</span>
+                                <span className={styles.label}>Image</span>
                                 <div className={styles.imageUploadRow}>
                                     {mapImageUrl ? (
                                         <Image
+                                            key={mapImageUrl}
                                             className={styles.imagePreview}
                                             src={mapImageUrl}
                                             alt=""
@@ -543,7 +540,7 @@ export function WorldArtifactEditor({
                                         className={[
                                             styles.secondaryButton,
                                             styles.uploadButton,
-                                            !canUploadMapImage || isPending
+                                            !canUploadArtifactImage || isPending
                                                 ? styles.uploadButtonDisabled
                                                 : '',
                                         ].join(' ')}
@@ -553,7 +550,8 @@ export function WorldArtifactEditor({
                                             type="file"
                                             accept="image/png,image/jpeg,image/gif,image/webp"
                                             disabled={
-                                                !canUploadMapImage || isPending
+                                                !canUploadArtifactImage ||
+                                                isPending
                                             }
                                             onChange={(event) => {
                                                 handleImageUpload(
