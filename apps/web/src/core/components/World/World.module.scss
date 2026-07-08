@@ -1,0 +1,67 @@
+.worldPanel {
+    @apply flex h-full min-h-0 flex-col gap-3;
+}
+
+.worldMap {
+    @apply flex min-h-32 flex-col justify-end rounded border border-slate-700 bg-slate-950/70 bg-cover bg-center p-3;
+}
+
+.worldMapEmpty {
+    @apply border-dashed text-slate-400;
+}
+
+.worldMapTitle {
+    @apply text-xs font-semibold uppercase tracking-wide text-slate-200;
+}
+
+.toolbar {
+    @apply flex items-center gap-2;
+}
+
+.searchInput {
+    @apply h-9 min-w-0 flex-1 rounded border border-slate-700 bg-slate-950 px-3 text-sm text-slate-100 outline-none transition-colors placeholder:text-slate-500 focus:border-cyan-400;
+}
+
+.addButton {
+    @apply inline-flex h-9 w-9 shrink-0 items-center justify-center rounded border border-cyan-500/60 bg-cyan-500/10 text-cyan-100 transition-colors hover:bg-cyan-500/20;
+}
+
+.artifactGroups {
+    @apply min-h-0 flex-1 overflow-auto pr-1;
+}
+
+.artifactGroup {
+    @apply mb-4;
+}
+
+.artifactGroupTitle {
+    @apply mb-2 text-[11px] font-semibold uppercase tracking-wide text-slate-400;
+}
+
+.artifactList {
+    @apply grid gap-2;
+}
+
+.artifactButton {
+    @apply grid w-full gap-1 rounded border border-slate-700/70 bg-slate-900/80 p-2 text-left transition-colors hover:border-cyan-400/60 hover:bg-slate-800/90;
+}
+
+.artifactTitleRow {
+    @apply flex items-center justify-between gap-2;
+}
+
+.artifactTitle {
+    @apply truncate text-sm font-semibold text-slate-100;
+}
+
+.mapBadge {
+    @apply rounded bg-emerald-500/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-emerald-200;
+}
+
+.artifactExcerpt {
+    @apply line-clamp-2 text-xs leading-5 text-slate-400;
+}
+
+.emptyState {
+    @apply rounded border border-dashed border-slate-700 p-4 text-sm text-slate-400;
+}

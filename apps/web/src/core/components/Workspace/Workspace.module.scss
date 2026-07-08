@@ -1,0 +1,59 @@
+.workspaceShell {
+    @apply flex h-full min-h-[24rem] w-full min-w-0 flex-col overflow-hidden rounded-xl border border-slate-700/60 bg-slate-950 text-slate-100 shadow-xl;
+}
+
+.workspaceToolbar {
+    @apply flex h-10 items-center gap-2 border-b border-slate-700/60 bg-slate-900/95 px-3 text-xs uppercase tracking-wide text-slate-300;
+}
+
+.workspaceDot {
+    @apply h-2.5 w-2.5 rounded-full bg-cyan-400/80;
+}
+
+.workspaceTitle {
+    @apply font-semibold text-slate-100;
+}
+
+.workspacePanelMenu {
+    @apply relative ml-auto;
+}
+
+.workspacePanelMenuButton {
+    @apply inline-flex h-7 cursor-pointer list-none items-center gap-1 rounded border border-slate-700 bg-slate-950 px-2 text-xs font-semibold text-slate-200 transition-colors hover:border-cyan-400/50 hover:bg-slate-800 hover:text-cyan-100;
+}
+
+.workspacePanelMenuButton::-webkit-details-marker {
+    display: none;
+}
+
+.workspacePanelMenuList {
+    @apply absolute right-0 top-8 z-50 grid min-w-48 gap-1 rounded border border-slate-700 bg-slate-950 p-2 text-slate-200 shadow-xl;
+}
+
+.workspacePanelMenuItem {
+    @apply flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-xs normal-case tracking-normal transition-colors hover:bg-slate-800;
+}
+
+.workspacePanelMenuItem input {
+    @apply h-3.5 w-3.5 accent-cyan-400;
+}
+
+.workspaceCanvas {
+    @apply h-full min-h-0 flex-1;
+}
+
+.workspaceDockview {
+    @apply h-full w-full;
+}
+
+.workspaceEmptyState {
+    @apply flex h-full items-center justify-center text-sm text-slate-400;
+}
+
+.workspaceHeaderActions {
+    @apply flex h-full items-center gap-1 px-1;
+}
+
+.workspaceHeaderButton {
+    @apply inline-flex h-6 w-6 items-center justify-center rounded border border-transparent text-slate-300 transition-colors hover:border-cyan-400/50 hover:bg-slate-800 hover:text-cyan-200 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-transparent disabled:hover:bg-transparent disabled:hover:text-slate-300;
+}
