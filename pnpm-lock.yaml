@@ -186,7 +186,7 @@ importers:
         version: 19.2.3(@types/react@19.2.17)
       '@vitejs/plugin-react':
         specifier: ^6.0.3
-        version: 6.0.3(vite@6.2.1(@types/node@26.1.0)(jiti@1.21.7)(sass@1.85.1)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0))
+        version: 6.0.3(vite@5.4.14(@types/node@26.1.0)(sass@1.85.1)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0))
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.5.3)
@@ -235,6 +235,9 @@ importers:
       typescript:
         specifier: ^5.4.2
         version: 5.7.3
+      vite-tsconfig-paths:
+        specifier: ^6.1.1
+        version: 6.1.1(typescript@5.7.3)(vite@5.4.14(@types/node@26.1.0)(sass@1.85.1)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0))
       vitest:
         specifier: ^1.3.1
         version: 1.6.1(@types/node@26.1.0)(jsdom@24.1.3)(sass@1.85.1)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)
@@ -5306,6 +5309,9 @@ packages:
   globjoin@0.1.4:
     resolution: {integrity: sha512-xYfnw62CKG8nLkZBfWbhWwDw02CHty86jfPcc2cr3ZfeuK9ysoVPPEUxf21bAD/rWAgk52SuBrLJlefNy8mvFg==}
 
+  globrex@0.1.2:
+    resolution: {integrity: sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==}
+
   gopd@1.2.0:
     resolution: {integrity: sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg==}
     engines: {node: '>= 0.4'}
@@ -7697,6 +7703,17 @@ packages:
       '@swc/wasm':
         optional: true
 
+  tsconfck@3.1.6:
+    resolution: {integrity: sha512-ks6Vjr/jEw0P1gmOVwutM3B7fWxoWBL2KRDb1JfqGVawBmO5UsvmWOQFGHBPl5yxYz4eERr19E6L7NMv+Fej4w==}
+    engines: {node: ^18 || >=20}
+    deprecated: unmaintained
+    hasBin: true
+    peerDependencies:
+      typescript: ^5.0.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
   tsconfig-paths@3.15.0:
     resolution: {integrity: sha512-2Ac2RgzDe/cn48GvOe3M+o82pEFewD3UPbyoUHHdKasHwJKjds4fLXWf/Ux5kATBKN20oaFGu+jbElp1pos0mg==}
 
@@ -7956,6 +7973,11 @@ packages:
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
 
+  vite-tsconfig-paths@6.1.1:
+    resolution: {integrity: sha512-2cihq7zliibCCZ8P9cKJrQBkfgdvcFkOOc3Y02o3GWUDLgqjWsZudaoiuOwO/gzTzy17cS5F7ZPo4bsnS4DGkg==}
+    peerDependencies:
+      vite: '*'
+
   vite@5.4.14:
     resolution: {integrity: sha512-EK5cY7Q1D8JNhSaPKVK4pwBFvaTmZxEnoKXLG/U9gmdDcihQGNzFlgIvaxezFR4glP1LsuiedwMBqCXH3wZccA==}
     engines: {node: ^18.0.0 || >=20.0.0}
@@ -7985,46 +8007,6 @@ packages:
       sugarss:
         optional: true
       terser:
-        optional: true
-
-  vite@6.2.1:
-    resolution: {integrity: sha512-n2GnqDb6XPhlt9B8olZPrgMD/es/Nd1RdChF6CBD/fHW6pUyUTt2sQW2fPRX5GiD9XEa6+8A6A4f2vT6pSsE7Q==}
-    engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
-    hasBin: true
-    peerDependencies:
-      '@types/node': ^18.0.0 || ^20.0.0 || >=22.0.0
-      jiti: '>=1.21.0'
-      less: '*'
-      lightningcss: ^1.21.0
-      sass: '*'
-      sass-embedded: '*'
-      stylus: '*'
-      sugarss: '*'
-      terser: ^5.16.0
-      tsx: ^4.8.1
-      yaml: ^2.4.2
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      jiti:
-        optional: true
-      less:
-        optional: true
-      lightningcss:
-        optional: true
-      sass:
-        optional: true
-      sass-embedded:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
-      tsx:
-        optional: true
-      yaml:
         optional: true
 
   vitest@1.6.1:
@@ -12312,10 +12294,10 @@ snapshots:
       - jest
       - supports-color
 
-  '@vitejs/plugin-react@6.0.3(vite@6.2.1(@types/node@26.1.0)(jiti@1.21.7)(sass@1.85.1)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0))':
+  '@vitejs/plugin-react@6.0.3(vite@5.4.14(@types/node@26.1.0)(sass@1.85.1)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0))':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
-      vite: 6.2.1(@types/node@26.1.0)(jiti@1.21.7)(sass@1.85.1)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)
+      vite: 5.4.14(@types/node@26.1.0)(sass@1.85.1)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)
 
   '@vitest/expect@1.6.1':
     dependencies:
@@ -13571,7 +13553,7 @@ snapshots:
   eslint-import-resolver-typescript@3.8.3(eslint-plugin-import@2.31.0)(eslint@9.22.0(jiti@1.21.7)):
     dependencies:
       '@nolyfill/is-core-module': 1.0.39
-      debug: 4.4.0
+      debug: 4.4.3
       enhanced-resolve: 5.18.1
       eslint: 9.22.0(jiti@1.21.7)
       get-tsconfig: 4.10.0
@@ -13586,7 +13568,7 @@ snapshots:
   eslint-import-resolver-typescript@3.8.3(eslint-plugin-import@2.32.0)(eslint@9.22.0(jiti@1.21.7)):
     dependencies:
       '@nolyfill/is-core-module': 1.0.39
-      debug: 4.4.0
+      debug: 4.4.3
       enhanced-resolve: 5.18.1
       eslint: 9.22.0(jiti@1.21.7)
       get-tsconfig: 4.10.0
@@ -14209,6 +14191,8 @@ snapshots:
 
   globjoin@0.1.4: {}
 
+  globrex@0.1.2: {}
+
   gopd@1.2.0: {}
 
   graceful-fs@4.2.11: {}
@@ -14272,7 +14256,7 @@ snapshots:
   http-proxy-agent@7.0.2:
     dependencies:
       agent-base: 7.1.3
-      debug: 4.4.0
+      debug: 4.4.3
     transitivePeerDependencies:
       - supports-color
 
@@ -14286,7 +14270,7 @@ snapshots:
   https-proxy-agent@7.0.6:
     dependencies:
       agent-base: 7.1.3
-      debug: 4.4.0
+      debug: 4.4.3
     transitivePeerDependencies:
       - supports-color
 
@@ -15670,7 +15654,8 @@ snapshots:
       object-assign: 4.1.1
       thenify-all: 1.6.0
 
-  nanoid@3.3.15: {}
+  nanoid@3.3.15:
+    optional: true
 
   nanoid@3.3.9: {}
 
@@ -16063,6 +16048,7 @@ snapshots:
       nanoid: 3.3.15
       picocolors: 1.1.1
       source-map-js: 1.2.1
+    optional: true
 
   postcss@8.5.3:
     dependencies:
@@ -16557,6 +16543,7 @@ snapshots:
       '@rollup/rollup-win32-x64-gnu': 4.62.2
       '@rollup/rollup-win32-x64-msvc': 4.62.2
       fsevents: 2.3.3
+    optional: true
 
   rope-sequence@1.3.4: {}
 
@@ -17299,6 +17286,10 @@ snapshots:
       '@swc/core': 1.11.8(@swc/helpers@0.5.15)
     optional: true
 
+  tsconfck@3.1.6(typescript@5.7.3):
+    optionalDependencies:
+      typescript: 5.7.3
+
   tsconfig-paths@3.15.0:
     dependencies:
       '@types/json5': 0.0.29
@@ -17600,6 +17591,16 @@ snapshots:
       - supports-color
       - terser
 
+  vite-tsconfig-paths@6.1.1(typescript@5.7.3)(vite@5.4.14(@types/node@26.1.0)(sass@1.85.1)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)):
+    dependencies:
+      debug: 4.4.3
+      globrex: 0.1.2
+      tsconfck: 3.1.6(typescript@5.7.3)
+      vite: 5.4.14(@types/node@26.1.0)(sass@1.85.1)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
+
   vite@5.4.14(@types/node@22.13.10)(sass@1.85.1)(sugarss@4.0.1(postcss@8.5.16))(terser@5.39.0):
     dependencies:
       esbuild: 0.21.5
@@ -17620,19 +17621,6 @@ snapshots:
     optionalDependencies:
       '@types/node': 26.1.0
       fsevents: 2.3.3
-      sass: 1.85.1
-      sugarss: 4.0.1(postcss@8.5.3)
-      terser: 5.39.0
-
-  vite@6.2.1(@types/node@26.1.0)(jiti@1.21.7)(sass@1.85.1)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0):
-    dependencies:
-      esbuild: 0.25.0
-      postcss: 8.5.16
-      rollup: 4.62.2
-    optionalDependencies:
-      '@types/node': 26.1.0
-      fsevents: 2.3.3
-      jiti: 1.21.7
       sass: 1.85.1
       sugarss: 4.0.1(postcss@8.5.3)
       terser: 5.39.0

@@ -8,8 +8,8 @@ import React, {
 } from 'react'
 import {
     IconArrowsMaximize,
-    IconChevronDown,
     IconExternalLink,
+    IconLayoutDashboard,
     IconMinus,
     IconX,
 } from '@tabler/icons-react'
@@ -402,7 +402,6 @@ export function Workspace(props: WorkspaceProps) {
         className,
         isGm = false,
         themeClassName = 'dockview-theme-abyss',
-        title = 'Wanderlust',
         children,
     } = props
 
@@ -547,23 +546,35 @@ export function Workspace(props: WorkspaceProps) {
 
     return (
         <section className={rootClassName} data-testid="workspace-shell">
-            <header className={styles.workspaceToolbar}>
-                <span className={styles.workspaceDot} aria-hidden="true" />
-                <span className={styles.workspaceTitle}>{title}</span>
-                {!children ? (
-                    <details className={styles.workspacePanelMenu}>
+            <div className={styles.workspaceCanvas}>
+                {children ? (
+                    dockview
+                ) : (
+                    <WorkspaceRuntimeContext value={runtimeContext}>
+                        {dockview}
+                    </WorkspaceRuntimeContext>
+                )}
+            </div>
+            {!children ? (
+                <div className="fab z-50">
+                    <details className="dropdown dropdown-top dropdown-end">
                         <summary
-                            className={styles.workspacePanelMenuButton}
+                            className={`btn btn-lg btn-circle btn-primary ${styles.workspacePanelMenuButton}`}
                             aria-label="Choose visible panels"
+                            title="Choose visible panels"
                         >
-                            Panels
-                            <IconChevronDown
-                                size={14}
+                            <IconLayoutDashboard
+                                size={24}
                                 stroke={1.8}
                                 aria-hidden="true"
                             />
                         </summary>
-                        <div className={styles.workspacePanelMenuList}>
+                        <div
+                            className={`dropdown-content ${styles.workspacePanelMenuList}`}
+                        >
+                            <div className={styles.workspacePanelMenuHeading}>
+                                Visible panels
+                            </div>
                             {allowedPanels.map((panel) => (
                                 <label
                                     className={styles.workspacePanelMenuItem}
@@ -586,17 +597,8 @@ export function Workspace(props: WorkspaceProps) {
                             ))}
                         </div>
                     </details>
-                ) : null}
-            </header>
-            <div className={styles.workspaceCanvas}>
-                {children ? (
-                    dockview
-                ) : (
-                    <WorkspaceRuntimeContext value={runtimeContext}>
-                        {dockview}
-                    </WorkspaceRuntimeContext>
-                )}
-            </div>
+                </div>
+            ) : null}
         </section>
     )
 }

@@ -134,7 +134,10 @@ describe('Workspace', () => {
     it('renders the shell and default border layout regions', () => {
         render(<Workspace isGm title="App Workspace" />)
 
-        expect(screen.getByText('App Workspace')).toBeTruthy()
+        expect(screen.queryByText('App Workspace')).toBeNull()
+        expect(
+            screen.getByRole('button', { name: 'Choose visible panels' })
+        ).toBeTruthy()
         expect(screen.getByTestId('workspace-shell')).toBeTruthy()
         expect(addPanelMock).toHaveBeenCalledTimes(10)
         expect(addPanelMock).toHaveBeenCalledWith(
