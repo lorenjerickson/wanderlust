@@ -1,8 +1,10 @@
 'use server'
 
 import { randomUUID } from 'crypto'
+import { eq, sql } from 'drizzle-orm'
 
-import { getDb } from '@/lib/db'
+import { encounters } from '@/lib/db/schema'
+import { getDrizzleDb } from '@/lib/drizzle'
 
 export type Encounter = {
     id: string
@@ -13,14 +15,7 @@ export type Encounter = {
     mapImageUrl?: string
 }
 
-type EncounterRow = {
-    id: string
-    scenario_id: string
-    short_description_rich_text: string
-    long_description_rich_text: string
-    location?: string | null
-    map_image_url?: string | null
-}
+type EncounterRow = typeof encounters.$inferSelect
 
 type CreateEncounterArgs = {
     scenarioId: string
@@ -37,11 +32,11 @@ type UpdateEncounterArgs = Partial<CreateEncounterArgs> & {
 function mapEncounter(row: EncounterRow): Encounter {
     return {
         id: row.id,
-        scenarioId: row.scenario_id,
-        shortDescriptionRichText: row.short_description_rich_text,
-        longDescriptionRichText: row.long_description_rich_text,
+        scenarioId: row.scenarioId,
+        shortDescriptionRichText: row.shortDescriptionRichText,
+        longDescriptionRichText: row.longDescriptionRichText,
         location: row.location ?? undefined,
-        mapImageUrl: row.map_image_url ?? undefined,
+        mapImageUrl: row.mapImageUrl ?? undefined,
     }
 }
 
@@ -52,28 +47,17 @@ export async function createEncounter({
     location,
     mapImageUrl,
 }: CreateEncounterArgs): Promise<Encounter> {
-    const db = await getDb()
+    const db = await getDrizzleDb()
     const id = randomUUID()
 
-    await db.run(
-        `
-            INSERT INTO encounters (
-                id,
-                scenario_id,
-                short_description_rich_text,
-                long_description_rich_text,
-                location,
-                map_image_url
-            )
-            VALUES (?, ?, ?, ?, ?, ?)
-        `,
+    await db.insert(encounters).values({
         id,
         scenarioId,
         shortDescriptionRichText,
         longDescriptionRichText,
-        location ?? null,
-        mapImageUrl ?? null
-    )
+        location: location ?? null,
+        mapImageUrl: mapImageUrl ?? null,
+    })
 
     return {
         id,
@@ -86,42 +70,23 @@ export async function createEncounter({
 }
 
 export async function findEncounterById(id: string): Promise<Encounter | null> {
-    const db = await getDb()
-    const row = await db.get<EncounterRow>(
-        `
-            SELECT
-                id,
-                scenario_id,
-                short_description_rich_text,
-                long_description_rich_text,
-                location,
-                map_image_url
-            FROM encounters
-            WHERE id = ?
-        `,
-        id
-    )
+    const db = await getDrizzleDb()
+    const row = await db.query.encounters.findFirst({
+        where: eq(encounters.id, id),
+    })
 
     return row ? mapEncounter(row) : null
 }
 
-export async function findEncountersByScenario(scenarioId: string): Promise<Encounter[]> {
-    const db = await getDb()
-    const rows = await db.all<EncounterRow[]>(
-        `
-            SELECT
-                id,
-                scenario_id,
-                short_description_rich_text,
-                long_description_rich_text,
-                location,
-                map_image_url
-            FROM encounters
-            WHERE scenario_id = ?
-            ORDER BY rowid ASC
-        `,
-        scenarioId
-    )
+export async function findEncountersByScenario(
+    scenarioId: string
+): Promise<Encounter[]> {
+    const db = await getDrizzleDb()
+    const rows = await db
+        .select()
+        .from(encounters)
+        .where(eq(encounters.scenarioId, scenarioId))
+        .orderBy(sql`rowid ASC`)
 
     return rows.map(mapEncounter)
 }
@@ -150,24 +115,17 @@ export async function updateEncounter({
         mapImageUrl: mapImageUrl ?? current.mapImageUrl,
     }
 
-    const db = await getDb()
-    await db.run(
-        `
-            UPDATE encounters
-            SET scenario_id = ?,
-                short_description_rich_text = ?,
-                long_description_rich_text = ?,
-                location = ?,
-                map_image_url = ?
-            WHERE id = ?
-        `,
-        nextEncounter.scenarioId,
-        nextEncounter.shortDescriptionRichText,
-        nextEncounter.longDescriptionRichText,
-        nextEncounter.location ?? null,
-        nextEncounter.mapImageUrl ?? null,
-        id
-    )
+    const db = await getDrizzleDb()
+    await db
+        .update(encounters)
+        .set({
+            scenarioId: nextEncounter.scenarioId,
+            shortDescriptionRichText: nextEncounter.shortDescriptionRichText,
+            longDescriptionRichText: nextEncounter.longDescriptionRichText,
+            location: nextEncounter.location ?? null,
+            mapImageUrl: nextEncounter.mapImageUrl ?? null,
+        })
+        .where(eq(encounters.id, id))
 
     return {
         id,
@@ -182,8 +140,8 @@ export async function deleteEncounter(id: string): Promise<Encounter | null> {
         return null
     }
 
-    const db = await getDb()
-    await db.run('DELETE FROM encounters WHERE id = ?', id)
+    const db = await getDrizzleDb()
+    await db.delete(encounters).where(eq(encounters.id, id))
 
     return current
 }

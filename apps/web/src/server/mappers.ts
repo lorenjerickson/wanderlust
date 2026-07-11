@@ -15,8 +15,8 @@ export type UserRow = {
     phoneNumber: string
     zipCode: string
     avatar?: string | null
-    external_auth_subject?: string | null
-    is_gm?: number | null
+    externalAuthSubject?: string | null
+    isGm?: number | null
 }
 
 export type MediaRow = {
@@ -62,8 +62,8 @@ export function mapUser(
         phoneNumber: row.phoneNumber,
         zipCode: row.zipCode,
         avatar: row.avatar ?? undefined,
-        externalAuthSubject: row.external_auth_subject ?? undefined,
-        isGm: row.is_gm === 1,
+        externalAuthSubject: row.externalAuthSubject ?? undefined,
+        isGm: row.isGm === 1,
         roles,
     }
 }

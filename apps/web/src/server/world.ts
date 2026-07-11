@@ -1,8 +1,10 @@
 'use server'
 
 import { randomUUID } from 'crypto'
+import { asc, eq } from 'drizzle-orm'
 
-import { getDb } from '@/lib/db'
+import { worlds } from '@/lib/db/schema'
+import { getDrizzleDb } from '@/lib/drizzle'
 
 export type World = {
     id: string
@@ -11,12 +13,7 @@ export type World = {
     mapImageUrl?: string
 }
 
-type WorldRow = {
-    id: string
-    name: string
-    description: string
-    map_image_url?: string | null
-}
+type WorldRow = typeof worlds.$inferSelect
 
 type CreateWorldArgs = {
     name: string
@@ -33,7 +30,7 @@ function mapWorld(row: WorldRow): World {
         id: row.id,
         name: row.name,
         description: row.description,
-        mapImageUrl: row.map_image_url ?? undefined,
+        mapImageUrl: row.mapImageUrl ?? undefined,
     }
 }
 
@@ -42,19 +39,15 @@ export async function createWorld({
     description = '',
     mapImageUrl,
 }: CreateWorldArgs): Promise<World> {
-    const db = await getDb()
+    const db = await getDrizzleDb()
     const id = randomUUID()
 
-    await db.run(
-        `
-            INSERT INTO worlds (id, name, description, map_image_url)
-            VALUES (?, ?, ?, ?)
-        `,
+    await db.insert(worlds).values({
         id,
         name,
         description,
-        mapImageUrl ?? null
-    )
+        mapImageUrl: mapImageUrl ?? null,
+    })
 
     return {
         id,
@@ -65,20 +58,17 @@ export async function createWorld({
 }
 
 export async function findWorldById(id: string): Promise<World | null> {
-    const db = await getDb()
-    const row = await db.get<WorldRow>(
-        'SELECT id, name, description, map_image_url FROM worlds WHERE id = ?',
-        id
-    )
+    const db = await getDrizzleDb()
+    const row = await db.query.worlds.findFirst({
+        where: eq(worlds.id, id),
+    })
 
     return row ? mapWorld(row) : null
 }
 
 export async function findAllWorlds(): Promise<World[]> {
-    const db = await getDb()
-    const rows = await db.all<WorldRow[]>(
-        'SELECT id, name, description, map_image_url FROM worlds ORDER BY name ASC'
-    )
+    const db = await getDrizzleDb()
+    const rows = await db.select().from(worlds).orderBy(asc(worlds.name))
 
     return rows.map(mapWorld)
 }
@@ -101,20 +91,15 @@ export async function updateWorld({
         mapImageUrl: mapImageUrl ?? current.mapImageUrl,
     }
 
-    const db = await getDb()
-    await db.run(
-        `
-            UPDATE worlds
-            SET name = ?,
-                description = ?,
-                map_image_url = ?
-            WHERE id = ?
-        `,
-        nextWorld.name,
-        nextWorld.description,
-        nextWorld.mapImageUrl ?? null,
-        id
-    )
+    const db = await getDrizzleDb()
+    await db
+        .update(worlds)
+        .set({
+            name: nextWorld.name,
+            description: nextWorld.description,
+            mapImageUrl: nextWorld.mapImageUrl ?? null,
+        })
+        .where(eq(worlds.id, id))
 
     return {
         id,
@@ -129,8 +114,8 @@ export async function deleteWorld(id: string): Promise<World | null> {
         return null
     }
 
-    const db = await getDb()
-    await db.run('DELETE FROM worlds WHERE id = ?', id)
+    const db = await getDrizzleDb()
+    await db.delete(worlds).where(eq(worlds.id, id))
 
     return current
 }

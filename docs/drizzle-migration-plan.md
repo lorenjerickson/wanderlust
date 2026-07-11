@@ -6,16 +6,14 @@ Make the Drizzle TypeScript schema the new source of truth, establish the existi
 
 The repository currently has:
 
-- Six handwritten migrations tracked through `SCHEMA_VERSION`
+- Seven handwritten migrations (v0–v6) tracked through `SCHEMA_VERSION`
 - Direct access through `sqlite` and `sqlite3`
 - Raw SQL spread across user, role, campaign, scenario, encounter, media, settings, authentication, and world-artifact services
-- A 24-table actor-domain migration that should become the baseline for the aggregate Drizzle schema
+- An actor-domain schema completed through v6 that forms the baseline for the aggregate Drizzle schema
 
 ## Recommended driver
 
-Use Drizzle's `node:sqlite` integration and standardize the web application on Node 22. This avoids adding another native SQLite package and matches the current development environment.
-
-If Node 18 compatibility must remain, choose `better-sqlite3` instead. That decision should be made before implementation because it changes connection creation and migration execution.
+Use Drizzle's `libsql` integration through `@libsql/client`. Drizzle Kit requires either `better-sqlite3` or `@libsql/client` for local SQLite access, and the native `better-sqlite3` binding is not portable in the current workspace environment. `libsql` supports the existing local SQLite file without introducing another native build.
 
 ## 1. Establish safety and acceptance criteria
 
@@ -132,16 +130,16 @@ Represent supported indexes and checks in the Drizzle schema. Preserve unsupport
 
 This is the most important transition step.
 
-The existing v0–v5 schema has already been applied to some databases, while Drizzle normally tracks migrations in its own migration journal. Therefore:
+The existing v0–v6 schema has already been applied to some databases, while Drizzle normally tracks migrations in its own migration journal. Therefore:
 
-1. Build the Drizzle schema until its exported DDL matches the schema produced by v0–v5.
+1. Build the Drizzle schema until its exported DDL matches the schema produced by v0–v6.
 2. Generate an initial Drizzle migration and snapshot.
 3. Treat that migration as the baseline for brand-new databases.
 4. Create a one-time adoption procedure for existing databases that marks the baseline as applied without executing its table-creation SQL.
-5. Verify that the Drizzle baseline and a legacy v5 database are structurally equivalent.
-6. Freeze the handwritten migration system after v5.
+5. Verify that the Drizzle baseline and a legacy v6 database are structurally equivalent.
+6. Freeze the handwritten migration system after v6.
 
-Do not run the generated baseline normally against an existing v5 database; `CREATE TABLE` collisions and migration-history divergence would result.
+Do not run the generated baseline normally against an existing v6 database; `CREATE TABLE` collisions and migration-history divergence would result.
 
 Drizzle Kit's `generate` command compares the current TypeScript schema with its stored schema snapshots, so creating a correct initial snapshot is essential for every later migration. See [Drizzle Kit generate](https://orm.drizzle.team/docs/drizzle-kit-generate).
 
@@ -230,7 +228,7 @@ CI should run:
 2. `drizzle-kit check`.
 3. Apply all migrations to an empty temporary database.
 4. Run `PRAGMA foreign_key_check`.
-5. Apply the legacy-to-Drizzle adoption path to a v5 fixture.
+5. Apply the legacy-to-Drizzle adoption path to a v6 fixture.
 6. Compare both resulting schemas.
 7. Run repository and integration tests.
 

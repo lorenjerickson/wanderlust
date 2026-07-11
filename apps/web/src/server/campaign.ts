@@ -1,8 +1,15 @@
 'use server'
 
 import { randomUUID } from 'crypto'
+import { and, asc, eq } from 'drizzle-orm'
 
-import { getDb } from '@/lib/db'
+import {
+    campaignPlayers,
+    campaigns,
+    userPlayerCharacters,
+    users,
+} from '@/lib/db/schema'
+import { getDrizzleDb } from '@/lib/drizzle'
 
 export type Campaign = {
     id: string
@@ -40,33 +47,12 @@ export type CampaignLobbyPlayer = UserPlayerCharacter & {
     }
 }
 
-type CampaignRow = {
-    id: string
-    title: string
-    description: string
-    active: number
-    world_id?: string | null
-    short_description_rich_text?: string | null
-    long_description_rich_text?: string | null
-    map_image_url?: string | null
-}
-
-type UserPlayerCharacterRow = {
-    id: string
-    user_id: string
-    name: string
-    race?: string | null
-    character_class?: string | null
-}
-
-type CampaignPlayerRow = {
-    id: string
-    campaign_id: string
-    user_player_character_id: string
-}
+type CampaignRow = typeof campaigns.$inferSelect
+type UserPlayerCharacterRow = typeof userPlayerCharacters.$inferSelect
+type CampaignPlayerRow = typeof campaignPlayers.$inferSelect
 
 type CampaignLobbyPlayerRow = UserPlayerCharacterRow & {
-    campaign_player_id: string
+    campaignPlayerId: string
     username: string
     fullName: string
     emailAddress: string
@@ -105,38 +91,42 @@ function mapCampaign(row: CampaignRow): Campaign {
         title: row.title,
         description: row.description,
         active: Boolean(row.active),
-        worldId: row.world_id ?? undefined,
+        worldId: row.worldId ?? undefined,
         shortDescriptionRichText:
-            row.short_description_rich_text ?? row.description ?? '',
-        longDescriptionRichText: row.long_description_rich_text ?? '',
-        mapImageUrl: row.map_image_url ?? undefined,
+            row.shortDescriptionRichText ?? row.description ?? '',
+        longDescriptionRichText: row.longDescriptionRichText ?? '',
+        mapImageUrl: row.mapImageUrl ?? undefined,
     }
 }
 
-function mapUserPlayerCharacter(row: UserPlayerCharacterRow): UserPlayerCharacter {
+function mapUserPlayerCharacter(
+    row: UserPlayerCharacterRow
+): UserPlayerCharacter {
     return {
         id: row.id,
-        userId: row.user_id,
+        userId: row.userId,
         name: row.name,
         race: row.race ?? undefined,
-        characterClass: row.character_class ?? undefined,
+        characterClass: row.characterClass ?? undefined,
     }
 }
 
 function mapCampaignPlayer(row: CampaignPlayerRow): CampaignPlayer {
     return {
         id: row.id,
-        campaignId: row.campaign_id,
-        userPlayerCharacterId: row.user_player_character_id,
+        campaignId: row.campaignId,
+        userPlayerCharacterId: row.userPlayerCharacterId,
     }
 }
 
-function mapCampaignLobbyPlayer(row: CampaignLobbyPlayerRow): CampaignLobbyPlayer {
+function mapCampaignLobbyPlayer(
+    row: CampaignLobbyPlayerRow
+): CampaignLobbyPlayer {
     return {
         ...mapUserPlayerCharacter(row),
-        campaignPlayerId: row.campaign_player_id,
+        campaignPlayerId: row.campaignPlayerId,
         user: {
-            id: row.user_id,
+            id: row.userId,
             username: row.username,
             fullName: row.fullName,
             emailAddress: row.emailAddress,
@@ -154,32 +144,19 @@ export async function createCampaign({
     longDescriptionRichText = '',
     mapImageUrl,
 }: CreateCampaignArgs): Promise<Campaign> {
-    const db = await getDb()
+    const db = await getDrizzleDb()
     const id = randomUUID()
 
-    await db.run(
-        `
-            INSERT INTO campaigns (
-                id,
-                title,
-                description,
-                active,
-                world_id,
-                short_description_rich_text,
-                long_description_rich_text,
-                map_image_url
-            )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        `,
+    await db.insert(campaigns).values({
         id,
         title,
         description,
-        active ? 1 : 0,
-        worldId ?? null,
+        active: active ? 1 : 0,
+        worldId: worldId ?? null,
         shortDescriptionRichText,
         longDescriptionRichText,
-        mapImageUrl ?? null
-    )
+        mapImageUrl: mapImageUrl ?? null,
+    })
 
     return {
         id,
@@ -194,68 +171,34 @@ export async function createCampaign({
 }
 
 export async function findCampaignById(id: string): Promise<Campaign | null> {
-    const db = await getDb()
-    const row = await db.get<CampaignRow>(
-        `
-            SELECT
-                id,
-                title,
-                description,
-                active,
-                world_id,
-                short_description_rich_text,
-                long_description_rich_text,
-                map_image_url
-            FROM campaigns
-            WHERE id = ?
-        `,
-        id
-    )
+    const db = await getDrizzleDb()
+    const row = await db.query.campaigns.findFirst({
+        where: eq(campaigns.id, id),
+    })
 
     return row ? mapCampaign(row) : null
 }
 
 export async function findActiveCampaigns(): Promise<Campaign[]> {
-    const db = await getDb()
-    const rows = await db.all<CampaignRow[]>(
-        `
-            SELECT
-                id,
-                title,
-                description,
-                active,
-                world_id,
-                short_description_rich_text,
-                long_description_rich_text,
-                map_image_url
-            FROM campaigns
-            WHERE active = 1
-            ORDER BY title ASC
-        `
-    )
+    const db = await getDrizzleDb()
+    const rows = await db
+        .select()
+        .from(campaigns)
+        .where(eq(campaigns.active, 1))
+        .orderBy(asc(campaigns.title))
 
     return rows.map(mapCampaign)
 }
 
-export async function findCampaignsByWorld(worldId: string): Promise<Campaign[]> {
-    const db = await getDb()
-    const rows = await db.all<CampaignRow[]>(
-        `
-            SELECT
-                id,
-                title,
-                description,
-                active,
-                world_id,
-                short_description_rich_text,
-                long_description_rich_text,
-                map_image_url
-            FROM campaigns
-            WHERE world_id = ?
-            ORDER BY title ASC
-        `,
-        worldId
-    )
+export async function findCampaignsByWorld(
+    worldId: string
+): Promise<Campaign[]> {
+    const db = await getDrizzleDb()
+    const rows = await db
+        .select()
+        .from(campaigns)
+        .where(eq(campaigns.worldId, worldId))
+        .orderBy(asc(campaigns.title))
 
     return rows.map(mapCampaign)
 }
@@ -288,28 +231,19 @@ export async function updateCampaign({
         mapImageUrl: mapImageUrl ?? current.mapImageUrl,
     }
 
-    const db = await getDb()
-    await db.run(
-        `
-            UPDATE campaigns
-            SET title = ?,
-                description = ?,
-                active = ?,
-                world_id = ?,
-                short_description_rich_text = ?,
-                long_description_rich_text = ?,
-                map_image_url = ?
-            WHERE id = ?
-        `,
-        nextCampaign.title,
-        nextCampaign.description,
-        nextCampaign.active ? 1 : 0,
-        nextCampaign.worldId ?? null,
-        nextCampaign.shortDescriptionRichText,
-        nextCampaign.longDescriptionRichText,
-        nextCampaign.mapImageUrl ?? null,
-        id
-    )
+    const db = await getDrizzleDb()
+    await db
+        .update(campaigns)
+        .set({
+            title: nextCampaign.title,
+            description: nextCampaign.description,
+            active: nextCampaign.active ? 1 : 0,
+            worldId: nextCampaign.worldId ?? null,
+            shortDescriptionRichText: nextCampaign.shortDescriptionRichText,
+            longDescriptionRichText: nextCampaign.longDescriptionRichText,
+            mapImageUrl: nextCampaign.mapImageUrl ?? null,
+        })
+        .where(eq(campaigns.id, id))
 
     return {
         id,
@@ -324,8 +258,8 @@ export async function deleteCampaign(id: string): Promise<Campaign | null> {
         return null
     }
 
-    const db = await getDb()
-    await db.run('DELETE FROM campaigns WHERE id = ?', id)
+    const db = await getDrizzleDb()
+    await db.delete(campaigns).where(eq(campaigns.id, id))
 
     return current
 }
@@ -336,26 +270,16 @@ export async function createUserPlayerCharacter({
     race,
     characterClass,
 }: CreateUserPlayerCharacterArgs): Promise<UserPlayerCharacter> {
-    const db = await getDb()
+    const db = await getDrizzleDb()
     const id = randomUUID()
 
-    await db.run(
-        `
-            INSERT INTO user_player_characters (
-                id,
-                user_id,
-                name,
-                race,
-                character_class
-            )
-            VALUES (?, ?, ?, ?, ?)
-        `,
+    await db.insert(userPlayerCharacters).values({
         id,
         userId,
         name,
-        race ?? null,
-        characterClass ?? null
-    )
+        race: race ?? null,
+        characterClass: characterClass ?? null,
+    })
 
     return {
         id,
@@ -366,16 +290,14 @@ export async function createUserPlayerCharacter({
     }
 }
 
-export async function findUserPlayerCharacters(userId: string): Promise<UserPlayerCharacter[]> {
-    const db = await getDb()
-    const rows = await db.all<UserPlayerCharacterRow[]>(
-        `
-            SELECT id, user_id, name, race, character_class
-            FROM user_player_characters
-            WHERE user_id = ?
-        `,
-        userId
-    )
+export async function findUserPlayerCharacters(
+    userId: string
+): Promise<UserPlayerCharacter[]> {
+    const db = await getDrizzleDb()
+    const rows = await db
+        .select()
+        .from(userPlayerCharacters)
+        .where(eq(userPlayerCharacters.userId, userId))
 
     return rows.map(mapUserPlayerCharacter)
 }
@@ -384,22 +306,14 @@ export async function addPlayerCharacterToCampaign({
     campaignId,
     userPlayerCharacterId,
 }: AddPlayerCharacterToCampaignArgs): Promise<CampaignPlayer> {
-    const db = await getDb()
+    const db = await getDrizzleDb()
     const id = randomUUID()
 
-    await db.run(
-        `
-            INSERT INTO campaign_players (
-                id,
-                user_player_character_id,
-                campaign_id
-            )
-            VALUES (?, ?, ?)
-        `,
+    await db.insert(campaignPlayers).values({
         id,
         userPlayerCharacterId,
-        campaignId
-    )
+        campaignId,
+    })
 
     return {
         id,
@@ -411,30 +325,28 @@ export async function addPlayerCharacterToCampaign({
 export async function findPlayerCharactersByCampaign(
     campaignId: string
 ): Promise<CampaignLobbyPlayer[]> {
-    const db = await getDb()
-    const rows = await db.all<CampaignLobbyPlayerRow[]>(
-        `
-            SELECT
-                user_player_characters.id,
-                user_player_characters.user_id,
-                user_player_characters.name,
-                user_player_characters.race,
-                user_player_characters.character_class,
-                campaign_players.id AS campaign_player_id,
-                users.username,
-                users.fullName,
-                users.emailAddress,
-                users.avatar
-            FROM campaign_players
-            INNER JOIN user_player_characters
-                ON user_player_characters.id = campaign_players.user_player_character_id
-            INNER JOIN users
-                ON users.id = user_player_characters.user_id
-            WHERE campaign_players.campaign_id = ?
-            ORDER BY user_player_characters.name ASC
-        `,
-        campaignId
-    )
+    const db = await getDrizzleDb()
+    const rows = await db
+        .select({
+            id: userPlayerCharacters.id,
+            userId: userPlayerCharacters.userId,
+            name: userPlayerCharacters.name,
+            race: userPlayerCharacters.race,
+            characterClass: userPlayerCharacters.characterClass,
+            campaignPlayerId: campaignPlayers.id,
+            username: users.username,
+            fullName: users.fullName,
+            emailAddress: users.emailAddress,
+            avatar: users.avatar,
+        })
+        .from(campaignPlayers)
+        .innerJoin(
+            userPlayerCharacters,
+            eq(userPlayerCharacters.id, campaignPlayers.userPlayerCharacterId)
+        )
+        .innerJoin(users, eq(users.id, userPlayerCharacters.userId))
+        .where(eq(campaignPlayers.campaignId, campaignId))
+        .orderBy(asc(userPlayerCharacters.name))
 
     return rows.map(mapCampaignLobbyPlayer)
 }
@@ -443,23 +355,19 @@ export async function removePlayerCharacterFromCampaign({
     campaignId,
     userPlayerCharacterId,
 }: AddPlayerCharacterToCampaignArgs): Promise<CampaignPlayer | null> {
-    const db = await getDb()
-    const row = await db.get<CampaignPlayerRow>(
-        `
-            SELECT id, campaign_id, user_player_character_id
-            FROM campaign_players
-            WHERE campaign_id = ?
-              AND user_player_character_id = ?
-        `,
-        campaignId,
-        userPlayerCharacterId
-    )
+    const db = await getDrizzleDb()
+    const row = await db.query.campaignPlayers.findFirst({
+        where: and(
+            eq(campaignPlayers.campaignId, campaignId),
+            eq(campaignPlayers.userPlayerCharacterId, userPlayerCharacterId)
+        ),
+    })
 
     if (!row) {
         return null
     }
 
-    await db.run('DELETE FROM campaign_players WHERE id = ?', row.id)
+    await db.delete(campaignPlayers).where(eq(campaignPlayers.id, row.id))
 
     return mapCampaignPlayer(row)
 }

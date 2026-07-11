@@ -1,8 +1,10 @@
 'use server'
 
 import { randomUUID } from 'crypto'
+import { eq, sql } from 'drizzle-orm'
 
-import { getDb } from '@/lib/db'
+import { scenarios } from '@/lib/db/schema'
+import { getDrizzleDb } from '@/lib/drizzle'
 
 export type Scenario = {
     id: string
@@ -12,13 +14,7 @@ export type Scenario = {
     longDescriptionRichText: string
 }
 
-type ScenarioRow = {
-    id: string
-    campaign_id: string
-    short_description_rich_text: string
-    map_image_url?: string | null
-    long_description_rich_text: string
-}
+type ScenarioRow = typeof scenarios.$inferSelect
 
 type CreateScenarioArgs = {
     campaignId: string
@@ -34,10 +30,10 @@ type UpdateScenarioArgs = Partial<CreateScenarioArgs> & {
 function mapScenario(row: ScenarioRow): Scenario {
     return {
         id: row.id,
-        campaignId: row.campaign_id,
-        shortDescriptionRichText: row.short_description_rich_text,
-        mapImageUrl: row.map_image_url ?? undefined,
-        longDescriptionRichText: row.long_description_rich_text,
+        campaignId: row.campaignId,
+        shortDescriptionRichText: row.shortDescriptionRichText,
+        mapImageUrl: row.mapImageUrl ?? undefined,
+        longDescriptionRichText: row.longDescriptionRichText,
     }
 }
 
@@ -47,26 +43,16 @@ export async function createScenario({
     mapImageUrl,
     longDescriptionRichText = '',
 }: CreateScenarioArgs): Promise<Scenario> {
-    const db = await getDb()
+    const db = await getDrizzleDb()
     const id = randomUUID()
 
-    await db.run(
-        `
-            INSERT INTO scenarios (
-                id,
-                campaign_id,
-                short_description_rich_text,
-                map_image_url,
-                long_description_rich_text
-            )
-            VALUES (?, ?, ?, ?, ?)
-        `,
+    await db.insert(scenarios).values({
         id,
         campaignId,
         shortDescriptionRichText,
-        mapImageUrl ?? null,
-        longDescriptionRichText
-    )
+        mapImageUrl: mapImageUrl ?? null,
+        longDescriptionRichText,
+    })
 
     return {
         id,
@@ -78,40 +64,23 @@ export async function createScenario({
 }
 
 export async function findScenarioById(id: string): Promise<Scenario | null> {
-    const db = await getDb()
-    const row = await db.get<ScenarioRow>(
-        `
-            SELECT
-                id,
-                campaign_id,
-                short_description_rich_text,
-                map_image_url,
-                long_description_rich_text
-            FROM scenarios
-            WHERE id = ?
-        `,
-        id
-    )
+    const db = await getDrizzleDb()
+    const row = await db.query.scenarios.findFirst({
+        where: eq(scenarios.id, id),
+    })
 
     return row ? mapScenario(row) : null
 }
 
-export async function findScenariosByCampaign(campaignId: string): Promise<Scenario[]> {
-    const db = await getDb()
-    const rows = await db.all<ScenarioRow[]>(
-        `
-            SELECT
-                id,
-                campaign_id,
-                short_description_rich_text,
-                map_image_url,
-                long_description_rich_text
-            FROM scenarios
-            WHERE campaign_id = ?
-            ORDER BY rowid ASC
-        `,
-        campaignId
-    )
+export async function findScenariosByCampaign(
+    campaignId: string
+): Promise<Scenario[]> {
+    const db = await getDrizzleDb()
+    const rows = await db
+        .select()
+        .from(scenarios)
+        .where(eq(scenarios.campaignId, campaignId))
+        .orderBy(sql`rowid ASC`)
 
     return rows.map(mapScenario)
 }
@@ -138,22 +107,16 @@ export async function updateScenario({
             longDescriptionRichText ?? current.longDescriptionRichText,
     }
 
-    const db = await getDb()
-    await db.run(
-        `
-            UPDATE scenarios
-            SET campaign_id = ?,
-                short_description_rich_text = ?,
-                map_image_url = ?,
-                long_description_rich_text = ?
-            WHERE id = ?
-        `,
-        nextScenario.campaignId,
-        nextScenario.shortDescriptionRichText,
-        nextScenario.mapImageUrl ?? null,
-        nextScenario.longDescriptionRichText,
-        id
-    )
+    const db = await getDrizzleDb()
+    await db
+        .update(scenarios)
+        .set({
+            campaignId: nextScenario.campaignId,
+            shortDescriptionRichText: nextScenario.shortDescriptionRichText,
+            mapImageUrl: nextScenario.mapImageUrl ?? null,
+            longDescriptionRichText: nextScenario.longDescriptionRichText,
+        })
+        .where(eq(scenarios.id, id))
 
     return {
         id,
@@ -168,8 +131,8 @@ export async function deleteScenario(id: string): Promise<Scenario | null> {
         return null
     }
 
-    const db = await getDb()
-    await db.run('DELETE FROM scenarios WHERE id = ?', id)
+    const db = await getDrizzleDb()
+    await db.delete(scenarios).where(eq(scenarios.id, id))
 
     return current
 }

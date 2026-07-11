@@ -1,10 +1,12 @@
 'use server'
 
 import { randomUUID } from 'crypto'
+import { eq, sql } from 'drizzle-orm'
 import { Media, Tag, User } from '@wanderlust/core'
 
-import { getDb } from '@web/lib/db'
-import { MediaRow } from './sqlite'
+import { media as mediaTable } from '@web/lib/db/schema'
+import { getDrizzleDb } from '@web/lib/drizzle'
+import { MediaRow } from './mappers'
 
 type UploadFileLike = {
     filename: string
@@ -48,45 +50,36 @@ function mapMedia(row: MediaRow): Media & { _id: string } {
 }
 
 export async function getAllMedia(): Promise<Array<Media & { _id: string }>> {
-    const db = await getDb()
-    const rows = await db.all<MediaRow[]>('SELECT * FROM media')
+    const db = await getDrizzleDb()
+    const rows = await db.select().from(mediaTable)
 
     return rows.map(mapMedia)
 }
 
-export async function getOneMedia(id: string): Promise<Array<Media & { _id: string }>> {
-    const db = await getDb()
-    const rows = await db.all<MediaRow[]>('SELECT * FROM media WHERE id = ?', id)
+export async function getOneMedia(
+    id: string
+): Promise<Array<Media & { _id: string }>> {
+    const db = await getDrizzleDb()
+    const rows = await db.select().from(mediaTable).where(eq(mediaTable.id, id))
 
     return rows.map(mapMedia)
 }
 
 export async function createMedia({ file, user }: CreateMediaArgs) {
-    const db = await getDb()
+    const db = await getDrizzleDb()
     const id = randomUUID()
     const userId = getUserId(user)
 
-    await db.run(
-        `
-            INSERT INTO media (
-                id,
-                title,
-                description,
-                type,
-                tags,
-                url,
-                createdBy,
-                updatedBy
-            )
-            VALUES (?, ?, '', ?, '[]', ?, ?, ?)
-        `,
+    await db.insert(mediaTable).values({
         id,
-        file.filename,
-        file.mimetype ?? 'file',
-        file.path,
-        userId,
-        userId
-    )
+        title: file.filename,
+        description: '',
+        type: file.mimetype ?? 'file',
+        tags: '[]',
+        url: file.path,
+        createdBy: userId,
+        updatedBy: userId,
+    })
 
     const media = await getOneMedia(id)
 
@@ -94,38 +87,37 @@ export async function createMedia({ file, user }: CreateMediaArgs) {
 }
 
 export async function updateMedia({ id, file, user }: UpdateMediaArgs) {
-    const db = await getDb()
+    const db = await getDrizzleDb()
     const current = (await getOneMedia(id))[0]
 
     if (!current) {
         return null
     }
 
-    await db.run(
-        `
-            UPDATE media
-            SET title = ?,
-                type = ?,
-                url = ?,
-                updatedBy = ?,
-                updatedOn = CURRENT_TIMESTAMP
-            WHERE id = ?
-        `,
-        file?.filename ?? current.title,
-        file?.mimetype ?? current.type,
-        file?.path ?? current.url,
-        getUserId(user),
-        id
-    )
+    await db
+        .update(mediaTable)
+        .set({
+            title: file?.filename ?? current.title,
+            type: file?.mimetype ?? current.type,
+            url: file?.path ?? current.url,
+            updatedBy: getUserId(user),
+            updatedOn: sql`CURRENT_TIMESTAMP`,
+        })
+        .where(eq(mediaTable.id, id))
 
     return (await getOneMedia(id))[0] ?? null
 }
 
-export async function deleteMedia({ id }: { id: string; user?: MediaUserLike }) {
-    const db = await getDb()
+export async function deleteMedia({
+    id,
+}: {
+    id: string
+    user?: MediaUserLike
+}) {
+    const db = await getDrizzleDb()
     const current = (await getOneMedia(id))[0] ?? null
 
-    await db.run('DELETE FROM media WHERE id = ?', id)
+    await db.delete(mediaTable).where(eq(mediaTable.id, id))
 
     return current
 }

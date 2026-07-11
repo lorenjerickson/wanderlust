@@ -38,5 +38,5 @@ export default async function HomePage() {
         )
     }
 
-    redirect('/world')
+    redirect('/user')
 }

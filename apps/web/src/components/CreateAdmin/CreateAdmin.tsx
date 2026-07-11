@@ -41,7 +41,7 @@ export function CreateAdminPage({ initialUser = {} }: CreateAdminPageProps) {
             createFirstGameMaster(data)
                 .then((response: User | null) => {
                     if (response?.emailAddress) {
-                        router.replace('/world')
+                        router.replace('/user')
                         router.refresh()
                     } else {
                         console.error('Failed to create GM profile')
