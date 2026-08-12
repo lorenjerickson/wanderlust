@@ -37,11 +37,13 @@
     "@heroicons/react": "^2.1.5",
     "@libsql/client": "^0.17.4",
     "@mdxeditor/editor": "^4.0.4",
+    "@nicia-ai/typegraph": "^0.48.0",
     "@tabler/icons-react": "^3.11.0",
     "@tanstack/react-query": "^5.29.2",
     "@tiptap/extension-link": "^2.5.8",
     "@tiptap/react": "^2.5.8",
     "@tiptap/starter-kit": "^2.5.8",
+    "@wanderlust/common": "workspace:*",
     "bcrypt": "^5.1.1",
     "dayjs": "^1.11.12",
     "dockview": "^7.0.2",
@@ -56,7 +58,8 @@
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "recharts": "^2.12.7",
-    "styled-components": "^6.1.12"
+    "styled-components": "^6.1.12",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.1",

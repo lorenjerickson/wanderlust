@@ -44,3 +44,13 @@ export async function getDrizzleDb() {
 
     return instancePromise
 }
+
+export async function getLibsqlClient(): Promise<Client> {
+    await getDrizzleDb()
+
+    if (!client) {
+        throw new Error('The SQLite client was not initialized')
+    }
+
+    return client
+}

@@ -3,7 +3,7 @@
 import { randomUUID } from 'crypto'
 import bcrypt from 'bcrypt'
 import { count, eq, sql } from 'drizzle-orm'
-import { Role, RoleName, User } from '@wanderlust/core'
+import { Role, RoleName, User } from '@wanderlust/common'
 
 import { auth0 } from '@/lib/auth0'
 import { roles, userRoles, users } from '@/lib/db/schema'

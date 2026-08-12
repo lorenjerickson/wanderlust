@@ -1,4 +1,4 @@
-import { Role, User } from '@wanderlust/core'
+import { Role, User } from '@wanderlust/common'
 
 type RoleRow = {
     id: string

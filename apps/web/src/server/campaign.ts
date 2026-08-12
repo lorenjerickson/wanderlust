@@ -5,11 +5,13 @@ import { and, asc, eq } from 'drizzle-orm'
 
 import {
     campaignPlayers,
+    campaignGms,
     campaigns,
     userPlayerCharacters,
     users,
 } from '@/lib/db/schema'
 import { getDrizzleDb } from '@/lib/drizzle'
+import { synchronizeKnowledgeGraph } from '@/lib/knowledgeGraph'
 
 export type Campaign = {
     id: string
@@ -60,6 +62,7 @@ type CampaignLobbyPlayerRow = UserPlayerCharacterRow & {
 }
 
 type CreateCampaignArgs = {
+    gmUserId?: string
     title: string
     description?: string
     active?: boolean
@@ -136,6 +139,7 @@ function mapCampaignLobbyPlayer(
 }
 
 export async function createCampaign({
+    gmUserId,
     title,
     description = '',
     active = true,
@@ -147,16 +151,28 @@ export async function createCampaign({
     const db = await getDrizzleDb()
     const id = randomUUID()
 
-    await db.insert(campaigns).values({
-        id,
-        title,
-        description,
-        active: active ? 1 : 0,
-        worldId: worldId ?? null,
-        shortDescriptionRichText,
-        longDescriptionRichText,
-        mapImageUrl: mapImageUrl ?? null,
+    await db.transaction(async (tx) => {
+        await tx.insert(campaigns).values({
+            id,
+            title,
+            description,
+            active: active ? 1 : 0,
+            worldId: worldId ?? null,
+            shortDescriptionRichText,
+            longDescriptionRichText,
+            mapImageUrl: mapImageUrl ?? null,
+        })
+
+        if (gmUserId) {
+            await tx.insert(campaignGms).values({
+                campaignId: id,
+                userId: gmUserId,
+                createdByUserId: gmUserId,
+                updatedByUserId: gmUserId,
+            })
+        }
     })
+    await synchronizeKnowledgeGraph()
 
     return {
         id,
@@ -244,6 +260,7 @@ export async function updateCampaign({
             mapImageUrl: nextCampaign.mapImageUrl ?? null,
         })
         .where(eq(campaigns.id, id))
+    await synchronizeKnowledgeGraph()
 
     return {
         id,
@@ -260,6 +277,7 @@ export async function deleteCampaign(id: string): Promise<Campaign | null> {
 
     const db = await getDrizzleDb()
     await db.delete(campaigns).where(eq(campaigns.id, id))
+    await synchronizeKnowledgeGraph()
 
     return current
 }

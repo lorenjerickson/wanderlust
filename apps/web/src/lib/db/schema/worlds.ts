@@ -7,11 +7,14 @@ export const worlds = sqliteTable(
     'worlds',
     {
         id: text().primaryKey(),
+        ownerUserId: text('owner_user_id').references(() => users.id, {
+            onDelete: 'set null',
+        }),
         name: text().notNull(),
         description: text().default('').notNull(),
         mapImageUrl: text('map_image_url'),
     },
-    (table) => []
+    (table) => [index('idx_worlds_owner').on(table.ownerUserId)]
 )
 
 export const scenarios = sqliteTable(

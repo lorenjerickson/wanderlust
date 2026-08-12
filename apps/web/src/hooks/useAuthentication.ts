@@ -1,4 +1,4 @@
-import { User } from '@wanderlust/core'
+import { User } from '@wanderlust/common'
 import { useAtom, atom } from 'jotai'
 import { useEffect, useMemo, useState } from 'react'
 

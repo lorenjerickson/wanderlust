@@ -2,7 +2,7 @@
 
 import { randomUUID } from 'crypto'
 import { eq } from 'drizzle-orm'
-import { Role, RoleName } from '@wanderlust/core'
+import { Role, RoleName } from '@wanderlust/common'
 
 import { roles } from '@/lib/db/schema'
 import { getDrizzleDb } from '@/lib/drizzle'

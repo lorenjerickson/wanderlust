@@ -5,17 +5,13 @@ import { asc, eq } from 'drizzle-orm'
 
 import { worlds } from '@/lib/db/schema'
 import { getDrizzleDb } from '@/lib/drizzle'
-
-export type World = {
-    id: string
-    name: string
-    description: string
-    mapImageUrl?: string
-}
+import { synchronizeKnowledgeGraph } from '@/lib/knowledgeGraph'
+import type { WorldRecord } from '@wanderlust/common'
 
 type WorldRow = typeof worlds.$inferSelect
 
 type CreateWorldArgs = {
+    ownerUserId?: string
     name: string
     description?: string
     mapImageUrl?: string
@@ -25,9 +21,10 @@ type UpdateWorldArgs = Partial<CreateWorldArgs> & {
     id: string
 }
 
-function mapWorld(row: WorldRow): World {
+function mapWorld(row: WorldRow): WorldRecord {
     return {
         id: row.id,
+        ownerUserId: row.ownerUserId ?? undefined,
         name: row.name,
         description: row.description,
         mapImageUrl: row.mapImageUrl ?? undefined,
@@ -35,29 +32,33 @@ function mapWorld(row: WorldRow): World {
 }
 
 export async function createWorld({
+    ownerUserId,
     name,
     description = '',
     mapImageUrl,
-}: CreateWorldArgs): Promise<World> {
+}: CreateWorldArgs): Promise<WorldRecord> {
     const db = await getDrizzleDb()
     const id = randomUUID()
 
     await db.insert(worlds).values({
         id,
+        ownerUserId: ownerUserId ?? null,
         name,
         description,
         mapImageUrl: mapImageUrl ?? null,
     })
+    await synchronizeKnowledgeGraph()
 
     return {
         id,
+        ownerUserId,
         name,
         description,
         mapImageUrl,
     }
 }
 
-export async function findWorldById(id: string): Promise<World | null> {
+export async function findWorldById(id: string): Promise<WorldRecord | null> {
     const db = await getDrizzleDb()
     const row = await db.query.worlds.findFirst({
         where: eq(worlds.id, id),
@@ -66,7 +67,7 @@ export async function findWorldById(id: string): Promise<World | null> {
     return row ? mapWorld(row) : null
 }
 
-export async function findAllWorlds(): Promise<World[]> {
+export async function findAllWorlds(): Promise<WorldRecord[]> {
     const db = await getDrizzleDb()
     const rows = await db.select().from(worlds).orderBy(asc(worlds.name))
 
@@ -78,7 +79,7 @@ export async function updateWorld({
     name,
     description,
     mapImageUrl,
-}: UpdateWorldArgs): Promise<World | null> {
+}: UpdateWorldArgs): Promise<WorldRecord | null> {
     const current = await findWorldById(id)
 
     if (!current) {
@@ -100,14 +101,16 @@ export async function updateWorld({
             mapImageUrl: nextWorld.mapImageUrl ?? null,
         })
         .where(eq(worlds.id, id))
+    await synchronizeKnowledgeGraph()
 
     return {
         id,
+        ownerUserId: current.ownerUserId,
         ...nextWorld,
     }
 }
 
-export async function deleteWorld(id: string): Promise<World | null> {
+export async function deleteWorld(id: string): Promise<WorldRecord | null> {
     const current = await findWorldById(id)
 
     if (!current) {
@@ -116,6 +119,7 @@ export async function deleteWorld(id: string): Promise<World | null> {
 
     const db = await getDrizzleDb()
     await db.delete(worlds).where(eq(worlds.id, id))
+    await synchronizeKnowledgeGraph()
 
     return current
 }

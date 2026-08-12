@@ -204,6 +204,9 @@ export const usersRelations = relations(users, ({ many }) => ({
     campaignGms_userId: many(campaignGms, {
         relationName: 'campaignGms_userId_users_id',
     }),
+    worlds_ownerUserId: many(worlds, {
+        relationName: 'worlds_ownerUserId_users_id',
+    }),
     actorItemEffects_updatedByUserId: many(actorItemEffects, {
         relationName: 'actorItemEffects_updatedByUserId_users_id',
     }),
@@ -225,7 +228,12 @@ export const campaignsRelations = relations(campaigns, ({ one, many }) => ({
     campaignGms: many(campaignGms),
 }))
 
-export const worldsRelations = relations(worlds, ({ many }) => ({
+export const worldsRelations = relations(worlds, ({ one, many }) => ({
+    owner: one(users, {
+        fields: [worlds.ownerUserId],
+        references: [users.id],
+        relationName: 'worlds_ownerUserId_users_id',
+    }),
     campaigns: many(campaigns),
     worldArtifacts: many(worldArtifacts),
 }))

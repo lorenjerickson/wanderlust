@@ -6,7 +6,7 @@ import {
     primaryKey,
 } from 'drizzle-orm/sqlite-core'
 import { sql } from 'drizzle-orm'
-import type { RoleName } from '@wanderlust/core'
+import type { RoleName } from '@wanderlust/common'
 
 export const roles = sqliteTable(
     'roles',

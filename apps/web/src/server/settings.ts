@@ -1,6 +1,6 @@
 'use server'
 
-import { Setting, Settings, SettingsGroup, ValueType } from '@wanderlust/core'
+import { Setting, Settings, SettingsGroup, ValueType } from '@wanderlust/common'
 import { eq } from 'drizzle-orm'
 
 import { settingsGroups } from '@web/lib/db/schema'

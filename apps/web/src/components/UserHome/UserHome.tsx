@@ -1,47 +1,20 @@
 'use client'
 
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
+import type {
+    InputHTMLAttributes,
+    ReactNode,
+    TextareaHTMLAttributes,
+} from 'react'
 
-type CampaignStatus = 'active' | 'hiatus' | 'completed'
+import {
+    createOwnedCampaign,
+    createOwnedWorld,
+    type OwnedCampaignSummary,
+    type OwnedWorldSummary,
+} from '@/server/userHome'
 
-type LastSession = {
-    date: string
-    summary: string
-}
-
-type PlayerCampaign = {
-    id: string
-    worldSlug: string
-    campaignSlug: string
-    sessionSlug: string
-    title: string
-    worldName: string
-    status: CampaignStatus
-    characterName: string
-    shortDescription: string
-    lastSession: LastSession | null
-}
-
-type ManagedWorld = {
-    id: string
-    slug: string
-    name: string
-    description: string
-    campaignCount: number
-}
-
-type ManagedCampaign = {
-    id: string
-    worldSlug: string
-    campaignSlug: string
-    title: string
-    worldName: string
-    status: CampaignStatus
-    playerCount: number
-    shortDescription: string
-}
-
-type UserProfile = {
+export type UserHomeProfile = {
     fullName: string
     username: string
     emailAddress: string
@@ -50,125 +23,29 @@ type UserProfile = {
     isGm: boolean
 }
 
-const MOCK_USER: UserProfile = {
-    fullName: 'Loren Erickson',
-    username: 'loren',
-    emailAddress: 'lorenjerickson@gmail.com',
-    phoneNumber: '(555) 201-4488',
-    zipCode: '97214',
-    isGm: true,
+type UserHomeProps = {
+    user: UserHomeProfile
+    initialWorlds: OwnedWorldSummary[]
+    initialCampaigns: OwnedCampaignSummary[]
 }
 
-const MOCK_PLAYER_CAMPAIGNS: PlayerCampaign[] = [
-    {
-        id: 'pc-1',
-        worldSlug: 'aetherfall',
-        campaignSlug: 'sunken-spire',
-        sessionSlug: 'session-12',
-        title: 'The Sunken Spire',
-        worldName: 'Aetherfall',
-        status: 'active',
-        characterName: 'Kessa Windmere',
-        shortDescription:
-            'A drowned city stirs beneath the tides, and something down there still remembers its name.',
-        lastSession: {
-            date: 'Jul 5, 2026',
-            summary:
-                'The party breached the outer seawall and lost Torvin to the undertow. Kessa recovered a corroded signet ring from the gatehouse.',
-        },
-    },
-    {
-        id: 'pc-2',
-        worldSlug: 'cinderreach',
-        campaignSlug: 'iron-and-ash',
-        sessionSlug: 'session-7',
-        title: 'Iron & Ash',
-        worldName: 'Cinderreach',
-        status: 'active',
-        characterName: 'Bram Ashfoot',
-        shortDescription:
-            'Refugee clans fight for control of the last forge-city as the wastes close in around it.',
-        lastSession: {
-            date: 'Jun 28, 2026',
-            summary:
-                'Negotiated a fragile truce between the Rill and Kettish clans. Bram was named a forge-warden as part of the bargain.',
-        },
-    },
-    {
-        id: 'pc-3',
-        worldSlug: 'aetherfall',
-        campaignSlug: 'hollow-court',
-        sessionSlug: 'session-1',
-        title: 'The Hollow Court',
-        worldName: 'Aetherfall',
-        status: 'hiatus',
-        characterName: 'Ilyra Duskwhisper',
-        shortDescription:
-            'A shadow court plays kingmaker in a realm that no longer remembers its own throne.',
-        lastSession: null,
-    },
-]
-
-const MOCK_MANAGED_WORLDS: ManagedWorld[] = [
-    {
-        id: 'w-1',
-        slug: 'aetherfall',
-        name: 'Aetherfall',
-        description:
-            'A sky-shattered realm of floating reliquaries and drowned cities, still settling after the Fall.',
-        campaignCount: 2,
-    },
-    {
-        id: 'w-2',
-        slug: 'cinderreach',
-        name: 'Cinderreach',
-        description:
-            'A scorched frontier where clans of survivors trade steel and favors along the ash roads.',
-        campaignCount: 1,
-    },
-]
-
-const MOCK_MANAGED_CAMPAIGNS: ManagedCampaign[] = [
-    {
-        id: 'mc-1',
-        worldSlug: 'aetherfall',
-        campaignSlug: 'sunken-spire',
-        title: 'The Sunken Spire',
-        worldName: 'Aetherfall',
-        status: 'active',
-        playerCount: 4,
-        shortDescription:
-            'A drowned city stirs beneath the tides, and something down there still remembers its name.',
-    },
-    {
-        id: 'mc-2',
-        worldSlug: 'aetherfall',
-        campaignSlug: 'hollow-court',
-        title: 'The Hollow Court',
-        worldName: 'Aetherfall',
-        status: 'hiatus',
-        playerCount: 3,
-        shortDescription:
-            'A shadow court plays kingmaker in a realm that no longer remembers its own throne.',
-    },
-    {
-        id: 'mc-3',
-        worldSlug: 'cinderreach',
-        campaignSlug: 'forge-wardens',
-        title: 'Forge Wardens',
-        worldName: 'Cinderreach',
-        status: 'completed',
-        playerCount: 5,
-        shortDescription:
-            'A season-long campaign to rebuild the last working forge before the ash roads close for winter.',
-    },
-]
-
-const STATUS_BADGE: Record<CampaignStatus, string> = {
-    active: 'badge-success',
-    hiatus: 'badge-warning',
-    completed: 'badge-neutral',
-}
+const PRIMARY_ACTION_CLASS =
+    'btn btn-warning inline-flex min-h-11 items-center justify-center rounded-lg border border-warning bg-warning px-4 py-2 text-sm font-semibold text-warning-content shadow-md transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-warning disabled:cursor-not-allowed disabled:opacity-40'
+const SECONDARY_ACTION_CLASS =
+    'btn inline-flex min-h-11 w-full items-center justify-center rounded-lg border border-base-content bg-transparent px-4 py-2 text-sm font-semibold text-base-content transition hover:bg-base-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-content sm:w-auto'
+const MODAL_BOX_CLASS =
+    'modal-box max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-lg overflow-y-auto bg-base-200 p-6 sm:p-7'
+const FORM_CLASS = 'mt-6 flex flex-col gap-5'
+const FIELD_GROUP_CLASS = 'flex min-w-0 flex-col gap-2'
+const FIELD_LABEL_CLASS = 'text-sm font-semibold text-base-content'
+const FIELD_CONTROL_CLASS =
+    'input min-h-11 w-full rounded-lg border border-base-content bg-base-100 px-3 py-2 text-base-content shadow-sm outline-none transition placeholder:opacity-60 focus:border-warning focus:ring-2 focus:ring-warning disabled:cursor-not-allowed disabled:opacity-50'
+const TEXTAREA_CLASS =
+    'textarea min-h-28 w-full resize-y rounded-lg border border-base-content bg-base-100 px-3 py-2 text-base-content shadow-sm outline-none transition placeholder:opacity-60 focus:border-warning focus:ring-2 focus:ring-warning disabled:cursor-not-allowed disabled:opacity-50'
+const SELECT_CLASS =
+    'select min-h-11 w-full rounded-lg border border-base-content bg-base-100 px-3 py-2 text-base-content shadow-sm outline-none transition focus:border-warning focus:ring-2 focus:ring-warning disabled:cursor-not-allowed disabled:opacity-50'
+const FORM_ACTIONS_CLASS =
+    'mt-2 flex flex-col-reverse gap-3 border-t border-base-300 pt-5 sm:flex-row sm:justify-end'
 
 function getInitials(name: string) {
     return name
@@ -180,11 +57,29 @@ function getInitials(name: string) {
         .toUpperCase()
 }
 
-export function UserHome() {
-    const [view, setView] = useState<'player' | 'gm'>('player')
+export function UserHome({
+    user,
+    initialWorlds,
+    initialCampaigns,
+}: UserHomeProps) {
+    const [ownedWorlds, setOwnedWorlds] =
+        useState<OwnedWorldSummary[]>(initialWorlds)
+    const [ownedCampaigns, setOwnedCampaigns] =
+        useState<OwnedCampaignSummary[]>(initialCampaigns)
+
+    function handleCampaignCreated(campaign: OwnedCampaignSummary) {
+        setOwnedCampaigns((current) => [...current, campaign])
+        setOwnedWorlds((current) =>
+            current.map((world) =>
+                campaign.worldId && world.id === campaign.worldId
+                    ? { ...world, campaignCount: world.campaignCount + 1 }
+                    : world
+            )
+        )
+    }
 
     return (
-        <div className="min-h-screen bg-base-200">
+        <div className="h-screen overflow-y-auto bg-base-200">
             <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
                 <div className="breadcrumbs text-sm text-base-content opacity-70">
                     <ul>
@@ -193,45 +88,41 @@ export function UserHome() {
                     </ul>
                 </div>
 
-                <ProfileCard user={MOCK_USER} />
+                <ProfileCard user={user} />
+                <SummaryStats
+                    worldCount={ownedWorlds.length}
+                    campaignCount={ownedCampaigns.length}
+                />
 
-                <SummaryStats user={MOCK_USER} />
+                <OwnedWorldsSection
+                    worlds={ownedWorlds}
+                    canCreate={user.isGm}
+                />
+                <OwnedCampaignsSection
+                    campaigns={ownedCampaigns}
+                    worlds={ownedWorlds}
+                    canCreate={user.isGm}
+                />
 
-                <div role="tablist" className="tabs tabs-box mt-10 w-fit">
-                    <button
-                        role="tab"
-                        className={`tab ${view === 'player' ? 'tab-active' : ''}`}
-                        onClick={() => setView('player')}
-                    >
-                        Player
-                    </button>
-                    {MOCK_USER.isGm && (
-                        <button
-                            role="tab"
-                            className={`tab ${view === 'gm' ? 'tab-active' : ''}`}
-                            onClick={() => setView('gm')}
-                        >
-                            Game Master
-                        </button>
-                    )}
-                </div>
-
-                <div className="mt-6">
-                    {view === 'player' ? (
-                        <PlayerSection campaigns={MOCK_PLAYER_CAMPAIGNS} />
-                    ) : (
-                        <GmSection
-                            worlds={MOCK_MANAGED_WORLDS}
-                            campaigns={MOCK_MANAGED_CAMPAIGNS}
+                {user.isGm ? (
+                    <>
+                        <CreateWorldModal
+                            onWorldCreated={(world) =>
+                                setOwnedWorlds((current) => [...current, world])
+                            }
                         />
-                    )}
-                </div>
+                        <CreateCampaignModal
+                            worlds={ownedWorlds}
+                            onCampaignCreated={handleCampaignCreated}
+                        />
+                    </>
+                ) : null}
             </div>
         </div>
     )
 }
 
-function ProfileCard({ user }: { user: UserProfile }) {
+function ProfileCard({ user }: { user: UserHomeProfile }) {
     return (
         <div className="card card-border mt-6 bg-base-100">
             <div className="card-body gap-6 sm:flex-row sm:items-center sm:justify-between">
@@ -244,17 +135,15 @@ function ProfileCard({ user }: { user: UserProfile }) {
                         </div>
                     </div>
                     <div>
-                        <h1 className="text-2xl font-bold">
-                            {user.fullName}
-                        </h1>
+                        <h1 className="text-2xl font-bold">{user.fullName}</h1>
                         <p className="text-base-content opacity-70">
                             @{user.username}
                         </p>
-                        {user.isGm && (
+                        {user.isGm ? (
                             <span className="badge badge-primary badge-sm mt-1">
                                 Game Master
                             </span>
-                        )}
+                        ) : null}
                     </div>
                 </div>
                 <div className="flex gap-2">
@@ -275,15 +164,12 @@ function ProfileCard({ user }: { user: UserProfile }) {
                     </a>
                 </div>
             </div>
-
             <div className="divider m-0" />
-
             <div className="card-body grid grid-cols-1 gap-4 pt-4 sm:grid-cols-3">
                 <DetailField label="Email" value={user.emailAddress} />
                 <DetailField label="Phone" value={user.phoneNumber} />
                 <DetailField label="Zip code" value={user.zipCode} />
             </div>
-
             <EditProfileModal user={user} />
         </div>
     )
@@ -300,301 +186,543 @@ function DetailField({ label, value }: { label: string; value: string }) {
     )
 }
 
-function EditProfileModal({ user }: { user: UserProfile }) {
+function SummaryStats({
+    worldCount,
+    campaignCount,
+}: {
+    worldCount: number
+    campaignCount: number
+}) {
+    return (
+        <div className="stats stats-vertical mt-6 w-full border border-base-300 bg-base-100 sm:stats-horizontal">
+            <div className="stat">
+                <div className="stat-title">Worlds</div>
+                <div className="stat-value">{worldCount}</div>
+                <div className="stat-desc">owned by you</div>
+            </div>
+            <div className="stat">
+                <div className="stat-title">Campaigns</div>
+                <div className="stat-value">{campaignCount}</div>
+                <div className="stat-desc">owned by you</div>
+            </div>
+        </div>
+    )
+}
+
+function OwnedWorldsSection({
+    worlds,
+    canCreate,
+}: {
+    worlds: OwnedWorldSummary[]
+    canCreate: boolean
+}) {
+    return (
+        <section className="mt-10" aria-labelledby="owned-worlds-heading">
+            <SectionHeader
+                id="owned-worlds-heading"
+                title="My Worlds"
+                subtitle="Worlds you own and the campaigns that live in them."
+                action={
+                    canCreate ? (
+                        <button
+                            className={PRIMARY_ACTION_CLASS}
+                            onClick={() =>
+                                (
+                                    document.getElementById(
+                                        'create-world-modal'
+                                    ) as HTMLDialogElement | null
+                                )?.showModal()
+                            }
+                        >
+                            Create world
+                        </button>
+                    ) : null
+                }
+            />
+            {worlds.length === 0 ? (
+                <EmptyState message="You don't own any worlds yet." />
+            ) : (
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    {worlds.map((world) => (
+                        <article
+                            key={world.id}
+                            className="card card-border bg-base-100"
+                        >
+                            <div className="card-body">
+                                <div className="flex items-start justify-between gap-3">
+                                    <h3 className="card-title">
+                                        <a
+                                            className="link link-hover"
+                                            href={`/worlds/${world.id}`}
+                                        >
+                                            {world.name}
+                                        </a>
+                                    </h3>
+                                    <span className="badge badge-sm">
+                                        Owner
+                                    </span>
+                                </div>
+                                <p className="text-sm text-base-content opacity-80">
+                                    {world.description || 'No description yet.'}
+                                </p>
+                                <p className="text-xs text-base-content opacity-70">
+                                    {world.campaignCount} campaign
+                                    {world.campaignCount === 1 ? '' : 's'}
+                                </p>
+                            </div>
+                        </article>
+                    ))}
+                </div>
+            )}
+        </section>
+    )
+}
+
+function OwnedCampaignsSection({
+    campaigns,
+    worlds,
+    canCreate,
+}: {
+    campaigns: OwnedCampaignSummary[]
+    worlds: OwnedWorldSummary[]
+    canCreate: boolean
+}) {
+    const canCreateCampaign = canCreate && worlds.length > 0
+
+    return (
+        <section className="mt-10" aria-labelledby="owned-campaigns-heading">
+            <SectionHeader
+                id="owned-campaigns-heading"
+                title="My Campaigns"
+                subtitle="Campaigns you own and run as Game Master."
+                action={
+                    canCreate ? (
+                        <button
+                            className={PRIMARY_ACTION_CLASS}
+                            disabled={!canCreateCampaign}
+                            title={
+                                canCreateCampaign
+                                    ? undefined
+                                    : 'Create a world before creating a campaign'
+                            }
+                            onClick={() =>
+                                (
+                                    document.getElementById(
+                                        'create-campaign-modal'
+                                    ) as HTMLDialogElement | null
+                                )?.showModal()
+                            }
+                        >
+                            Create campaign
+                        </button>
+                    ) : null
+                }
+            />
+            {campaigns.length === 0 ? (
+                <EmptyState message="You don't own any campaigns yet." />
+            ) : (
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    {campaigns.map((campaign) => (
+                        <article
+                            key={campaign.id}
+                            className="card card-border bg-base-100"
+                        >
+                            <div className="card-body">
+                                <div className="flex items-start justify-between gap-2">
+                                    <div>
+                                        <h3 className="card-title">
+                                            {campaign.worldId ? (
+                                                <a
+                                                    className="link link-hover"
+                                                    href={`/worlds/${campaign.worldId}/campaigns/${campaign.id}`}
+                                                >
+                                                    {campaign.title}
+                                                </a>
+                                            ) : (
+                                                campaign.title
+                                            )}
+                                        </h3>
+                                        <p className="text-sm text-base-content opacity-70">
+                                            {campaign.worldName} ·{' '}
+                                            {campaign.playerCount} players
+                                        </p>
+                                    </div>
+                                    <div className="flex flex-wrap justify-end gap-2">
+                                        <span className="badge badge-sm">
+                                            GM
+                                        </span>
+                                        <span
+                                            className={`badge badge-sm ${campaign.active ? 'badge-success' : 'badge-warning'}`}
+                                        >
+                                            {campaign.active
+                                                ? 'Active'
+                                                : 'Inactive'}
+                                        </span>
+                                    </div>
+                                </div>
+                                <p className="text-sm text-base-content opacity-80">
+                                    {campaign.description ||
+                                        'No description yet.'}
+                                </p>
+                            </div>
+                        </article>
+                    ))}
+                </div>
+            )}
+        </section>
+    )
+}
+
+function SectionHeader({
+    id,
+    title,
+    subtitle,
+    action,
+}: {
+    id: string
+    title: string
+    subtitle: string
+    action: ReactNode
+}) {
+    return (
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+                <h2 id={id} className="text-lg font-semibold">
+                    {title}
+                </h2>
+                <p className="text-sm text-base-content opacity-70">
+                    {subtitle}
+                </p>
+            </div>
+            {action}
+        </div>
+    )
+}
+
+function EditProfileModal({ user }: { user: UserHomeProfile }) {
     return (
         <dialog id="edit-profile-modal" className="modal">
-            <div className="modal-box">
+            <div className={MODAL_BOX_CLASS}>
                 <h3 className="text-lg font-bold">Edit profile</h3>
-
-                <fieldset className="fieldset mt-4">
-                    <legend className="fieldset-legend">Full name</legend>
-                    <input
-                        type="text"
+                <form method="dialog" className={FORM_CLASS}>
+                    <ProfileField
+                        id="profile-full-name"
+                        label="Full name"
+                        name="fullName"
                         defaultValue={user.fullName}
-                        className="input w-full"
+                        autoComplete="name"
+                        required
                     />
-                </fieldset>
-
-                <fieldset className="fieldset">
-                    <legend className="fieldset-legend">Username</legend>
-                    <input
-                        type="text"
+                    <ProfileField
+                        id="profile-username"
+                        label="Username"
+                        name="username"
                         defaultValue={user.username}
-                        className="input w-full"
+                        autoComplete="username"
+                        required
                     />
-                </fieldset>
-
-                <fieldset className="fieldset">
-                    <legend className="fieldset-legend">
-                        Email address
-                    </legend>
-                    <input
+                    <ProfileField
+                        id="profile-email"
+                        label="Email address"
+                        name="emailAddress"
                         type="email"
                         defaultValue={user.emailAddress}
-                        className="input w-full"
+                        autoComplete="email"
+                        required
                     />
-                </fieldset>
-
-                <div className="grid grid-cols-2 gap-4">
-                    <fieldset className="fieldset">
-                        <legend className="fieldset-legend">
-                            Phone number
-                        </legend>
-                        <input
+                    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                        <ProfileField
+                            id="profile-phone"
+                            label="Phone number"
+                            name="phoneNumber"
                             type="tel"
                             defaultValue={user.phoneNumber}
-                            className="input w-full"
+                            autoComplete="tel"
                         />
-                    </fieldset>
-
-                    <fieldset className="fieldset">
-                        <legend className="fieldset-legend">Zip code</legend>
-                        <input
-                            type="text"
+                        <ProfileField
+                            id="profile-zip-code"
+                            label="Zip code"
+                            name="zipCode"
                             defaultValue={user.zipCode}
-                            className="input w-full"
+                            autoComplete="postal-code"
+                            inputMode="numeric"
                         />
-                    </fieldset>
-                </div>
-
-                <div className="modal-action">
-                    <form method="dialog" className="flex gap-2">
-                        <button className="btn">Cancel</button>
-                        <button className="btn btn-primary">
+                    </div>
+                    <div className={FORM_ACTIONS_CLASS}>
+                        <button
+                            type="button"
+                            className={SECONDARY_ACTION_CLASS}
+                            onClick={(event) =>
+                                event.currentTarget.closest('dialog')?.close()
+                            }
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            className={`${PRIMARY_ACTION_CLASS} w-full sm:w-auto`}
+                        >
                             Save changes
                         </button>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
-            <form method="dialog" className="modal-backdrop">
-                <button>close</button>
-            </form>
+            <ModalBackdrop />
         </dialog>
     )
 }
 
-function SummaryStats({ user }: { user: UserProfile }) {
-    return (
-        <div className="stats stats-vertical mt-6 w-full border border-base-300 bg-base-100 sm:stats-horizontal">
-            <div className="stat">
-                <div className="stat-title">Playing</div>
-                <div className="stat-value text-primary">
-                    {MOCK_PLAYER_CAMPAIGNS.length}
-                </div>
-                <div className="stat-desc">active campaigns</div>
-            </div>
-            {user.isGm && (
-                <>
-                    <div className="stat">
-                        <div className="stat-title">Worlds</div>
-                        <div className="stat-value">
-                            {MOCK_MANAGED_WORLDS.length}
-                        </div>
-                        <div className="stat-desc">under your management</div>
-                    </div>
-                    <div className="stat">
-                        <div className="stat-title">Running</div>
-                        <div className="stat-value">
-                            {MOCK_MANAGED_CAMPAIGNS.length}
-                        </div>
-                        <div className="stat-desc">campaigns as GM</div>
-                    </div>
-                </>
-            )}
-        </div>
-    )
-}
-
-function SectionHeading({
-    title,
-    subtitle,
-}: {
-    title: string
-    subtitle: string
+function ProfileField({
+    id,
+    label,
+    type = 'text',
+    ...inputProps
+}: InputHTMLAttributes<HTMLInputElement> & {
+    id: string
+    label: string
 }) {
     return (
-        <div className="mb-4">
-            <h2 className="text-lg font-semibold">{title}</h2>
-            <p className="text-sm text-base-content opacity-70">{subtitle}</p>
+        <div className={FIELD_GROUP_CLASS}>
+            <label className={FIELD_LABEL_CLASS} htmlFor={id}>
+                {label}
+            </label>
+            <input
+                {...inputProps}
+                id={id}
+                type={type}
+                className={FIELD_CONTROL_CLASS}
+            />
         </div>
     )
 }
 
-function PlayerSection({ campaigns }: { campaigns: PlayerCampaign[] }) {
-    if (campaigns.length === 0) {
-        return (
-            <EmptyState message="You haven't joined any campaigns yet." />
-        )
+function CreateWorldModal({
+    onWorldCreated,
+}: {
+    onWorldCreated: (world: OwnedWorldSummary) => void
+}) {
+    const [isSaving, setIsSaving] = useState(false)
+    const [error, setError] = useState('')
+
+    async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault()
+        const form = event.currentTarget
+        const formData = new FormData(form)
+        setIsSaving(true)
+        setError('')
+
+        try {
+            const world = await createOwnedWorld({
+                name: String(formData.get('name') ?? '').trim(),
+                description: String(formData.get('description') ?? '').trim(),
+            })
+            onWorldCreated(world)
+            form.reset()
+            form.closest('dialog')?.close()
+        } catch (creationError) {
+            setError(
+                creationError instanceof Error
+                    ? creationError.message
+                    : 'Unable to create world.'
+            )
+        } finally {
+            setIsSaving(false)
+        }
     }
 
     return (
-        <div>
-            <SectionHeading
-                title="My Campaigns"
-                subtitle="Worlds you're adventuring in as a player."
-            />
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                {campaigns.map((campaign) => (
-                    <div
-                        key={campaign.id}
-                        className="card card-border bg-base-100"
-                    >
-                        <div className="card-body">
-                            <div className="flex items-start justify-between gap-2">
-                                <div>
-                                    <h2 className="card-title">
-                                        {campaign.title}
-                                    </h2>
-                                    <p className="text-sm text-base-content opacity-70">
-                                        {campaign.worldName} · playing{' '}
-                                        {campaign.characterName}
-                                    </p>
-                                </div>
-                                <span
-                                    className={`badge ${STATUS_BADGE[campaign.status]} badge-sm capitalize`}
-                                >
-                                    {campaign.status}
-                                </span>
-                            </div>
-
-                            <p className="text-sm text-base-content opacity-80">
-                                {campaign.shortDescription}
-                            </p>
-
-                            <div className="divider my-1" />
-
-                            {campaign.lastSession ? (
-                                <div>
-                                    <p className="text-xs tracking-wide text-base-content opacity-70 uppercase">
-                                        Last session ·{' '}
-                                        {campaign.lastSession.date}
-                                    </p>
-                                    <p className="text-sm">
-                                        {campaign.lastSession.summary}
-                                    </p>
-                                </div>
-                            ) : (
-                                <p className="text-sm text-base-content opacity-70 italic">
-                                    No sessions played yet.
-                                </p>
-                            )}
-
-                            <div className="card-actions mt-2 justify-end">
-                                <a
-                                    className="btn btn-primary btn-sm"
-                                    href={`/worlds/${campaign.worldSlug}/campaigns/${campaign.campaignSlug}/session/${campaign.sessionSlug}/lobby`}
-                                >
-                                    Go to lobby
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                ))}
+        <dialog id="create-world-modal" className="modal">
+            <div className={MODAL_BOX_CLASS}>
+                <h3 className="text-lg font-bold">Create a world</h3>
+                <form className={FORM_CLASS} onSubmit={handleSubmit}>
+                    <LabeledInput
+                        id="world-name"
+                        label="World name"
+                        name="name"
+                        required
+                        autoFocus
+                    />
+                    <LabeledTextarea
+                        id="world-description"
+                        label="Description"
+                        name="description"
+                    />
+                    <FormError message={error} />
+                    <FormActions
+                        isSaving={isSaving}
+                        submitLabel="Create world"
+                    />
+                </form>
             </div>
+            <ModalBackdrop />
+        </dialog>
+    )
+}
+
+function CreateCampaignModal({
+    worlds,
+    onCampaignCreated,
+}: {
+    worlds: OwnedWorldSummary[]
+    onCampaignCreated: (campaign: OwnedCampaignSummary) => void
+}) {
+    const [isSaving, setIsSaving] = useState(false)
+    const [error, setError] = useState('')
+
+    async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault()
+        const form = event.currentTarget
+        const formData = new FormData(form)
+        setIsSaving(true)
+        setError('')
+
+        try {
+            const campaign = await createOwnedCampaign({
+                title: String(formData.get('title') ?? '').trim(),
+                description: String(formData.get('description') ?? '').trim(),
+                worldId: String(formData.get('worldId') ?? ''),
+            })
+            onCampaignCreated(campaign)
+            form.reset()
+            form.closest('dialog')?.close()
+        } catch (creationError) {
+            setError(
+                creationError instanceof Error
+                    ? creationError.message
+                    : 'Unable to create campaign.'
+            )
+        } finally {
+            setIsSaving(false)
+        }
+    }
+
+    return (
+        <dialog id="create-campaign-modal" className="modal">
+            <div className={MODAL_BOX_CLASS}>
+                <h3 className="text-lg font-bold">Create a campaign</h3>
+                <form className={FORM_CLASS} onSubmit={handleSubmit}>
+                    <LabeledInput
+                        id="campaign-title"
+                        label="Campaign title"
+                        name="title"
+                        required
+                        autoFocus
+                    />
+                    <div className={FIELD_GROUP_CLASS}>
+                        <label
+                            className={FIELD_LABEL_CLASS}
+                            htmlFor="campaign-world"
+                        >
+                            World
+                        </label>
+                        <select
+                            id="campaign-world"
+                            className={SELECT_CLASS}
+                            name="worldId"
+                            required
+                        >
+                            {worlds.map((world) => (
+                                <option key={world.id} value={world.id}>
+                                    {world.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <LabeledTextarea
+                        id="campaign-description"
+                        label="Description"
+                        name="description"
+                    />
+                    <FormError message={error} />
+                    <FormActions
+                        isSaving={isSaving}
+                        submitLabel="Create campaign"
+                    />
+                </form>
+            </div>
+            <ModalBackdrop />
+        </dialog>
+    )
+}
+
+function LabeledInput({
+    id,
+    label,
+    ...props
+}: InputHTMLAttributes<HTMLInputElement> & {
+    id: string
+    label: string
+}) {
+    return (
+        <div className={FIELD_GROUP_CLASS}>
+            <label className={FIELD_LABEL_CLASS} htmlFor={id}>
+                {label}
+            </label>
+            <input {...props} id={id} className={FIELD_CONTROL_CLASS} />
         </div>
     )
 }
 
-function GmSection({
-    worlds,
-    campaigns,
-}: {
-    worlds: ManagedWorld[]
-    campaigns: ManagedCampaign[]
+function LabeledTextarea({
+    id,
+    label,
+    ...props
+}: TextareaHTMLAttributes<HTMLTextAreaElement> & {
+    id: string
+    label: string
 }) {
     return (
-        <div className="flex flex-col gap-10">
-            <div>
-                <SectionHeading
-                    title="Worlds I'm Running"
-                    subtitle="Settings you've built for your tables."
-                />
-                {worlds.length === 0 ? (
-                    <EmptyState message="You haven't created a world yet." />
-                ) : (
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                        {worlds.map((world) => (
-                            <div
-                                key={world.id}
-                                className="card card-border bg-base-100"
-                            >
-                                <div className="card-body">
-                                    <h2 className="card-title">
-                                        {world.name}
-                                    </h2>
-                                    <p className="text-sm text-base-content opacity-80">
-                                        {world.description}
-                                    </p>
-                                    <p className="text-xs text-base-content opacity-70">
-                                        {world.campaignCount} campaign
-                                        {world.campaignCount === 1 ? '' : 's'}
-                                    </p>
-                                    <div className="card-actions mt-2 justify-end">
-                                        <a
-                                            className="btn btn-outline btn-sm"
-                                            href={`/worlds/${world.slug}`}
-                                        >
-                                            Manage world
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
-
-            <div>
-                <SectionHeading
-                    title="Campaigns I'm GMing"
-                    subtitle="Jump back into a table you run."
-                />
-                {campaigns.length === 0 ? (
-                    <EmptyState message="You aren't running any campaigns yet." />
-                ) : (
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                        {campaigns.map((campaign) => (
-                            <div
-                                key={campaign.id}
-                                className="card card-border bg-base-100"
-                            >
-                                <div className="card-body">
-                                    <div className="flex items-start justify-between gap-2">
-                                        <div>
-                                            <h2 className="card-title">
-                                                {campaign.title}
-                                            </h2>
-                                            <p className="text-sm text-base-content opacity-70">
-                                                {campaign.worldName} ·{' '}
-                                                {campaign.playerCount} players
-                                            </p>
-                                        </div>
-                                        <span
-                                            className={`badge ${STATUS_BADGE[campaign.status]} badge-sm capitalize`}
-                                        >
-                                            {campaign.status}
-                                        </span>
-                                    </div>
-
-                                    <p className="text-sm text-base-content opacity-80">
-                                        {campaign.shortDescription}
-                                    </p>
-
-                                    <div className="card-actions mt-2 justify-end">
-                                        <a
-                                            className="btn btn-primary btn-sm"
-                                            href={`/worlds/${campaign.worldSlug}/campaigns/${campaign.campaignSlug}`}
-                                        >
-                                            Manage campaign
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
+        <div className={FIELD_GROUP_CLASS}>
+            <label className={FIELD_LABEL_CLASS} htmlFor={id}>
+                {label}
+            </label>
+            <textarea {...props} id={id} className={TEXTAREA_CLASS} rows={5} />
         </div>
+    )
+}
+
+function FormActions({
+    isSaving,
+    submitLabel,
+}: {
+    isSaving: boolean
+    submitLabel: string
+}) {
+    return (
+        <div className={FORM_ACTIONS_CLASS}>
+            <button
+                type="button"
+                className={SECONDARY_ACTION_CLASS}
+                onClick={(event) =>
+                    event.currentTarget.closest('dialog')?.close()
+                }
+            >
+                Cancel
+            </button>
+            <button
+                type="submit"
+                className={`${PRIMARY_ACTION_CLASS} w-full sm:w-auto`}
+                disabled={isSaving}
+            >
+                {isSaving ? 'Creating…' : submitLabel}
+            </button>
+        </div>
+    )
+}
+
+function FormError({ message }: { message: string }) {
+    return message ? (
+        <p className="text-sm text-error" role="alert">
+            {message}
+        </p>
+    ) : null
+}
+
+function ModalBackdrop() {
+    return (
+        <form method="dialog" className="modal-backdrop">
+            <button>close</button>
+        </form>
     )
 }
 

@@ -1,0 +1,6 @@
+export { default as breakpoints } from './breakpoints'
+export { default as componentDefaults } from './components'
+export { default as palette } from './palette'
+export { default as spacing } from './spacing'
+export { theme } from './theme'
+export { default as typography } from './typography'

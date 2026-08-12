@@ -5,7 +5,6 @@
         "plugins": []
     },
     "include": [
-        "src/core/types/**/*.ts",
         "src/lib/**/*.ts",
         "src/server/**/*.ts"
     ],

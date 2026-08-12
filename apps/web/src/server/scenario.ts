@@ -5,6 +5,7 @@ import { eq, sql } from 'drizzle-orm'
 
 import { scenarios } from '@/lib/db/schema'
 import { getDrizzleDb } from '@/lib/drizzle'
+import { synchronizeKnowledgeGraph } from '@/lib/knowledgeGraph'
 
 export type Scenario = {
     id: string
@@ -53,6 +54,7 @@ export async function createScenario({
         mapImageUrl: mapImageUrl ?? null,
         longDescriptionRichText,
     })
+    await synchronizeKnowledgeGraph()
 
     return {
         id,
@@ -117,6 +119,7 @@ export async function updateScenario({
             longDescriptionRichText: nextScenario.longDescriptionRichText,
         })
         .where(eq(scenarios.id, id))
+    await synchronizeKnowledgeGraph()
 
     return {
         id,
@@ -133,6 +136,7 @@ export async function deleteScenario(id: string): Promise<Scenario | null> {
 
     const db = await getDrizzleDb()
     await db.delete(scenarios).where(eq(scenarios.id, id))
+    await synchronizeKnowledgeGraph()
 
     return current
 }

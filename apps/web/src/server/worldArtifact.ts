@@ -5,21 +5,15 @@ import { asc, eq, sql } from 'drizzle-orm'
 
 import { worldArtifacts } from '@/lib/db/schema'
 import { getDrizzleDb } from '@/lib/drizzle'
+import { synchronizeKnowledgeGraph } from '@/lib/knowledgeGraph'
 import {
     WORLD_ARTIFACT_TYPES,
+    type CreateWorldArtifactArgs,
+    type FindWorldArtifactsArgs,
+    type UpdateWorldArtifactArgs,
+    type WorldArtifact,
     type WorldArtifactType,
-} from '@/core/types/worldArtifact'
-
-export type WorldArtifact = {
-    id: string
-    worldId?: string
-    artifactType: WorldArtifactType
-    title: string
-    descriptionMarkdown: string
-    mapImageUrl?: string
-    createdAt: string
-    updatedAt: string
-}
+} from '@wanderlust/common'
 
 type WorldArtifactRow = {
     id: string
@@ -30,23 +24,6 @@ type WorldArtifactRow = {
     mapImageUrl?: string | null
     createdAt: string
     updatedAt: string
-}
-
-type CreateWorldArtifactArgs = {
-    worldId?: string
-    artifactType: WorldArtifactType
-    title: string
-    descriptionMarkdown?: string
-    mapImageUrl?: string
-}
-
-type UpdateWorldArtifactArgs = Partial<CreateWorldArtifactArgs> & {
-    id: string
-}
-
-type FindWorldArtifactsArgs = {
-    worldId?: string
-    query?: string
 }
 
 function mapWorldArtifact(row: WorldArtifactRow): WorldArtifact {
@@ -154,6 +131,7 @@ export async function createWorldArtifact({
         createdAt: now,
         updatedAt: now,
     })
+    await synchronizeKnowledgeGraph()
 
     return {
         id,
@@ -202,6 +180,7 @@ export async function updateWorldArtifact({
             updatedAt,
         })
         .where(eq(worldArtifacts.id, id))
+    await synchronizeKnowledgeGraph()
 
     return {
         id,
@@ -222,6 +201,7 @@ export async function deleteWorldArtifact(
 
     const db = await getDrizzleDb()
     await db.delete(worldArtifacts).where(eq(worldArtifacts.id, id))
+    await synchronizeKnowledgeGraph()
 
     return current
 }

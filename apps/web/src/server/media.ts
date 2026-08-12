@@ -2,7 +2,7 @@
 
 import { randomUUID } from 'crypto'
 import { eq, sql } from 'drizzle-orm'
-import { Media, Tag, User } from '@wanderlust/core'
+import { Media, Tag, User } from '@wanderlust/common'
 
 import { media as mediaTable } from '@web/lib/db/schema'
 import { getDrizzleDb } from '@web/lib/drizzle'
