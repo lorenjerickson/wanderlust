@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import classes from './ContentLayout.module.scss'
-import { SideNav } from '@/core/components/SideNav/SideNav'
+import { SideNav } from '@wanderlust/common/components'
 
 type ContentLayoutProps = {
     children: ReactNode

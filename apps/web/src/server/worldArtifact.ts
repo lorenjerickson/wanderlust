@@ -1,62 +1,41 @@
 'use server'
 
 import { randomUUID } from 'crypto'
+import { asc, eq, sql } from 'drizzle-orm'
 
-import { getDb } from '@/lib/db'
+import { worldArtifacts } from '@/lib/db/schema'
+import { getDrizzleDb } from '@/lib/drizzle'
+import { synchronizeKnowledgeGraph } from '@/lib/knowledgeGraph'
 import {
     WORLD_ARTIFACT_TYPES,
+    type CreateWorldArtifactArgs,
+    type FindWorldArtifactsArgs,
+    type UpdateWorldArtifactArgs,
+    type WorldArtifact,
     type WorldArtifactType,
-} from '@/core/types/worldArtifact'
-
-export type WorldArtifact = {
-    id: string
-    worldId?: string
-    artifactType: WorldArtifactType
-    title: string
-    descriptionMarkdown: string
-    mapImageUrl?: string
-    createdAt: string
-    updatedAt: string
-}
+} from '@wanderlust/common'
 
 type WorldArtifactRow = {
     id: string
-    world_id?: string | null
-    artifact_type: string
+    worldId?: string | null
+    artifactType: string
     title: string
-    description_markdown: string
-    map_image_url?: string | null
-    created_at: string
-    updated_at: string
-}
-
-type CreateWorldArtifactArgs = {
-    worldId?: string
-    artifactType: WorldArtifactType
-    title: string
-    descriptionMarkdown?: string
-    mapImageUrl?: string
-}
-
-type UpdateWorldArtifactArgs = Partial<CreateWorldArtifactArgs> & {
-    id: string
-}
-
-type FindWorldArtifactsArgs = {
-    worldId?: string
-    query?: string
+    descriptionMarkdown: string
+    mapImageUrl?: string | null
+    createdAt: string
+    updatedAt: string
 }
 
 function mapWorldArtifact(row: WorldArtifactRow): WorldArtifact {
     return {
         id: row.id,
-        worldId: row.world_id ?? undefined,
-        artifactType: normalizeArtifactType(row.artifact_type),
+        worldId: row.worldId ?? undefined,
+        artifactType: normalizeArtifactType(row.artifactType),
         title: row.title,
-        descriptionMarkdown: row.description_markdown,
-        mapImageUrl: row.map_image_url ?? undefined,
-        createdAt: row.created_at,
-        updatedAt: row.updated_at,
+        descriptionMarkdown: row.descriptionMarkdown,
+        mapImageUrl: row.mapImageUrl ?? undefined,
+        createdAt: row.createdAt,
+        updatedAt: row.updatedAt,
     }
 }
 
@@ -77,61 +56,45 @@ export async function findWorldArtifacts({
     worldId,
     query = '',
 }: FindWorldArtifactsArgs = {}): Promise<WorldArtifact[]> {
-    const db = await getDb()
+    const db = await getDrizzleDb()
     const trimmedQuery = query.trim()
 
     if (trimmedQuery) {
         const ftsQuery = buildFtsQuery(trimmedQuery)
-        const rows = await db.all<WorldArtifactRow[]>(
-            `
+        const rows = await db.all<WorldArtifactRow>(sql`
                 SELECT
                     wa.id,
-                    wa.world_id,
-                    wa.artifact_type,
+                    wa.world_id AS worldId,
+                    wa.artifact_type AS artifactType,
                     wa.title,
-                    wa.description_markdown,
-                    wa.map_image_url,
-                    wa.created_at,
-                    wa.updated_at
+                    wa.description_markdown AS descriptionMarkdown,
+                    wa.map_image_url AS mapImageUrl,
+                    wa.created_at AS createdAt,
+                    wa.updated_at AS updatedAt
                 FROM world_artifacts_fts fts
                 JOIN world_artifacts wa ON wa.rowid = fts.rowid
-                WHERE world_artifacts_fts MATCH ?
-                    AND (? IS NULL OR wa.world_id = ?)
+                WHERE world_artifacts_fts MATCH ${ftsQuery}
+                    AND (${worldId ?? null} IS NULL OR wa.world_id = ${worldId ?? null})
                 ORDER BY
                     CASE
-                        WHEN lower(wa.title) LIKE lower(?) THEN 0
+                        WHEN lower(wa.title) LIKE lower(${`%${trimmedQuery}%`}) THEN 0
                         ELSE 1
                     END,
                     bm25(world_artifacts_fts),
                     wa.title COLLATE NOCASE ASC
-            `,
-            ftsQuery,
-            worldId ?? null,
-            worldId ?? null,
-            `%${trimmedQuery}%`
-        )
+            `)
 
         return rows.map(mapWorldArtifact)
     }
 
-    const rows = await db.all<WorldArtifactRow[]>(
-        `
-            SELECT
-                id,
-                world_id,
-                artifact_type,
-                title,
-                description_markdown,
-                map_image_url,
-                created_at,
-                updated_at
-            FROM world_artifacts
-            WHERE (? IS NULL OR world_id = ?)
-            ORDER BY artifact_type ASC, title COLLATE NOCASE ASC
-        `,
-        worldId ?? null,
-        worldId ?? null
-    )
+    const rows = await db
+        .select()
+        .from(worldArtifacts)
+        .where(worldId ? eq(worldArtifacts.worldId, worldId) : undefined)
+        .orderBy(
+            asc(worldArtifacts.artifactType),
+            sql`${worldArtifacts.title} COLLATE NOCASE ASC`
+        )
 
     return rows.map(mapWorldArtifact)
 }
@@ -139,23 +102,10 @@ export async function findWorldArtifacts({
 export async function findWorldArtifactById(
     id: string
 ): Promise<WorldArtifact | null> {
-    const db = await getDb()
-    const row = await db.get<WorldArtifactRow>(
-        `
-            SELECT
-                id,
-                world_id,
-                artifact_type,
-                title,
-                description_markdown,
-                map_image_url,
-                created_at,
-                updated_at
-            FROM world_artifacts
-            WHERE id = ?
-        `,
-        id
-    )
+    const db = await getDrizzleDb()
+    const row = await db.query.worldArtifacts.findFirst({
+        where: eq(worldArtifacts.id, id),
+    })
 
     return row ? mapWorldArtifact(row) : null
 }
@@ -167,33 +117,21 @@ export async function createWorldArtifact({
     descriptionMarkdown = '',
     mapImageUrl,
 }: CreateWorldArtifactArgs): Promise<WorldArtifact> {
-    const db = await getDb()
+    const db = await getDrizzleDb()
     const id = randomUUID()
     const now = new Date().toISOString()
 
-    await db.run(
-        `
-            INSERT INTO world_artifacts (
-                id,
-                world_id,
-                artifact_type,
-                title,
-                description_markdown,
-                map_image_url,
-                created_at,
-                updated_at
-            )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        `,
+    await db.insert(worldArtifacts).values({
         id,
-        worldId ?? null,
+        worldId: worldId ?? null,
         artifactType,
         title,
         descriptionMarkdown,
-        mapImageUrl ?? null,
-        now,
-        now
-    )
+        mapImageUrl: mapImageUrl ?? null,
+        createdAt: now,
+        updatedAt: now,
+    })
+    await synchronizeKnowledgeGraph()
 
     return {
         id,
@@ -229,27 +167,20 @@ export async function updateWorldArtifact({
         mapImageUrl: mapImageUrl ?? current.mapImageUrl,
     }
     const updatedAt = new Date().toISOString()
-    const db = await getDb()
+    const db = await getDrizzleDb()
 
-    await db.run(
-        `
-            UPDATE world_artifacts
-            SET world_id = ?,
-                artifact_type = ?,
-                title = ?,
-                description_markdown = ?,
-                map_image_url = ?,
-                updated_at = ?
-            WHERE id = ?
-        `,
-        nextArtifact.worldId ?? null,
-        nextArtifact.artifactType,
-        nextArtifact.title,
-        nextArtifact.descriptionMarkdown,
-        nextArtifact.mapImageUrl ?? null,
-        updatedAt,
-        id
-    )
+    await db
+        .update(worldArtifacts)
+        .set({
+            worldId: nextArtifact.worldId ?? null,
+            artifactType: nextArtifact.artifactType,
+            title: nextArtifact.title,
+            descriptionMarkdown: nextArtifact.descriptionMarkdown,
+            mapImageUrl: nextArtifact.mapImageUrl ?? null,
+            updatedAt,
+        })
+        .where(eq(worldArtifacts.id, id))
+    await synchronizeKnowledgeGraph()
 
     return {
         id,
@@ -268,8 +199,9 @@ export async function deleteWorldArtifact(
         return null
     }
 
-    const db = await getDb()
-    await db.run('DELETE FROM world_artifacts WHERE id = ?', id)
+    const db = await getDrizzleDb()
+    await db.delete(worldArtifacts).where(eq(worldArtifacts.id, id))
+    await synchronizeKnowledgeGraph()
 
     return current
 }

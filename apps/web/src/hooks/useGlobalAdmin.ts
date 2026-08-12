@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import { User } from '@wanderlust/core'
+import { User } from '@wanderlust/common'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 const USER_API_ENDPOINT =

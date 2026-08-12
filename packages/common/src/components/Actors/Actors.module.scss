@@ -1,0 +1,60 @@
+.panelView {
+    @apply flex h-full w-full min-w-0 flex-col bg-slate-950 text-slate-100;
+}
+
+.controls {
+    @apply grid gap-2 border-b border-slate-700/70 bg-slate-900/80 p-2;
+}
+
+.controls > button {
+    @apply w-fit;
+}
+
+.filters {
+    @apply grid min-w-0 grid-cols-[minmax(0,1fr)_8rem] items-center gap-2;
+}
+
+.filters input,
+.filters select {
+    @apply w-full border-slate-700 bg-slate-950 text-slate-100 outline-none placeholder:text-slate-500 focus:border-cyan-400;
+}
+
+.searchField {
+    @apply relative min-w-0;
+}
+
+.searchField input {
+    @apply pl-8;
+}
+
+.searchIcon {
+    @apply pointer-events-none absolute left-2.5 top-1/2 z-10 -translate-y-1/2 text-slate-400;
+}
+
+.actorList {
+    @apply grid min-h-0 flex-1 content-start gap-1 overflow-y-auto p-2;
+}
+
+.actorListItem {
+    @apply flex min-h-14 w-full items-center justify-between gap-3 rounded-md border border-transparent px-3 py-2 text-left transition-colors hover:border-slate-700 hover:bg-slate-900 focus-visible:border-cyan-400 focus-visible:outline-none;
+}
+
+.actorSummary {
+    @apply grid min-w-0 gap-0.5;
+}
+
+.actorName {
+    @apply truncate text-sm font-semibold text-slate-100;
+}
+
+.actorDescription {
+    @apply truncate text-xs text-slate-400;
+}
+
+.actorType {
+    @apply shrink-0 rounded border border-slate-700 bg-slate-900 px-1.5 py-0.5 text-[0.625rem] font-semibold uppercase tracking-wide text-cyan-300;
+}
+
+.emptyState {
+    @apply m-0 px-3 py-8 text-center text-sm text-slate-400;
+}

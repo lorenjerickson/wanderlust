@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -sk --resolve local.wanderlust.io:3000:127.0.0.1 -o /tmp/claude-1000/-home-loren-dev-wanderlust/d5a808f2-f550-4762-b05a-49603e00ac20/scratchpad/user2.html -w \"%{http_code}\\\\n\" https://local.wanderlust.io:3000/user --max-time 20)",
+      "Bash(curl -sk --resolve local.wanderlust.io:3000:127.0.0.1 https://local.wanderlust.io:3000/_next/static/chunks/_0y8ezf3._.css --max-time 20 -o /tmp/claude-1000/-home-loren-dev-wanderlust/d5a808f2-f550-4762-b05a-49603e00ac20/scratchpad/user.css)",
+      "Bash(grep -o \"\\\\.[a-zA-Z-]*\\\\\\\\\\\\\\\\/[0-9]*[^{,]*\" user.css)",
+      "Bash(curl -sk --resolve local.wanderlust.io:3000:127.0.0.1 -o /tmp/claude-1000/-home-loren-dev-wanderlust/d5a808f2-f550-4762-b05a-49603e00ac20/scratchpad/user3.html -w \"%{http_code}\\\\n\" https://local.wanderlust.io:3000/user --max-time 20)",
+      "Bash(curl -sk --resolve local.wanderlust.io:3000:127.0.0.1 https://local.wanderlust.io:3000/_next/static/chunks/_0y8ezf3._.css --max-time 20 -o /tmp/claude-1000/-home-loren-dev-wanderlust/d5a808f2-f550-4762-b05a-49603e00ac20/scratchpad/user3.css)"
+    ]
+  }
+}

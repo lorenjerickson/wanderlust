@@ -1,9 +1,11 @@
 'use server'
 
 import bcrypt from 'bcrypt'
+import { eq, sql } from 'drizzle-orm'
 import jwt from 'jsonwebtoken'
 
-import { getDb } from '@web/lib/db'
+import { auth } from '@web/lib/db/schema'
+import { getDrizzleDb } from '@web/lib/drizzle'
 import { findOneUserByUsername } from './user'
 
 export type AuthRecord = {
@@ -16,7 +18,10 @@ type AuthenticateArgs = {
     password: string
 }
 
-export async function authenticate({ username, password }: AuthenticateArgs): Promise<AuthRecord> {
+export async function authenticate({
+    username,
+    password,
+}: AuthenticateArgs): Promise<AuthRecord> {
     const user = await findOneUserByUsername(username)
 
     if (!user?.password) {
@@ -29,21 +34,23 @@ export async function authenticate({ username, password }: AuthenticateArgs): Pr
         throw new Error('Unauthorized')
     }
 
-    const secret = process.env.JWT_SECRET ?? process.env.AUTH0_SECRET ?? 'wanderlust-local-secret'
+    const secret =
+        process.env.JWT_SECRET ??
+        process.env.AUTH0_SECRET ??
+        'wanderlust-local-secret'
     const token = jwt.sign({ sub: user.username, user }, secret)
-    const db = await getDb()
+    const db = await getDrizzleDb()
 
-    await db.run(
-        `
-            INSERT INTO auth (username, jwt)
-            VALUES (?, ?)
-            ON CONFLICT(username) DO UPDATE SET
-                jwt = excluded.jwt,
-                createdOn = CURRENT_TIMESTAMP
-        `,
-        username,
-        token
-    )
+    await db
+        .insert(auth)
+        .values({ username, jwt: token })
+        .onConflictDoUpdate({
+            target: auth.username,
+            set: {
+                jwt: token,
+                createdOn: sql`CURRENT_TIMESTAMP`,
+            },
+        })
 
     return {
         username,
@@ -51,14 +58,15 @@ export async function authenticate({ username, password }: AuthenticateArgs): Pr
     }
 }
 
-export async function deauthenticate(username: string): Promise<AuthRecord | null> {
-    const db = await getDb()
-    const record = await db.get<AuthRecord>(
-        'SELECT username, jwt FROM auth WHERE username = ?',
-        username
-    )
+export async function deauthenticate(
+    username: string
+): Promise<AuthRecord | null> {
+    const db = await getDrizzleDb()
+    const record = await db.query.auth.findFirst({
+        where: eq(auth.username, username),
+    })
 
-    await db.run('DELETE FROM auth WHERE username = ?', username)
+    await db.delete(auth).where(eq(auth.username, username))
 
     return record ?? null
 }

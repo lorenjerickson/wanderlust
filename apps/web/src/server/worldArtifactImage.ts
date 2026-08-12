@@ -3,10 +3,11 @@
 import { mkdir, writeFile } from 'fs/promises'
 import path from 'path'
 
-import type { WorldArtifactType } from '@/core/types/worldArtifact'
+import type { WorldArtifactType } from '@wanderlust/common'
 
 const ARTIFACT_IMAGE_DIRS: Record<WorldArtifactType, string> = {
     World: 'worlds',
+    Location: 'locations',
     Campaign: 'campaigns',
     Scenario: 'scenarios',
     Encounter: 'encounters',

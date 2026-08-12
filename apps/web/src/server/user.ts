@@ -2,12 +2,14 @@
 
 import { randomUUID } from 'crypto'
 import bcrypt from 'bcrypt'
-import { Role, User } from '@wanderlust/core'
+import { count, eq, sql } from 'drizzle-orm'
+import { Role, RoleName, User } from '@wanderlust/common'
 
 import { auth0 } from '@/lib/auth0'
-import { getDb } from '@/lib/db'
+import { roles, userRoles, users } from '@/lib/db/schema'
+import { getDrizzleDb } from '@/lib/drizzle'
 import { findOrCreateAdminRole } from './role'
-import { mapRole, mapUser, UserRow, withoutPassword } from './sqlite'
+import { mapRole, mapUser, withoutPassword } from './mappers'
 
 type StoredUser = User & {
     _id: string
@@ -47,16 +49,16 @@ function requireProfileValue(
 }
 
 async function getUserRoles(userId: string): Promise<Role[]> {
-    const db = await getDb()
-    const rows = await db.all(
-        `
-            SELECT roles.id, roles.name, roles.description
-            FROM roles
-            INNER JOIN user_roles ON user_roles.role_id = roles.id
-            WHERE user_roles.user_id = ?
-        `,
-        userId
-    )
+    const db = await getDrizzleDb()
+    const rows = await db
+        .select({
+            id: roles.id,
+            name: roles.name,
+            description: roles.description,
+        })
+        .from(roles)
+        .innerJoin(userRoles, eq(userRoles.roleId, roles.id))
+        .where(eq(userRoles.userId, userId))
 
     return rows.map(mapRole)
 }
@@ -65,11 +67,15 @@ async function getUserByColumn(
     column: 'id' | 'username' | 'emailAddress',
     value: string
 ) {
-    const db = await getDb()
-    const row = await db.get<UserRow>(
-        `SELECT * FROM users WHERE ${column} = ?`,
-        value
-    )
+    const db = await getDrizzleDb()
+    const targetColumn = {
+        id: users.id,
+        username: users.username,
+        emailAddress: users.emailAddress,
+    }[column]
+    const row = await db.query.users.findFirst({
+        where: eq(targetColumn, value),
+    })
 
     if (!row) {
         return null
@@ -79,11 +85,10 @@ async function getUserByColumn(
 }
 
 async function getUserByExternalAuthSubject(externalAuthSubject: string) {
-    const db = await getDb()
-    const row = await db.get<UserRow>(
-        'SELECT * FROM users WHERE external_auth_subject = ?',
-        externalAuthSubject
-    )
+    const db = await getDrizzleDb()
+    const row = await db.query.users.findFirst({
+        where: eq(users.externalAuthSubject, externalAuthSubject),
+    })
 
     if (!row) {
         return null
@@ -96,57 +101,41 @@ async function replaceUserRoles(
     userId: string,
     roles: Array<Role | string> = []
 ) {
-    const db = await getDb()
+    const db = await getDrizzleDb()
 
-    await db.run('DELETE FROM user_roles WHERE user_id = ?', userId)
+    await db.delete(userRoles).where(eq(userRoles.userId, userId))
 
     for (const role of roles) {
         const roleId = typeof role === 'string' ? role : role._id
 
         if (roleId) {
-            await db.run(
-                'INSERT OR IGNORE INTO user_roles (user_id, role_id) VALUES (?, ?)',
-                userId,
-                roleId
-            )
+            await db
+                .insert(userRoles)
+                .values({ userId, roleId })
+                .onConflictDoNothing()
         }
     }
 }
 
 export async function createUser(user: CreateUserInput): Promise<StoredUser> {
-    const db = await getDb()
+    const db = await getDrizzleDb()
     const id = randomUUID()
     const hashedPassword = user.password
         ? await bcrypt.hash(user.password, 10)
         : null
 
-    await db.run(
-        `
-            INSERT INTO users (
-                id,
-                username,
-                password,
-                emailAddress,
-                fullName,
-                phoneNumber,
-                zipCode,
-                avatar,
-                external_auth_subject,
-                is_gm
-            )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `,
+    await db.insert(users).values({
         id,
-        user.username,
-        hashedPassword,
-        user.emailAddress,
-        user.fullName,
-        user.phoneNumber,
-        user.zipCode,
-        user.avatar ?? null,
-        user.externalAuthSubject ?? null,
-        user.isGm ? 1 : 0
-    )
+        username: user.username!,
+        password: hashedPassword,
+        emailAddress: user.emailAddress!,
+        fullName: user.fullName!,
+        phoneNumber: user.phoneNumber!,
+        zipCode: user.zipCode!,
+        avatar: user.avatar ?? null,
+        externalAuthSubject: user.externalAuthSubject ?? null,
+        isGm: user.isGm ? 1 : 0,
+    })
 
     await replaceUserRoles(id, user.roles ?? [])
 
@@ -163,7 +152,7 @@ export async function updateUser(
     sessionId: string,
     body: User
 ): Promise<StoredUser> {
-    const db = await getDb()
+    const db = await getDrizzleDb()
     const existingUser =
         (await getUserByColumn('id', sessionId)) ??
         (await getUserByColumn('username', sessionId))
@@ -176,28 +165,19 @@ export async function updateUser(
         ? await bcrypt.hash(body.password, 10)
         : (existingUser.password ?? null)
 
-    await db.run(
-        `
-            UPDATE users
-            SET username = ?,
-                password = ?,
-                emailAddress = ?,
-                fullName = ?,
-                phoneNumber = ?,
-                zipCode = ?,
-                avatar = ?,
-                updatedOn = CURRENT_TIMESTAMP
-            WHERE id = ?
-        `,
-        body.username ?? existingUser.username,
-        nextPassword,
-        body.emailAddress ?? existingUser.emailAddress,
-        body.fullName ?? existingUser.fullName,
-        body.phoneNumber ?? existingUser.phoneNumber,
-        body.zipCode ?? existingUser.zipCode,
-        body.avatar ?? existingUser.avatar ?? null,
-        existingUser._id
-    )
+    await db
+        .update(users)
+        .set({
+            username: body.username ?? existingUser.username,
+            password: nextPassword,
+            emailAddress: body.emailAddress ?? existingUser.emailAddress,
+            fullName: body.fullName ?? existingUser.fullName,
+            phoneNumber: body.phoneNumber ?? existingUser.phoneNumber,
+            zipCode: body.zipCode ?? existingUser.zipCode,
+            avatar: body.avatar ?? existingUser.avatar ?? null,
+            updatedOn: sql`CURRENT_TIMESTAMP`,
+        })
+        .where(eq(users.id, existingUser._id))
 
     if (body.roles) {
         await replaceUserRoles(existingUser._id, body.roles)
@@ -213,10 +193,8 @@ export async function updateUser(
 }
 
 export async function countUsers(): Promise<number> {
-    const db = await getDb()
-    const row = await db.get<{ count: number }>(
-        'SELECT COUNT(*) AS count FROM users'
-    )
+    const db = await getDrizzleDb()
+    const [row] = await db.select({ count: count() }).from(users)
 
     return row?.count ?? 0
 }
@@ -232,8 +210,8 @@ export async function findOneUserByUsername(
 }
 
 export async function findAllUsers(): Promise<StoredUser[]> {
-    const db = await getDb()
-    const rows = await db.all<UserRow[]>('SELECT * FROM users')
+    const db = await getDrizzleDb()
+    const rows = await db.select().from(users)
 
     return Promise.all(
         rows.map(async (row) => mapUser(row, await getUserRoles(row.id)))
@@ -253,23 +231,19 @@ export async function findOneUserByRole(
         return null
     }
 
-    const db = await getDb()
-    const row = await db.get<UserRow>(
-        `
-            SELECT users.*
-            FROM users
-            INNER JOIN user_roles ON user_roles.user_id = users.id
-            WHERE user_roles.role_id = ?
-            LIMIT 1
-        `,
-        role._id
-    )
+    const db = await getDrizzleDb()
+    const [row] = await db
+        .select({ user: users })
+        .from(users)
+        .innerJoin(userRoles, eq(userRoles.userId, users.id))
+        .where(eq(userRoles.roleId, role._id))
+        .limit(1)
 
     if (!row) {
         return null
     }
 
-    return withoutPassword(mapUser(row, await getUserRoles(row.id)))
+    return withoutPassword(mapUser(row.user, await getUserRoles(row.user.id)))
 }
 
 export async function createGlobalAdmin(
@@ -304,15 +278,10 @@ export async function getGlobalAdmin(): Promise<StoredUser | null> {
 }
 
 export async function getGameMaster(): Promise<StoredUser | null> {
-    const db = await getDb()
-    const row = await db.get<UserRow>(
-        `
-            SELECT *
-            FROM users
-            WHERE is_gm = 1
-            LIMIT 1
-        `
-    )
+    const db = await getDrizzleDb()
+    const row = await db.query.users.findFirst({
+        where: eq(users.isGm, 1),
+    })
 
     if (!row) {
         return null
@@ -343,70 +312,62 @@ export async function createFirstGameMaster(
         ),
         avatar: body.avatar ?? null,
     }
-    const db = await getDb()
+    const db = await getDrizzleDb()
     const id = randomUUID()
 
-    await db.exec('BEGIN IMMEDIATE TRANSACTION;')
-
-    try {
-        const row = await db.get<{ count: number }>(
-            'SELECT COUNT(*) AS count FROM users'
-        )
+    const createdUser = await db.transaction(async (tx) => {
+        const [row] = await tx.select({ count: count() }).from(users)
 
         if ((row?.count ?? 0) > 0) {
             throw new Error('A user record already exists')
         }
 
-        const adminRole = await findOrCreateAdminRole()
+        let adminRole = await tx.query.roles.findFirst({
+            where: eq(roles.name, RoleName.GlobalAdmin),
+        })
 
-        await db.run(
-            `
-                INSERT INTO users (
-                    id,
-                    username,
-                    password,
-                    emailAddress,
-                    fullName,
-                    phoneNumber,
-                    zipCode,
-                    avatar,
-                    external_auth_subject,
-                    is_gm
-                )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            `,
+        if (!adminRole) {
+            const roleId = randomUUID()
+            await tx.insert(roles).values({
+                id: roleId,
+                name: RoleName.GlobalAdmin,
+                description: 'Global Administrator with full access',
+            })
+            adminRole = {
+                id: roleId,
+                name: RoleName.GlobalAdmin,
+                description: 'Global Administrator with full access',
+            }
+        }
+
+        if (!adminRole) {
+            throw new Error('Unable to create the global administrator role')
+        }
+
+        await tx.insert(users).values({
             id,
-            user.username,
-            null,
-            user.emailAddress,
-            user.fullName,
-            user.phoneNumber,
-            user.zipCode,
-            user.avatar,
+            username: user.username,
+            password: null,
+            emailAddress: user.emailAddress,
+            fullName: user.fullName,
+            phoneNumber: user.phoneNumber,
+            zipCode: user.zipCode,
+            avatar: user.avatar,
             externalAuthSubject,
-            1
-        )
+            isGm: 1,
+        })
 
-        await db.run(
-            'INSERT OR IGNORE INTO user_roles (user_id, role_id) VALUES (?, ?)',
-            id,
-            adminRole._id
-        )
+        await tx.insert(userRoles).values({ userId: id, roleId: adminRole.id })
 
-        await db.exec('COMMIT;')
-
-        const createdUser: StoredUser = {
+        return {
             _id: id,
             ...user,
             avatar: user.avatar ?? undefined,
             externalAuthSubject,
             isGm: true,
-            roles: [adminRole],
-        }
+            roles: [mapRole(adminRole)],
+        } satisfies StoredUser
+    })
 
-        return withoutPassword(createdUser)
-    } catch (error) {
-        await db.exec('ROLLBACK;')
-        throw error
-    }
+    return createdUser
 }

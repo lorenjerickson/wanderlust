@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { ReactNode } from 'react'
 
 import './globals.css'
+import '@wanderlust/common/styles.css'
 import { Providers } from './providers'
 
 export const metadata: Metadata = {

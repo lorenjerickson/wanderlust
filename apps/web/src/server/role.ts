@@ -1,26 +1,24 @@
 'use server'
 
 import { randomUUID } from 'crypto'
-import { Role, RoleName } from '@wanderlust/core'
+import { eq } from 'drizzle-orm'
+import { Role, RoleName } from '@wanderlust/common'
 
-import { getDb } from '@/lib/db'
-import { mapRole } from './sqlite'
+import { roles } from '@/lib/db/schema'
+import { getDrizzleDb } from '@/lib/drizzle'
+import { mapRole } from './mappers'
 
 const globalAdminRoleName = 'globalAdmin' as RoleName
 
 export async function createRole(role: Role): Promise<Role> {
-    const db = await getDb()
+    const db = await getDrizzleDb()
     const id = role._id ?? randomUUID()
 
-    await db.run(
-        `
-            INSERT INTO roles (id, name, description)
-            VALUES (?, ?, ?)
-        `,
+    await db.insert(roles).values({
         id,
-        role.name,
-        role.description ?? null
-    )
+        name: role.name,
+        description: role.description ?? null,
+    })
 
     return {
         ...role,
@@ -29,18 +27,17 @@ export async function createRole(role: Role): Promise<Role> {
 }
 
 export async function findOneRoleByName(role: RoleName): Promise<Role | null> {
-    const db = await getDb()
-    const row = await db.get(
-        'SELECT id, name, description FROM roles WHERE name = ?',
-        role
-    )
+    const db = await getDrizzleDb()
+    const row = await db.query.roles.findFirst({
+        where: eq(roles.name, role),
+    })
 
     return row ? mapRole(row) : null
 }
 
 export async function findAllRoles(): Promise<Role[]> {
-    const db = await getDb()
-    const rows = await db.all('SELECT id, name, description FROM roles')
+    const db = await getDrizzleDb()
+    const rows = await db.select().from(roles)
 
     return rows.map(mapRole)
 }

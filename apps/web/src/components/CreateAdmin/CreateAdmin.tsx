@@ -1,8 +1,8 @@
 'use client'
 
 import { createFirstGameMaster } from '@/server/user'
-import { User } from '@/core/types/user'
-import { Button, Text, TextInput } from '@/core/components'
+import type { User } from '@wanderlust/common'
+import { Button, Text, TextInput } from '@wanderlust/common/components'
 import { ChangeEvent, MouseEvent, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
@@ -41,7 +41,7 @@ export function CreateAdminPage({ initialUser = {} }: CreateAdminPageProps) {
             createFirstGameMaster(data)
                 .then((response: User | null) => {
                     if (response?.emailAddress) {
-                        router.replace('/world')
+                        router.replace('/user')
                         router.refresh()
                     } else {
                         console.error('Failed to create GM profile')

@@ -1,9 +1,11 @@
 'use server'
 
-import { Setting, Settings, SettingsGroup, ValueType } from '@wanderlust/core'
+import { Setting, Settings, SettingsGroup, ValueType } from '@wanderlust/common'
+import { eq } from 'drizzle-orm'
 
-import { getDb } from '@web/lib/db'
-import { SettingsGroupRow } from './sqlite'
+import { settingsGroups } from '@web/lib/db/schema'
+import { getDrizzleDb } from '@web/lib/drizzle'
+import { SettingsGroupRow } from './mappers'
 
 function mapSettingsGroup(row: SettingsGroupRow): SettingsGroup {
     return {
@@ -17,18 +19,20 @@ function mapSettingsGroup(row: SettingsGroupRow): SettingsGroup {
 }
 
 export async function getAllSettings(): Promise<Settings> {
-    const db = await getDb()
-    const rows = await db.all<SettingsGroupRow[]>('SELECT * FROM settings_groups')
+    const db = await getDrizzleDb()
+    const rows = await db.select().from(settingsGroups)
 
     return rows.map(mapSettingsGroup)
 }
 
-export async function findSettingsByKey(groupKey: string): Promise<SettingsGroup[]> {
-    const db = await getDb()
-    const rows = await db.all<SettingsGroupRow[]>(
-        'SELECT * FROM settings_groups WHERE key = ?',
-        groupKey
-    )
+export async function findSettingsByKey(
+    groupKey: string
+): Promise<SettingsGroup[]> {
+    const db = await getDrizzleDb()
+    const rows = await db
+        .select()
+        .from(settingsGroups)
+        .where(eq(settingsGroups.key, groupKey))
 
     return rows.map(mapSettingsGroup)
 }
@@ -47,27 +51,23 @@ export async function findSettingsByKeyAndSettingKey(
     return group.settings.find((setting) => setting.key === settingKey) ?? null
 }
 
-export async function updateAllGroupSettings(key: string, group: SettingsGroup) {
-    const db = await getDb()
-    const result = await db.run(
-        `
-            UPDATE settings_groups
-            SET label = ?,
-                description = ?,
-                icon = ?,
-                moduleId = ?,
-                settings = ?
-            WHERE key = ?
-        `,
-        group.label,
-        group.description,
-        group.icon ?? null,
-        group.moduleId ?? null,
-        JSON.stringify(group.settings),
-        key
-    )
+export async function updateAllGroupSettings(
+    key: string,
+    group: SettingsGroup
+) {
+    const db = await getDrizzleDb()
+    const result = await db
+        .update(settingsGroups)
+        .set({
+            label: group.label,
+            description: group.description,
+            icon: group.icon ?? null,
+            moduleId: group.moduleId ?? null,
+            settings: JSON.stringify(group.settings),
+        })
+        .where(eq(settingsGroups.key, key))
 
-    return result
+    return { changes: result.rowsAffected }
 }
 
 export async function updateOneGroupSetting(
@@ -101,35 +101,32 @@ export async function updateOneGroupSetting(
 }
 
 export async function createSettings(settings: Settings) {
-    const db = await getDb()
+    const db = await getDrizzleDb()
 
-    for (const group of settings) {
-        await db.run(
-            `
-                INSERT INTO settings_groups (
-                    key,
-                    label,
-                    description,
-                    icon,
-                    moduleId,
-                    settings
-                )
-                VALUES (?, ?, ?, ?, ?, ?)
-                ON CONFLICT(key) DO UPDATE SET
-                    label = excluded.label,
-                    description = excluded.description,
-                    icon = excluded.icon,
-                    moduleId = excluded.moduleId,
-                    settings = excluded.settings
-            `,
-            group.key,
-            group.label,
-            group.description,
-            group.icon ?? null,
-            group.moduleId ?? null,
-            JSON.stringify(group.settings)
-        )
-    }
+    await db.transaction(async (tx) => {
+        for (const group of settings) {
+            await tx
+                .insert(settingsGroups)
+                .values({
+                    key: group.key,
+                    label: group.label,
+                    description: group.description,
+                    icon: group.icon ?? null,
+                    moduleId: group.moduleId ?? null,
+                    settings: JSON.stringify(group.settings),
+                })
+                .onConflictDoUpdate({
+                    target: settingsGroups.key,
+                    set: {
+                        label: group.label,
+                        description: group.description,
+                        icon: group.icon ?? null,
+                        moduleId: group.moduleId ?? null,
+                        settings: JSON.stringify(group.settings),
+                    },
+                })
+        }
+    })
 
     return settings
 }
